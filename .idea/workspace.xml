@@ -4,20 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/data/models/ReportModelData.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/models/ReportParam.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/repository/ReportRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/MakeReportPostUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +30,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Object" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -43,17 +42,28 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2AD7jzgeHOurZHETxaRjwCaU3c7" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "kotlin"
+    ]
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="data.models" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainKt" />
@@ -77,6 +87,21 @@
       <option name="presentableId" value="Default" />
       <updated>1654532445216</updated>
     </task>
+    <task id="LOCAL-00001" summary="- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета">
+      <created>1655480569957</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1655480569957</updated>
+    </task>
+    <task id="LOCAL-00002" summary="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета">
+      <created>1655481883997</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1655481883997</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -89,5 +114,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
+    <MESSAGE value="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
   </component>
 </project>
