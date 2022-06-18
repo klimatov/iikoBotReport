@@ -3,19 +3,21 @@ package domain.usecases
 import SecurityData.REPORT_ID
 import data.repository.ReportRepositoryImpl
 import domain.models.ReportParam
+import domain.models.ReportResult
+import domain.repository.ReportRepository
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class GetReport {
-    fun execute(): Boolean {
+class GetReport(private val reportRepository: ReportRepository) {
+    fun execute(): ReportResult {
         val doc = dotToDash(
-            ReportRepositoryImpl().get(
+            doc = reportRepository.get(
                 ReportParam(
                     reportId = REPORT_ID,
-                    dateFrom = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    dateFrom = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     dateTo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
                 )
             )
@@ -41,12 +43,12 @@ class GetReport {
                 }
                 table.add(row) // добавляем полученную строку в таблицу
             }
-            table.forEach { println(it) }
-            return true
-        } else return false
+
+            return ReportResult(table = table)
+        } else return ReportResult(table = null)
     }
 
-    fun dotToDash(doc: Document?): Document {     // замена "." на "-" внутри тэгов
+    private fun dotToDash(doc: Document?): Document {     // замена "." на "-" внутри тэгов
         var text = ""
         var flag = false
         for (char in doc.toString()) {

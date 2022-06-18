@@ -9,43 +9,62 @@ import domain.repository.ReportRepository
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.parser.Parser
 
 class ReportRepositoryImpl() : ReportRepository {
+    private val login = LOGIN_USER
+    private val password = LOGIN_PASSWORD
+    private val server = "$SERVER_IP:$SERVER_PORT"
+    private var loginCookies: MutableMap<String, String> = mutableMapOf()
+    private val path = "/resto/service/reports/report.jspx"
     override fun get(reportParam: ReportParam): Document? {
+        try {
+            if (checkCookies()) {
+                val doc =
+                    Jsoup.connect("$server$path")
+                        .cookies(loginCookies)
+                        .userAgent("Chrome/4.0.249.0 Safari/532.5")
+                        .referrer(server)
+                        .data(
+                            "dateFrom",
+                            reportParam.dateFrom,
+                            "dateTo",
+                            reportParam.dateTo,
+                            "presetId",
+                            reportParam.reportId
+                        )
+                        .get()
+                if ((doc.connection().response().url().path == path) && (doc.connection().response()
+                        .statusCode() == 200)
+                ) {
+                    return doc
+                } else {
+                    refreshCookies()
+                    return null
+                }
+            } else return null
+        } catch (e: Exception) {
+            println(e)
+            return null
+        }
+    }
 
-        val login = LOGIN_USER
-        val password = LOGIN_PASSWORD
-        val server = "$SERVER_IP:$SERVER_PORT"
+    private fun checkCookies(): Boolean {
+        if (loginCookies.isEmpty()) return refreshCookies() else return true
+    }
+
+    private fun refreshCookies(): Boolean {
         val res = Jsoup.connect("$server/resto/j_spring_security_check")
             .data("j_username", login, "j_password", password, "submit", "Log+in")
             .method(Connection.Method.POST)
             .execute()
-        val loginCookies = res.cookies()
         if (!((res.statusCode() == 200) && (res.url().path == "/resto/service/"))) {
             println("login failed")
-            return null
+            return false
         } else {
+            loginCookies = res.cookies()
             println("login ok")
-            val doc =
-                Jsoup.connect("$server/resto/service/reports/report.jspx")
-                    .cookies(loginCookies)
-                    .userAgent("Chrome/4.0.249.0 Safari/532.5")
-                    .referrer(server)
-                    .data(
-                        "dateFrom",
-                        reportParam.dateFrom,
-                        "dateTo",
-                        reportParam.dateTo,
-                        "presetId",
-                        reportParam.reportId
-                    )
-                    .get()
-
-            return doc
+            return true
         }
     }
-
-
 }
 

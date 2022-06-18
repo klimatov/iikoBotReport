@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/data/models/ReportModelData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/models/ReportParam.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/repository/ReportRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/MakeReportPostUseCase.kt" afterDir="false" />
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.2&#10;+ распределение по классам и пакетам&#10;+ менеджер запроса отчета по таймеру в корутине">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/BotRepositoryImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/models/ReportResult.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/repository/BotRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/FormatText.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/SendReportMessage.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/MakeReportPostUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/MakeReportPostUseCase.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,17 +51,17 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "kotlin"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;kotlin&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="data.models" />
@@ -101,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655481883997</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="v 0.2&#10;+ распределение по классам и пакетам&#10;+ менеджер запроса отчета по таймеру в корутине">
+      <created>1655490987382</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1655490987382</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -118,6 +128,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
     <MESSAGE value="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
-    <option name="LAST_COMMIT_MESSAGE" value="v 0.1&#10;- Коннект к серверу и получение кукис&#10;- Получение отчета по ID и датам начала и конца&#10;- Замена &quot;.&quot; на &quot;-&quot; в тегах ответа для корректной обработки JSOUP-ом&#10;- Парсинг таблицы с данными отчета" />
+    <MESSAGE value="v 0.2&#10;+ распределение по классам и пакетам&#10;+ менеджер запроса отчета по таймеру в корутине" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.2&#10;+ распределение по классам и пакетам&#10;+ менеджер запроса отчета по таймеру в корутине" />
   </component>
 </project>

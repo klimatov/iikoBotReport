@@ -1,15 +1,23 @@
 package domain.usecases
 
-class MakeReportPostUseCase {
+import domain.models.ReportResult
+import domain.repository.BotRepository
+import domain.repository.ReportRepository
 
-    fun execute() {
+class MakeReportPostUseCase(private val reportRepository: ReportRepository, private val botRepository: BotRepository) {
+    private var oldValue = ReportResult(null)
+    suspend fun execute() {
 
         // тут получаем отчет
-        val result = GetReport().execute()
+        val result = GetReport(reportRepository = reportRepository).execute()
 
         // сравниваем с прошлым
-        // если изменился, то отправляем в чат
+        if (result.table != oldValue.table) {
+            oldValue.table = result.table
 
+            // если изменился, то отправляем в чат
+            SendReportMessage(botRepository = botRepository).execute(reportResult = result)
 
+        } else println("Ничего не изменилось!")
     }
 }

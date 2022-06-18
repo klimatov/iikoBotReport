@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation ("dev.inmo:tgbotapi:1.1.0")
+    implementation ("dev.inmo:tgbotapi:2.0.2")
     implementation("org.jsoup:jsoup:1.14.3")
 }
 
