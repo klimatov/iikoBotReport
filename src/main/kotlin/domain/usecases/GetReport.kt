@@ -9,6 +9,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class GetReport(private val reportRepository: ReportRepository) {
@@ -17,7 +18,9 @@ class GetReport(private val reportRepository: ReportRepository) {
             doc = reportRepository.get(
                 ReportParam(
                     reportId = REPORT_ID,
-                    dateFrom = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    dateFrom = LocalDate.now()
+                        .minusDays(if (LocalDateTime.now().hour <= 3) 1 else 0) // с 0 до 3 часов используем вчерашнюю дату
+                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     dateTo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
                 )
             )
@@ -32,7 +35,8 @@ class GetReport(private val reportRepository: ReportRepository) {
 
 
             // создаем таблицу (list of lists) и 0 строкой вносим заголовки
-            val table: MutableList<MutableList<String>> = (mutableListOf(columns.values.toMutableList()))
+//            val table: MutableList<MutableList<String>> = (mutableListOf(columns.values.toMutableList()))
+            val table: MutableList<MutableList<String>> = (mutableListOf())
 
             // перебираем все строки и вносим в таблицу
             for (element in doc.getElementsByTag("data")) { // перебираем строки исходной таблицы

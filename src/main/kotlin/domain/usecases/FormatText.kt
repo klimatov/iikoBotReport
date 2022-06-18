@@ -4,9 +4,15 @@ import domain.models.ReportResult
 
 class FormatText {
 
-    fun report(reportResult: ReportResult):String {
+    fun report(reportResult: ReportResult, oldResult: ReportResult): String {
         var resultMessage = ""
-        reportResult.table?.forEach { row -> resultMessage += row.joinToString { it }+"\n" }
+        reportResult.table?.forEachIndexed { index, strings ->
+            resultMessage += strings.joinToString(separator = " - ") { it }
+            if (strings != oldResult.table?.get(index)) resultMessage +="\uD83D\uDD1D"
+            resultMessage += "\n"
+
+        }
+        println(resultMessage)
         return resultMessage
     }
 }

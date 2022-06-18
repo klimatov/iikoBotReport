@@ -41,3 +41,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 /src/main/kotlin/SecurityData.kt
+/.idea/
