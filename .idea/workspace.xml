@@ -9,13 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.4&#10;+ разделение полей отчета дефисом&#10;+ отметка изменившейся строки значком&#10;+ с 0 до 3 часов используем вчерашнюю дату для отчета">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportWorker.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/models/WorkerPref.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/Bot.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/models/ReportModelData.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -193,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655573371152</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект">
+      <created>1655653858736</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1655653858736</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +221,7 @@
     <MESSAGE value="v 0.2&#10;+ распределение по классам и пакетам&#10;+ менеджер запроса отчета по таймеру в корутине" />
     <MESSAGE value="v 0.3&#10;+ добавить функционал бота&#10;+ отправка сообщений в чат" />
     <MESSAGE value="v 0.4&#10;+ разделение полей отчета дефисом&#10;+ отметка изменившейся строки значком&#10;+ с 0 до 3 часов используем вчерашнюю дату для отчета" />
-    <option name="LAST_COMMIT_MESSAGE" value="v 0.4&#10;+ разделение полей отчета дефисом&#10;+ отметка изменившейся строки значком&#10;+ с 0 до 3 часов используем вчерашнюю дату для отчета" />
+    <MESSAGE value="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект" />
   </component>
 </project>

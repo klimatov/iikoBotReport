@@ -1,30 +1,30 @@
 package core
 
-import data.repository.BotRepositoryImpl
-import data.repository.ReportRepositoryImpl
-import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
+import models.WorkerPref
 
-class ReportManager(bot: Bot) {
-
-    private val reportRepository by lazy {
-        ReportRepositoryImpl
-    }
-
-    private val botRepository by lazy {
-        BotRepositoryImpl(bot = bot)
-    }
-
-    private val makeReportPostUseCase by lazy {
-        MakeReportPostUseCase(reportRepository = reportRepository, botRepository = botRepository)
-    }
-
+class ReportManager(val bot: Bot) {
+    val workerList: MutableMap<String, Job> = mutableMapOf()
     suspend fun start() {
-            while (true) {
-                println("process...")
-                makeReportPostUseCase.execute()
-                delay(30000L)
-            }
+
+        repeat(3) {
+            addWorker(WorkerPref(workerId = (it + 1).toString()))
+        }
+
+        delay(3000L)
+        cancelWorker("3")
     }
 
+    suspend fun addWorker(workerPref: WorkerPref) {
+        val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerPref.workerId)) {
+            ReportWorker(bot = bot).start(workerId = workerPref.workerId)
+        }
+        scope.start()
+        workerList[workerPref.workerId] = scope
+    }
+
+    suspend fun cancelWorker(workerId: String) {
+        workerList[workerId]?.cancel()
+        workerList.remove(workerId)
+    }
 }

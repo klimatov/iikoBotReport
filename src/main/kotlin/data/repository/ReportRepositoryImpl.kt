@@ -16,6 +16,11 @@ object ReportRepositoryImpl : ReportRepository {
     private val server = "$SERVER_IP:$SERVER_PORT"
     private var loginCookies: MutableMap<String, String> = mutableMapOf()
     private val path = "/resto/service/reports/report.jspx"
+
+    init {
+        refreshCookies()
+    }
+
     override fun get(reportParam: ReportParam): Document? {
         try {
             if (checkCookies()) {
@@ -62,7 +67,7 @@ object ReportRepositoryImpl : ReportRepository {
             return false
         } else {
             loginCookies = res.cookies()
-            println("login ok")
+            println("login ok, cookies: $loginCookies")
             return true
         }
     }
