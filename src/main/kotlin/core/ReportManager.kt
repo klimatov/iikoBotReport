@@ -8,11 +8,11 @@ import kotlinx.coroutines.*
 class ReportManager(bot: Bot) {
 
     private val reportRepository by lazy {
-        ReportRepositoryImpl()
+        ReportRepositoryImpl
     }
 
     private val botRepository by lazy {
-        BotRepositoryImpl(bot)
+        BotRepositoryImpl(bot = bot)
     }
 
     private val makeReportPostUseCase by lazy {

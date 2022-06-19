@@ -10,7 +10,7 @@ import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-class ReportRepositoryImpl() : ReportRepository {
+object ReportRepositoryImpl : ReportRepository {
     private val login = LOGIN_USER
     private val password = LOGIN_PASSWORD
     private val server = "$SERVER_IP:$SERVER_PORT"

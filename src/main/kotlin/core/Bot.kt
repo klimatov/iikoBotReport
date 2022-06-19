@@ -14,12 +14,12 @@ import kotlinx.coroutines.Dispatchers
 
 class Bot(private val job: CompletableJob) {
     private val botToken = TELEGRAM_BOT_TOKEN
-    val bot = telegramBot(botToken)
+    val bot = telegramBot(token = botToken)
 
     suspend fun start() {
         val scope = CoroutineScope(Dispatchers.Default + job)
         bot.buildBehaviourWithLongPolling(scope) {
-            onCommand("start"){
+            onCommand("start") {
                 sendTextMessage(it.chat, "Стартуешь?")
             }
             println("Bot started! ${getMe()}")

@@ -9,7 +9,7 @@ val job = SupervisorJob()
 private val bot by lazy { Bot(job) }
 private val reportManager by lazy(LazyThreadSafetyMode.NONE) { ReportManager(bot) }
 
-fun main() {
+fun main(args: Array<String>) {
     CoroutineScope(Dispatchers.Default + job).launch {
         bot.start()
         reportManager.start()
