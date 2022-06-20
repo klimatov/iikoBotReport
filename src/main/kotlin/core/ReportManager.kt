@@ -1,30 +1,42 @@
 package core
 
+import SecurityData.REPORT_ID
+import SecurityData.TELEGRAM_CHAT_ID
 import kotlinx.coroutines.*
-import models.WorkerPref
+import models.WorkerParam
+import java.util.*
 
-class ReportManager(val bot: Bot) {
-    val workerList: MutableMap<String, Job> = mutableMapOf()
+class ReportManager(private val bot: Bot) {
+    private val jobList: MutableMap<String, Job> = mutableMapOf()
+    private val workerList: MutableList<WorkerParam> = mutableListOf()
     suspend fun start() {
 
-        repeat(3) {
-            addWorker(WorkerPref(workerId = (it + 1).toString()))
-        }
-
-        delay(3000L)
-        cancelWorker("3")
+        val testWorkerParam = WorkerParam(
+            workerId = UUID.randomUUID().toString(), // ok
+            workerName = "Test report", // ok
+            reportId = REPORT_ID, // ok
+            reportPeriod = 0, //ok
+            sendChatId = TELEGRAM_CHAT_ID, // ok
+            sendWhenType = 1,
+            sendPeriod = 1,
+            messageHeader = false, //ok
+            messageSuffix = mapOf(Pair(1," руб."),Pair(10," шт.")), // ok
+            messageAmount = 0
+        )
+        addWorker(testWorkerParam)
     }
 
-    suspend fun addWorker(workerPref: WorkerPref) {
-        val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerPref.workerId)) {
-            ReportWorker(bot = bot).start(workerId = workerPref.workerId)
+    suspend fun addWorker(workerParam: WorkerParam) {
+        val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerParam.workerId)) {
+            ReportWorker(bot = bot).start(workerParam)
         }
         scope.start()
-        workerList[workerPref.workerId] = scope
+        jobList[workerParam.workerId] = scope
+        workerList.add(workerParam)
     }
 
     suspend fun cancelWorker(workerId: String) {
-        workerList[workerId]?.cancel()
-        workerList.remove(workerId)
+        jobList[workerId]?.cancel()
+        jobList.remove(workerId)
     }
 }

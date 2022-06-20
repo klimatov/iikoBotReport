@@ -1,8 +1,8 @@
 package domain.repository
 
-import domain.models.ReportParam
+import domain.models.RequestParam
 import org.jsoup.nodes.Document
 
 interface ReportRepository {
-    fun get(reportParam: ReportParam): Document?
+    fun get(requestParam: RequestParam): Document?
 }

@@ -4,7 +4,7 @@ import SecurityData.LOGIN_PASSWORD
 import SecurityData.LOGIN_USER
 import SecurityData.SERVER_IP
 import SecurityData.SERVER_PORT
-import domain.models.ReportParam
+import domain.models.RequestParam
 import domain.repository.ReportRepository
 import org.jsoup.Connection
 import org.jsoup.Jsoup
@@ -18,10 +18,14 @@ object ReportRepositoryImpl : ReportRepository {
     private val path = "/resto/service/reports/report.jspx"
 
     init {
-        refreshCookies()
+        try {
+            refreshCookies()
+        } catch (e: Exception) {
+            println(e)
+        }
     }
 
-    override fun get(reportParam: ReportParam): Document? {
+    override fun get(requestParam: RequestParam): Document? {
         try {
             if (checkCookies()) {
                 val doc =
@@ -31,11 +35,11 @@ object ReportRepositoryImpl : ReportRepository {
                         .referrer(server)
                         .data(
                             "dateFrom",
-                            reportParam.dateFrom,
+                            requestParam.dateFrom,
                             "dateTo",
-                            reportParam.dateTo,
+                            requestParam.dateTo,
                             "presetId",
-                            reportParam.reportId
+                            requestParam.reportId
                         )
                         .get()
                 if ((doc.connection().response().url().path == path) && (doc.connection().response()

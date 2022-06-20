@@ -1,29 +1,16 @@
 package domain.usecases
 
-import SecurityData.REPORT_ID
-import data.repository.ReportRepositoryImpl
-import domain.models.ReportParam
+import domain.models.RequestParam
 import domain.models.ReportResult
 import domain.repository.ReportRepository
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class GetReport(private val reportRepository: ReportRepository) {
-    fun execute(): ReportResult {
+    fun execute(requestParam: RequestParam): ReportResult {
         val doc = dotToDash(
-            doc = reportRepository.get(
-                ReportParam(
-                    reportId = REPORT_ID,
-                    dateFrom = LocalDate.now()
-                        .minusDays(if (LocalDateTime.now().hour <= 3) 1 else 0) // с 0 до 3 часов используем вчерашнюю дату
-                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                    dateTo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-                )
-            )
+            doc = reportRepository.get(requestParam)
         )
         // парсим заголовки таблицы с id
         val columns = mutableMapOf<String, String>()
@@ -35,8 +22,7 @@ class GetReport(private val reportRepository: ReportRepository) {
 
 
             // создаем таблицу (list of lists) и 0 строкой вносим заголовки
-//            val table: MutableList<MutableList<String>> = (mutableListOf(columns.values.toMutableList()))
-            val table: MutableList<MutableList<String>> = (mutableListOf())
+            val table: MutableList<MutableList<String>> = (mutableListOf(columns.values.toMutableList()))
 
             // перебираем все строки и вносим в таблицу
             for (element in doc.getElementsByTag("data")) { // перебираем строки исходной таблицы

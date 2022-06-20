@@ -1,6 +1,6 @@
 package models
 
-class WorkerPref(
+class WorkerParam(
     val workerId: String, // ID отчета (worker'а)
     val workerName: String = "", // название отчета
     val reportId: String = "", // ID отчета в iiko
@@ -13,6 +13,6 @@ class WorkerPref(
     val sendWeekDay: List<Int> = listOf(1), // дни недели для отправки отчета
     val sendMonthDay: List<Int> = listOf(1), // числа месяца для отправки отчета (32 - последний день месяца)
     val messageHeader: Boolean = true, // отображать ли заголовок в отчете?
-    val messageSuffix: List<Int> = listOf(), // суфикс руб./шт. в колонке номер Int
+    val messageSuffix: Map<Int, String> = mapOf(), // суфикс руб./шт. в колонке номер Int
     val messageAmount: Int = 0 // доп. строка с суммой колонки номер Int (0 если не выводим)
 )
