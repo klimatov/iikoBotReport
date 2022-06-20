@@ -21,7 +21,7 @@ class ReportManager(private val bot: Bot) {
             sendPeriod = 1,
             messageHeader = false, //ok
             messageSuffix = mapOf(Pair(1," руб."),Pair(10," шт.")), // ok
-            messageAmount = 0
+            messageAmount = 2 // ok
         )
         addWorker(testWorkerParam)
     }

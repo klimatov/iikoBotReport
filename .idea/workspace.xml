@@ -9,15 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportWorker.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/models/WorkerPref.kt" afterDir="false" />
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.7&#10;+  период данных для формирования отчета из iiko (0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)&#10;+ генератор UUID для workerId&#10;+ настройка сообщений - добавлять суффикс РУБ/ШТ к колонке номер N&#10;+ настройка сообщений - показывать заголовок да/нет">
+      <change afterPath="$PROJECT_DIR$/src/test/kotlin/domain/usecases/FormatTextTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/models/ReportModelData.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/FormatText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/FormatText.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +75,7 @@
         <option value="Kotlin Object" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -94,27 +92,104 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;build.tools&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "build.tools"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;kotlin&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "kotlin"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="domain.usecases" />
+    </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="data.models" />
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
+    <configuration name="FormatTextTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;domain.usecases.FormatTextTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FormatTextTest.report" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;domain.usecases.FormatTextTest.report&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FormatTextTest.reportTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;domain.usecases.FormatTextTest.reportTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="iikoBotReport [distZip]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -146,6 +221,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.FormatTextTest.reportTest" />
+        <item itemvalue="Gradle.FormatTextTest.report" />
+        <item itemvalue="Gradle.FormatTextTest" />
         <item itemvalue="Gradle.iikoBotReport [distZip]" />
       </list>
     </recent_temporary>
@@ -201,7 +279,21 @@
       <option name="project" value="LOCAL" />
       <updated>1655653858736</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="v 0.6&#10;+ обновление кукиса при инициализации&#10;+ отдельный класс инстанс которого создается для разных отчетов (worker)">
+      <created>1655667918315</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1655667918315</updated>
+    </task>
+    <task id="LOCAL-00008" summary="v 0.7&#10;+  период данных для формирования отчета из iiko (0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)&#10;+ генератор UUID для workerId&#10;+ настройка сообщений - добавлять суффикс РУБ/ШТ к колонке номер N&#10;+ настройка сообщений - показывать заголовок да/нет">
+      <created>1655744414259</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1655744414259</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -222,6 +314,8 @@
     <MESSAGE value="v 0.3&#10;+ добавить функционал бота&#10;+ отправка сообщений в чат" />
     <MESSAGE value="v 0.4&#10;+ разделение полей отчета дефисом&#10;+ отметка изменившейся строки значком&#10;+ с 0 до 3 часов используем вчерашнюю дату для отчета" />
     <MESSAGE value="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект" />
-    <option name="LAST_COMMIT_MESSAGE" value="v 0.5&#10;+ ReportRepositoryImpl в синглтон объект" />
+    <MESSAGE value="v 0.6&#10;+ обновление кукиса при инициализации&#10;+ отдельный класс инстанс которого создается для разных отчетов (worker)" />
+    <MESSAGE value="v 0.7&#10;+  период данных для формирования отчета из iiko (0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)&#10;+ генератор UUID для workerId&#10;+ настройка сообщений - добавлять суффикс РУБ/ШТ к колонке номер N&#10;+ настройка сообщений - показывать заголовок да/нет" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.7&#10;+  период данных для формирования отчета из iiko (0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)&#10;+ генератор UUID для workerId&#10;+ настройка сообщений - добавлять суффикс РУБ/ШТ к колонке номер N&#10;+ настройка сообщений - показывать заголовок да/нет" />
   </component>
 </project>
