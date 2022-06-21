@@ -16,7 +16,8 @@ class FormatText {
             resultMessage += row.mapIndexed { indexCell, cell ->  // проставляем суффиксы руб./шт. и т.п.
                 if (messageParam.messageSuffix.contains(indexCell)) cell + messageParam.messageSuffix[indexCell] else cell
             }.joinToString(separator = " - ") { it } // сворачиваем все значения в строку
-            if (row != messageParam.oldReport.table?.get(indexRow)) resultMessage += "\uD83D\uDD1D" // если изменения добавляем значок
+            if (messageParam.oldReport.table?.contains(row) == false) {resultMessage += "\uD83D\uDD1D"} // если изменения добавляем значок
+//            if (row != messageParam.oldReport.table?.get(indexRow)) resultMessage += "\uD83D\uDD1D"
             resultMessage += "\n"
 
             if ((messageParam.messageAmount > 0)&&(row.size >= messageParam.messageAmount)) { // доп. строка с суммой колонки номер N

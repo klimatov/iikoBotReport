@@ -29,9 +29,9 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
                 messageSuffix = reportParam.messageSuffix,
                 messageAmount = reportParam.messageAmount
             )
-            SendReportMessage(botRepository = botRepository).execute(messageParam)
+            val sendResult = SendReportMessage(botRepository = botRepository).execute(messageParam)
             oldReport.table = result.table
-            println("Данные изменились, отправлены в чат...")
+            println("Данные изменились, ${if (sendResult) "отправлены в чат" else "отправить в чат НЕ УДАЛОСЬ"}...")
         } else println("Данные не изменились...")
     }
 

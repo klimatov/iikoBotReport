@@ -7,7 +7,9 @@ import domain.repository.BotRepository
 class SendReportMessage(private val botRepository: BotRepository) {
 
     suspend fun execute(messageParam: MessageParam): Boolean {
-        botRepository.sendMessageToChat(text = FormatText().report(messageParam), sendChatId = messageParam.sendChatId)
-        return true
+        val messageText = FormatText().report(messageParam)
+        if (messageText.isNotEmpty()) {
+            return botRepository.sendMessageToChat(text = messageText, sendChatId = messageParam.sendChatId)
+        } else return false
     }
 }

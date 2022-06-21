@@ -19,9 +19,12 @@ class ReportManager(private val bot: Bot) {
             sendChatId = TELEGRAM_CHAT_ID, // ok
             sendWhenType = 1,
             sendPeriod = 1,
+            sendTime = listOf("10:00"),
+            sendWeekDay = listOf(1),
+            sendMonthDay = listOf(1),
             messageHeader = false, //ok
-            messageSuffix = mapOf(Pair(1," руб."),Pair(10," шт.")), // ok
-            messageAmount = 2 // ok
+            messageSuffix = mapOf(Pair(1, " руб."), Pair(10, " шт.")), // ok
+            messageAmount = 0 // ok
         )
         addWorker(testWorkerParam)
     }
