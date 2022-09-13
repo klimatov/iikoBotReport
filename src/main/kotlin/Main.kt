@@ -1,8 +1,12 @@
 import core.Bot
 import core.ReportManager
+import httpServer.plugins.configureAuth
+import httpServer.plugins.configureEditWorker
+import httpServer.plugins.configureRouting
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
@@ -15,6 +19,12 @@ fun main(args: Array<String>) {
         bot.start()
         reportManager.start()
     }.start()
+
+    embeddedServer(Netty, port = 8085, host = "0.0.0.0") {
+        configureAuth()
+        configureRouting()
+        configureEditWorker()
+    }.start(wait = true)
 
     while (true) {
     }
