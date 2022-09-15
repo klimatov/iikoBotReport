@@ -57,6 +57,30 @@ object ReportRepositoryImpl : ReportRepository {
         }
     }
 
+    override fun getList(): Document? {
+        try {
+            if (checkCookies()) {
+                val doc =
+                    Jsoup.connect("$server$path")
+                        .cookies(loginCookies)
+                        .userAgent("Chrome/4.0.249.0 Safari/532.5")
+                        .referrer(server)
+                        .get()
+                if ((doc.connection().response().url().path == path) && (doc.connection().response()
+                        .statusCode() == 200)
+                ) {
+                    return doc
+                } else {
+                    refreshCookies()
+                    return null
+                }
+            } else return null
+        } catch (e: Exception) {
+            println(e)
+            return null
+        }
+    }
+
     private fun checkCookies(): Boolean {
         if (loginCookies.isEmpty()) return refreshCookies() else return true
     }

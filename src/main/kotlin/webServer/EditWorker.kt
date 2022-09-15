@@ -3,6 +3,7 @@ package webServer.plugins
 import SecurityData.TELEGRAM_CHAT_ID
 import core.ReportManager
 import data.fileProcessing.WorkersRepository
+import domain.usecases.GetReportList
 import io.ktor.http.*
 import io.ktor.server.html.*
 import kotlinx.html.*
@@ -63,10 +64,22 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             repeat(2) { br() }
 
                             +"ID отчета в iiko: "
-                            input(type = InputType.text, name = "reportId") {
-                                value = editWorkerParam.reportId
-                                required = true
+
+                            select {
+                                name = "reportId"
+                                GetReportList().execute().forEach { reportId, reportName ->
+                                    option {
+                                        label = reportName
+                                        value = reportId
+                                        selected = editWorkerParam.reportId == value
+                                    }
+                                }
                             }
+
+//                            input(type = InputType.text, name = "reportId") {
+//                                value = editWorkerParam.reportId
+//                                required = true
+//                            }
                             repeat(2) { br() }
 
                             +"Период данных для формирования отчета из iiko: " //(0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)

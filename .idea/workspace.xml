@@ -9,18 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера">
-      <change afterPath="$PROJECT_DIR$/workers.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.11&#10;+ не запускать новый воркер с тем же ID - остановить его и перезапустить&#10;+ обработка изменений воркеров в файле">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReportList.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/Authentication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/Authentication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/EditWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/EditWorker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/Routing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/Routing.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/models/WorkerParam.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/models/WorkerParam.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/repository/ReportRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/repository/ReportRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/repository/ReportRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/webServer/EditWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/EditWorker.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,8 +63,8 @@
       <list>
         <option value="Kotlin Object" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -313,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663080442058</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="v 0.11&#10;+ не запускать новый воркер с тем же ID - остановить его и перезапустить&#10;+ обработка изменений воркеров в файле">
+      <created>1663234960073</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1663234960073</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -354,7 +356,8 @@
     <MESSAGE value="v 0.8&#10;+ настройка сообщений - доп. строка с суммой колонки номер N (плюс суффикс если был по колонке)" />
     <MESSAGE value="v 0.9&#10;+ fix краш при отправке нового сообщения если прошлое было пустым&#10;+ обработка неудачной отправки сообщения в чат" />
     <MESSAGE value="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера" />
-    <option name="LAST_COMMIT_MESSAGE" value="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера" />
+    <MESSAGE value="v 0.11&#10;+ не запускать новый воркер с тем же ID - остановить его и перезапустить&#10;+ обработка изменений воркеров в файле" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.11&#10;+ не запускать новый воркер с тем же ID - остановить его и перезапустить&#10;+ обработка изменений воркеров в файле" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
