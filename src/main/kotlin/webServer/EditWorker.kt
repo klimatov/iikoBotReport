@@ -36,7 +36,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     sendMonthDay = listOf(1, 15),
                     messageHeader = false, //ok
                     messageSuffix = mapOf(Pair(10, " шт.")), // ok
-                    messageAmount = 0 // ok
+                    messageAmount = 0, // ok
+                    messageWordLimit = mapOf(Pair(0, 0))
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (workerList?.containsKey(workerId) == true) editWorkerParam = workerList[workerId]!!
@@ -86,7 +87,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             select {
                                 name = "reportPeriodType"
                                 option {
-                                    label = "Сегодня"
+                                    label = "Сегодня (текущий день)"
                                     value = "0"
                                     selected = editWorkerParam.reportPeriod.toString() == value
                                 }
@@ -157,6 +158,11 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     selected = editWorkerParam.sendWhenType.toString() == value
                                 }
                             }
+                            span {
+                                style = "color:red;font-size:smaller;font-style: italic;"
+                                +" *Пока реализован только периодический"
+                            }
+
                             repeat(2) { br() }
 
                             +"Период отправки в минутах: "
@@ -168,6 +174,10 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             +"Время отправки (для еженедельного/ежемесячного отчета): "
                             input(type = InputType.time, name = "sendTime") {
                                 value = editWorkerParam.sendTime.joinToString()
+                            }
+                            span {
+                                style = "color:red;font-size:smaller;font-style: italic;"
+                                +" *Пока не реализовано"
                             }
                             repeat(2) { br() }
 
@@ -213,6 +223,10 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 }
                             }
                             +" (держим CTRL для нескольких)"
+                            span {
+                                style = "color:red;font-size:smaller;font-style: italic;"
+                                +" *Пока не реализовано"
+                            }
                             repeat(2) { br() }
 
                             +"Числа месяца для отправки отчета (32 - отправлять в последний день месяца): "
@@ -228,6 +242,10 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 }
                             }
                             +" (держим CTRL для нескольких)"
+                            span {
+                                style = "color:red;font-size:smaller;font-style: italic;"
+                                +" *Пока не реализовано"
+                            }
                             repeat(2) { br() }
 
                             +"Отображать ли заголовок в отчете?: "
@@ -263,7 +281,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             +" в колонке номер: "
                             input(type = InputType.number, name = "messageSuffixCol") {
                                 value = editWorkerParam.messageSuffix.keys.first()
-                                    .toString()
+                                    .toString().toInt().plus(1).toString()
                             }
                             repeat(2) { br() }
 
@@ -273,6 +291,21 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             }
                             +" (0 если не выводим)"
                             repeat(2) { br() }
+
+                            +"В колонке номер: "
+                            input(type = InputType.number, name = "messageWordLimitCol") {
+                                value = editWorkerParam.messageWordLimit.keys.first()
+                                    .toString().toInt().plus(1).toString()
+                                required = true
+                            }
+                            +" количество слов не более "
+                            input(type = InputType.number, name = "messageWordLimitSum") {
+                                value = editWorkerParam.messageWordLimit.values.first().toString()
+                                required = true
+                            }
+                            +" (0 если не применяем)"
+                            repeat(2) { br() }
+
 //                        span {
 //                            style = "color:red;font-size:large;font-weight:bold;"
 //                            +errorMessage
@@ -321,11 +354,17 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     messageHeader = receiveParam["messageHeader"]?.joinToString().toBoolean(),
                     messageSuffix = mapOf(
                         Pair(
-                            receiveParam["messageSuffixCol"]?.joinToString()?.toInt(),
+                            receiveParam["messageSuffixCol"]?.joinToString()?.toInt()?.minus(1) ?: 0,
                             receiveParam["messageSuffixText"]?.joinToString()
                         ) as Pair<Int, String>
                     ),
-                    messageAmount = receiveParam["messageAmount"]?.joinToString()?.toInt() ?: 0
+                    messageAmount = receiveParam["messageAmount"]?.joinToString()?.toInt() ?: 0,
+                    messageWordLimit = mapOf(
+                        Pair(
+                            receiveParam["messageWordLimitCol"]?.joinToString()?.toInt()?.minus(1) ?: 0,
+                            receiveParam["messageWordLimitSum"]?.joinToString()?.toInt()
+                        ) as Pair<Int, Int>
+                    ),
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

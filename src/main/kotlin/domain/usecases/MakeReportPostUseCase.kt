@@ -27,7 +27,8 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
                 sendChatId = reportParam.sendChatId,
                 messageHeader = reportParam.messageHeader,
                 messageSuffix = reportParam.messageSuffix,
-                messageAmount = reportParam.messageAmount
+                messageAmount = reportParam.messageAmount,
+                messageWordLimit = reportParam.messageWordLimit
             )
             val sendResult = SendReportMessage(botRepository = botRepository).execute(messageParam)
             oldReport.table = result.table

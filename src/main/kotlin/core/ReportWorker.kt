@@ -45,7 +45,8 @@ class ReportWorker(bot: Bot) {
             sendChatId = workerParam.sendChatId,
             messageHeader = workerParam.messageHeader,
             messageSuffix = workerParam.messageSuffix,
-            messageAmount = workerParam.messageAmount
+            messageAmount = workerParam.messageAmount,
+            messageWordLimit = workerParam.messageWordLimit
         )
     }
 }
