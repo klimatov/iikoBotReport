@@ -1,4 +1,4 @@
-package httpServer.plugins
+package webServer.plugins
 
 import SecurityData.WEB_LOGIN
 import SecurityData.WEB_PASSWORD

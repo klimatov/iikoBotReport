@@ -1,6 +1,6 @@
 package models
 
-class WorkerParam(
+data class WorkerParam(
     val workerId: String, // ID отчета (worker'а)
     val workerName: String = "", // название отчета
     val reportId: String = "", // ID отчета в iiko

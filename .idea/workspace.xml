@@ -9,12 +9,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.8&#10;+ настройка сообщений - доп. строка с суммой колонки номер N (плюс суффикс если был по колонке)">
+    <list default="true" id="9fc68ff6-1b3f-4162-a85a-1c66cb967c67" name="Changes" comment="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера">
+      <change afterPath="$PROJECT_DIR$/workers.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/ReportManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/FormatText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/FormatText.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/GetReport.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/SendReportMessage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/usecases/SendReportMessage.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/Authentication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/Authentication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/EditWorker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/EditWorker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/httpServer/plugins/Routing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/webServer/Routing.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/models/WorkerParam.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/models/WorkerParam.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,19 +54,7 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="iikoBotReport" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="iikoBotReport" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="distribution" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="iikoBotReport" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
+                <item name="application" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -85,6 +79,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2AD7jzgeHOurZHETxaRjwCaU3c7" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -92,24 +89,28 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;build.tools&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "last_opened_file_path": "C:/Users/klima/IdeaProjects/iikoBotReport/src/main/kotlin",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.kotlinCompiler"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;kotlin&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "kotlin"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\klima\IdeaProjects\iikoBotReport\src\main\kotlin" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
@@ -121,29 +122,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
-    <configuration name="FormatTextTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;domain.usecases.FormatTextTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="FormatTextTest.report" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -190,7 +168,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="iikoBotReport [distZip]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="iikoBotReport [buildFatJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -201,7 +179,28 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="distZip" />
+            <option value="buildFatJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="iikoBotReport [buildImage]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="buildImage" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -221,10 +220,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.iikoBotReport [buildImage]" />
+        <item itemvalue="Gradle.iikoBotReport [buildFatJar]" />
         <item itemvalue="Gradle.FormatTextTest.reportTest" />
         <item itemvalue="Gradle.FormatTextTest.report" />
-        <item itemvalue="Gradle.FormatTextTest" />
-        <item itemvalue="Gradle.iikoBotReport [distZip]" />
       </list>
     </recent_temporary>
   </component>
@@ -300,15 +299,44 @@
       <option name="project" value="LOCAL" />
       <updated>1655749098499</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="v 0.9&#10;+ fix краш при отправке нового сообщения если прошлое было пустым&#10;+ обработка неудачной отправки сообщения в чат">
+      <created>1655820231915</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1655820231915</updated>
+    </task>
+    <task id="LOCAL-00011" summary="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера">
+      <created>1663080442058</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1663080442058</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.cfg" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -324,7 +352,9 @@
     <MESSAGE value="v 0.6&#10;+ обновление кукиса при инициализации&#10;+ отдельный класс инстанс которого создается для разных отчетов (worker)" />
     <MESSAGE value="v 0.7&#10;+  период данных для формирования отчета из iiko (0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)&#10;+ генератор UUID для workerId&#10;+ настройка сообщений - добавлять суффикс РУБ/ШТ к колонке номер N&#10;+ настройка сообщений - показывать заголовок да/нет" />
     <MESSAGE value="v 0.8&#10;+ настройка сообщений - доп. строка с суммой колонки номер N (плюс суффикс если был по колонке)" />
-    <option name="LAST_COMMIT_MESSAGE" value="v 0.8&#10;+ настройка сообщений - доп. строка с суммой колонки номер N (плюс суффикс если был по колонке)" />
+    <MESSAGE value="v 0.9&#10;+ fix краш при отправке нового сообщения если прошлое было пустым&#10;+ обработка неудачной отправки сообщения в чат" />
+    <MESSAGE value="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.10&#10;+ добавлен веб-сервер на базе ktor для создания и редактирования отчетов (воркеров)&#10;+ веб сделаны - аутентификация пользователя, список активных отчетов с выбором редактирования, страница редактирования/создания всех параметров воркера" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -335,5 +365,9 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

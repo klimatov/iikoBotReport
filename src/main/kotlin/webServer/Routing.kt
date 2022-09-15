@@ -1,4 +1,4 @@
-package httpServer.plugins
+package webServer.plugins
 
 import data.fileProcessing.WorkersRepository
 import io.ktor.server.routing.*

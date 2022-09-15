@@ -1,6 +1,7 @@
-package httpServer.plugins
+package webServer.plugins
 
 import SecurityData.TELEGRAM_CHAT_ID
+import core.ReportManager
 import data.fileProcessing.WorkersRepository
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -14,13 +15,7 @@ import io.ktor.util.*
 import models.WorkerParam
 import java.util.*
 
-/*
-- Проверка данных на валидность
-- Несколько суффиксов
-- Несколько времен отправки
-*/
-
-fun Application.configureEditWorker() {
+fun Application.configureEditWorker(reportManager: ReportManager) {
 
     routing {
         authenticate("auth-basic") {
@@ -324,12 +319,15 @@ fun Application.configureEditWorker() {
                     println("DELETE")
                     workerList?.remove(htmlWorkerParam.workerId)
                     WorkersRepository().set(workerList)
+                    reportManager.changeWorkersConfig()
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
                     println("SAVE")
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
                     WorkersRepository().set(workerList)
+//                    reportManager.addWorker(htmlWorkerParam)
+                    reportManager.changeWorkersConfig()
                 }
                 call.respondRedirect("/")
             }
