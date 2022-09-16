@@ -1,3 +1,5 @@
+import SecurityData.WEB_HOST
+import SecurityData.WEB_PORT
 import core.Bot
 import core.ReportManager
 import webServer.plugins.configureAuth
@@ -20,7 +22,7 @@ fun main() {
         reportManager.start()
     }.start()
 
-    embeddedServer(factory = Netty, port = 8085, host = "0.0.0.0") {
+    embeddedServer(factory = Netty, port = WEB_PORT, host = WEB_HOST) {
         configureAuth()
         configureRouting()
         configureEditWorker(reportManager)

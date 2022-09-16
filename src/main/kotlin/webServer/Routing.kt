@@ -9,7 +9,7 @@ import io.ktor.server.html.*
 import kotlinx.html.*
 
 fun Application.configureRouting() {
-
+    val tag = "configureRouting"
     routing {
         authenticate("auth-basic") {
             get("/") {

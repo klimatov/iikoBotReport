@@ -3,6 +3,7 @@ package domain.usecases
 import data.repository.ReportRepositoryImpl
 
 class GetReportList {
+    private val tag = this::class.java.simpleName
     fun execute(): MutableMap<String, String> {
         val reportRepository = ReportRepositoryImpl
         val doc = reportRepository.getList()

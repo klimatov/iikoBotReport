@@ -9,8 +9,10 @@ import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onComman
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import utils.Logging
 
 class Bot(private val job: CompletableJob) {
+    private val tag = this::class.java.simpleName
     private val botToken = TELEGRAM_BOT_TOKEN
     val bot = telegramBot(token = botToken)
 
@@ -20,7 +22,7 @@ class Bot(private val job: CompletableJob) {
             onCommand("start") {
                 sendTextMessage(it.chat, "Стартуешь?")
             }
-            println("Bot started! ${getMe()}")
+            Logging.i(tag,"Telegram Bot started! ${getMe()}")
         }.start()
     }
 }

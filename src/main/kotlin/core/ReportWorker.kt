@@ -11,9 +11,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
-
+import utils.Logging
 
 class ReportWorker(bot: Bot) {
+    private val tag = this::class.java.simpleName
 
     private val reportRepository by lazy {
         ReportRepositoryImpl
@@ -29,9 +30,7 @@ class ReportWorker(bot: Bot) {
 
     suspend fun start(workerParam: WorkerParam) {
         while (isActive) {
-            println(
-                LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + " process worker ${workerParam.workerId}..."
+            Logging.i(tag,"process worker [${workerParam.workerName}] - ${workerParam.workerId}..."
             )
             makeReportPostUseCase.execute(mapToDomain(workerParam = workerParam))
             delay(workerParam.sendPeriod.toDuration(DurationUnit.MINUTES))

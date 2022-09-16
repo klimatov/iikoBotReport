@@ -7,7 +7,7 @@ import fileProcessing.FileOperations
 import models.WorkerParam
 
 class WorkersRepository {
-
+    private val tag = this::class.java.simpleName
     fun get(): MutableMap<String, WorkerParam>? {
         val serializedData = FileOperations().read("workers.cfg")
         val type = object : TypeToken<MutableMap<String, WorkerParam>>() {}.type

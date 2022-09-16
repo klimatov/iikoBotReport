@@ -6,6 +6,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.application.*
 
 fun Application.configureAuth() {
+	val tag = "configureAuth"
     authentication {
     		basic(name = "auth-basic") {
     			realm = "Access to the '/' path"

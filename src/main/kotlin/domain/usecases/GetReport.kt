@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 
 class GetReport(private val reportRepository: ReportRepository) {
+    private val tag = this::class.java.simpleName
     fun execute(requestParam: RequestParam): ReportResult {
         val doc = dotToDash(
             doc = reportRepository.get(requestParam)

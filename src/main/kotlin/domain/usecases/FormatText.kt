@@ -4,7 +4,7 @@ import domain.models.MessageParam
 import kotlin.math.roundToInt
 
 class FormatText {
-
+    private val tag = this::class.java.simpleName
     fun report(messageParam: MessageParam): String {
         var tableMsg = messageParam.reportResult.table
         var resultMessage = ""

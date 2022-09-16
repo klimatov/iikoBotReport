@@ -9,8 +9,9 @@ import domain.repository.ReportRepository
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-
+import utils.Logging
 object ReportRepositoryImpl : ReportRepository {
+    private val tag = this::class.java.simpleName
     private val login = LOGIN_USER
     private val password = LOGIN_PASSWORD
     private val server = "$SERVER_IP:$SERVER_PORT"
@@ -21,7 +22,7 @@ object ReportRepositoryImpl : ReportRepository {
         try {
             refreshCookies()
         } catch (e: Exception) {
-            println(e)
+            Logging.e(tag,e.toString())
         }
     }
 
@@ -52,7 +53,7 @@ object ReportRepositoryImpl : ReportRepository {
                 }
             } else return null
         } catch (e: Exception) {
-            println(e)
+            Logging.e(tag,e.toString())
             return null
         }
     }
@@ -76,7 +77,7 @@ object ReportRepositoryImpl : ReportRepository {
                 }
             } else return null
         } catch (e: Exception) {
-            println(e)
+            Logging.e(tag,e.toString())
             return null
         }
     }
@@ -91,11 +92,11 @@ object ReportRepositoryImpl : ReportRepository {
             .method(Connection.Method.POST)
             .execute()
         if (!((res.statusCode() == 200) && (res.url().path == "/resto/service/"))) {
-            println("login failed")
+            Logging.e(tag,"login failed")
             return false
         } else {
             loginCookies = res.cookies()
-            println("login ok, cookies: $loginCookies")
+            Logging.i(tag,"login ok, cookies: $loginCookies")
             return true
         }
     }

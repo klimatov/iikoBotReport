@@ -1,14 +1,15 @@
 package fileProcessing
 
 import java.io.File
+import utils.Logging
 
 class FileOperations {
-
+    private val tag = this::class.java.simpleName
     fun write(fileName: String, data: String) {
         val writer = File(fileName).bufferedWriter()
         try {
             writer.write(data)
-            println("Write to $fileName")
+            Logging.i(tag,"Write to $fileName")
         } finally {
             writer.close()
         }
@@ -19,7 +20,7 @@ class FileOperations {
         var text = ""
         try {
             text = reader.readText()
-            println("Read from $fileName")
+            Logging.i(tag,"Read from $fileName")
         } finally {
             reader.close()
         }

@@ -15,9 +15,10 @@ import io.ktor.server.routing.*
 import io.ktor.util.*
 import models.WorkerParam
 import java.util.*
+import utils.Logging
 
 fun Application.configureEditWorker(reportManager: ReportManager) {
-
+    val tag = "configureEditWorker"
     routing {
         authenticate("auth-basic") {
             get("/edit-worker") {
@@ -336,7 +337,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             post("/edit-worker") {
                 val workerList = WorkersRepository().get()
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
-                println(receiveParam)
+                Logging.d(tag,receiveParam.toString())
                 val htmlWorkerParam = WorkerParam(
                     workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                     workerName = receiveParam["workerName"]?.joinToString() ?: "",
@@ -368,17 +369,16 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
-                    println("DELETE")
+                    Logging.i(tag,"Нажата кнопка DELETE")
                     workerList?.remove(htmlWorkerParam.workerId)
                     WorkersRepository().set(workerList)
                     reportManager.changeWorkersConfig()
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
-                    println("SAVE")
+                    Logging.i(tag,"Нажата кнопка SAVE")
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
                     WorkersRepository().set(workerList)
-//                    reportManager.addWorker(htmlWorkerParam)
                     reportManager.changeWorkersConfig()
                 }
                 call.respondRedirect("/")
