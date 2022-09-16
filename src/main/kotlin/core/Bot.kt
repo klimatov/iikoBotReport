@@ -6,6 +6,7 @@ import dev.inmo.tgbotapi.extensions.api.bot.getMe
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage
 import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommand
+import dev.inmo.tgbotapi.extensions.utils.asFromUser
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,11 @@ class Bot(private val job: CompletableJob) {
         bot.buildBehaviourWithLongPolling(scope) {
             onCommand("start") {
                 sendTextMessage(it.chat, "Стартуешь?")
+            }
+            onCommand("getmyid") {
+                val userId = it.asFromUser()?.user?.id?.chatId
+                val chatId = it.chat.id.chatId
+                sendTextMessage(it.chat, "Твой user ID: $userId\nТекущий chat ID: $chatId")
             }
             Logging.i(tag,"Telegram Bot started! ${getMe()}")
         }.start()

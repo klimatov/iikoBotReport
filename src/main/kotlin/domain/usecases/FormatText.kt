@@ -10,7 +10,7 @@ class FormatText {
         var resultMessage = ""
         var sum: Double = 0.0
 
-
+        if (messageParam.nameInHeader) resultMessage +=messageParam.workerName + "\n"
         tableMsg?.forEachIndexed() { indexRow, row ->
             if ((!messageParam.messageHeader) && (indexRow == 0)) return@forEachIndexed // убираем заголовок если false в настройках
 

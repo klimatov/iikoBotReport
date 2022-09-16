@@ -38,7 +38,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     messageHeader = false, //ok
                     messageSuffix = mapOf(Pair(10, " шт.")), // ok
                     messageAmount = 0, // ok
-                    messageWordLimit = mapOf(Pair(0, 0))
+                    messageWordLimit = mapOf(Pair(0, 0)),
+                    nameInHeader = false
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (workerList?.containsKey(workerId) == true) editWorkerParam = workerList[workerId]!!
@@ -51,6 +52,16 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     }
                     body {
                         postForm {
+                            input(type = InputType.checkBox, name = "workerIsActive"){
+                                checked = editWorkerParam.workerIsActive
+                            }
+                            +" отчет (worker'а) активен"
+                            span {
+                                style = "color:red;font-size:smaller;font-style: italic;"
+                                +" *Пока не реализовано"
+                            }
+                            repeat(2) { br() }
+
                             +"ID отчета (worker'а): ${editWorkerParam.workerId}"
                             hiddenInput {
                                 name = "workerId"
@@ -63,6 +74,11 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 value = editWorkerParam.workerName
                                 required = true
                             }
+                            +"  "
+                            input(type = InputType.checkBox, name = "nameInHeader"){
+                                checked = editWorkerParam.nameInHeader
+                            }
+                            +" выводить в заголовке сообщения"
                             repeat(2) { br() }
 
                             +"ID отчета в iiko: "
@@ -366,6 +382,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             receiveParam["messageWordLimitSum"]?.joinToString()?.toInt()
                         ) as Pair<Int, Int>
                     ),
+                    nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
+                    workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

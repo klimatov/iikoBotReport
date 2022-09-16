@@ -7,8 +7,6 @@ import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.NonCancellable.isActive
 import models.WorkerParam
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import utils.Logging
@@ -45,7 +43,10 @@ class ReportWorker(bot: Bot) {
             messageHeader = workerParam.messageHeader,
             messageSuffix = workerParam.messageSuffix,
             messageAmount = workerParam.messageAmount,
-            messageWordLimit = workerParam.messageWordLimit
+            messageWordLimit = workerParam.messageWordLimit,
+            nameInHeader = workerParam.nameInHeader,
+            workerIsActive = workerParam.workerIsActive,
+            workerName = workerParam.workerName
         )
     }
 }

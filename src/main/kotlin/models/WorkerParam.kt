@@ -15,5 +15,7 @@ data class WorkerParam(
     val messageHeader: Boolean = true, // отображать ли заголовок в отчете?
     val messageSuffix: Map<Int, String> = mapOf(), // суфикс руб./шт. в колонке номер Int
     val messageAmount: Int = 0, // доп. строка с суммой колонки номер Int (0 если не выводим)
-    val messageWordLimit: Map<Int, Int> = mapOf() // в колонке номер Int количество слов не более Int
+    val messageWordLimit: Map<Int, Int> = mapOf(), // в колонке номер Int количество слов не более Int
+    val nameInHeader: Boolean = false, // Выводить название отчета в заголовке сообщения
+    val workerIsActive: Boolean = true // Галка активности отчета
 )
