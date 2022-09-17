@@ -3,8 +3,6 @@ package core
 import data.fileProcessing.WorkersRepository
 import kotlinx.coroutines.*
 import models.WorkerParam
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import utils.Logging
 
 class ReportManager(private val bot: Bot) {
@@ -42,10 +40,11 @@ class ReportManager(private val bot: Bot) {
         val oldWorkerList = workerList // сохранили список работающих воркеров
         workerList = WorkersRepository().get() ?: mutableMapOf() // получили актуальный список воркеров
         workerList.forEach {// перебираем актуальные воркеры
-            if (oldWorkerList.containsKey(it.key) && it.value != oldWorkerList[it.key]) { // если конфиг воркера изменился - перезапускаем воркер
-                Logging.i(tag,"Изменение конфигурации worker'а ${it.key}, ПЕРЕЗАПУСК")
+            if (oldWorkerList.containsKey(it.key) && it.value != oldWorkerList[it.key]) {
+                            // если воркер есть в старом списке и конфиг воркера изменился - перезапускаем воркер
+                Logging.i(tag,"Изменение конфигурации worker'а ${it.key}, ОБРАБОТКА")
                 cancelWorker(it.key)
-                addWorker(it.value)
+                if (it.value.workerIsActive) addWorker(it.value) // перезапуск только если воркер активен
                 return@forEach
             }
             if (!oldWorkerList.containsKey(it.key)) { // если появился новый воркер - запускаем его

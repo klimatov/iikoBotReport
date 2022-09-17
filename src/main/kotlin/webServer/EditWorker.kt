@@ -56,10 +56,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 checked = editWorkerParam.workerIsActive
                             }
                             +" отчет (worker'а) активен"
-                            span {
-                                style = "color:red;font-size:smaller;font-style: italic;"
-                                +" *Пока не реализовано"
-                            }
                             repeat(2) { br() }
 
                             +"ID отчета (worker'а): ${editWorkerParam.workerId}"

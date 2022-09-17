@@ -35,6 +35,12 @@ fun Application.configureRouting() {
                                 title = it
                                 +"${workerList[it]?.workerName}"
                             }
+                            if (workerList[it]?.workerIsActive != true) {
+                                span {
+                                    style = "color:red;"
+                                    +" [не активен]"
+                                }
+                            }
                             br()
 
                         }
