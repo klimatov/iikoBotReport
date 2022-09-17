@@ -10,15 +10,16 @@ class ReportManager(private val bot: Bot) {
     private val workerScopeList: MutableMap<String, Job> = mutableMapOf()
     private var workerList: MutableMap<String, WorkerParam> = mutableMapOf()
     suspend fun start() {
-        workerList = WorkersRepository().get() ?: mutableMapOf()
+        workerList = WorkersRepository().get() ?: mutableMapOf() // загружаем список воркеров
         workerList.forEach {
-            addWorker(it.value)
+            if (it.value.workerIsActive) addWorker(it.value) // запускаем только если воркер активен
         }
     }
     suspend fun addWorker(workerParam: WorkerParam) {
         if (!workerScopeList.containsKey(workerParam.workerId)) {
+            Logging.i(tag,"start worker ${workerParam.workerId}...")
             val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerParam.workerId)) {
-                ReportWorker(bot = bot).start(workerParam)
+                ReportWorker(bot = bot).process(workerParam)
             }
             scope.start()
             workerScopeList[workerParam.workerId] = scope
@@ -30,8 +31,7 @@ class ReportManager(private val bot: Bot) {
     }
 
     suspend fun cancelWorker(workerId: String) {
-        Logging.i(tag,"cancel worker ${workerId}..."
-        )
+        Logging.i(tag,"cancel worker ${workerId}...")
         workerScopeList[workerId]?.cancel()
         workerScopeList.remove(workerId)
     }
