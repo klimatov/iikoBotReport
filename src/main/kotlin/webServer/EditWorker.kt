@@ -176,10 +176,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     selected = editWorkerParam.sendWhenType.toString() == value
                                 }
                             }
-                            span {
-                                style = "color:red;font-size:smaller;font-style: italic;"
-                                +" *Пока реализован только периодический"
-                            }
 
                             repeat(2) { br() }
 
@@ -194,10 +190,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             +"Время отправки (для еженедельного/ежемесячного отчета): "
                             input(type = InputType.time, name = "sendTime") {
                                 value = editWorkerParam.sendTime.joinToString()
-                            }
-                            span {
-                                style = "color:red;font-size:smaller;font-style: italic;"
-                                +" *Пока не реализовано"
                             }
                             repeat(2) { br() }
 
@@ -243,10 +235,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 }
                             }
                             +" (держим CTRL для нескольких)"
-                            span {
-                                style = "color:red;font-size:smaller;font-style: italic;"
-                                +" *Пока не реализовано"
-                            }
                             repeat(2) { br() }
 
                             +"Числа месяца для отправки отчета (32 - отправлять в последний день месяца): "
@@ -264,10 +252,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 }
                             }
                             +" (держим CTRL для нескольких)"
-                            span {
-                                style = "color:red;font-size:smaller;font-style: italic;"
-                                +" *Пока не реализовано"
-                            }
                             repeat(2) { br() }
 
                             +"Отображать ли названия колонок в заголовоке?: "
