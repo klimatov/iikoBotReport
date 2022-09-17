@@ -38,7 +38,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     messageHeader = false, //ok
                     messageSuffix = mapOf(Pair(10, " шт.")), // ok
                     messageAmount = 0, // ok
-                    messageWordLimit = mapOf(Pair(0, 0)),
+                    messageWordLimit = mapOf(Pair(-1, 1)),
                     nameInHeader = false
                 )
                 val workerId = call.request.queryParameters["workerId"]
@@ -49,16 +49,18 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                         title {
                             +"iikoBotReport edit worker"
                         }
+                        meta {
+                            name = "viewport"
+                            content = "width=device-width, initial-scale=1"
+                        }
                     }
                     body {
                         postForm {
-                            input(type = InputType.checkBox, name = "workerIsActive"){
+                            input(type = InputType.checkBox, name = "workerIsActive") {
                                 checked = editWorkerParam.workerIsActive
                             }
-                            +" отчет (worker'а) активен"
-                            repeat(2) { br() }
-
-                            +"ID отчета (worker'а): ${editWorkerParam.workerId}"
+                            +" отчет (worker) активен,"
+                            +" ID: ${editWorkerParam.workerId}"
                             hiddenInput {
                                 name = "workerId"
                                 value = editWorkerParam.workerId
@@ -71,7 +73,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 required = true
                             }
                             +"  "
-                            input(type = InputType.checkBox, name = "nameInHeader"){
+                            input(type = InputType.checkBox, name = "nameInHeader") {
                                 checked = editWorkerParam.nameInHeader
                             }
                             +" выводить в заголовке сообщения"
@@ -96,7 +98,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 //                            }
                             repeat(2) { br() }
 
-                            +"Период данных для формирования отчета из iiko: " //(0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)
+                            +"Период формирования отчета из iiko: " //(0 - сегодня, n - количество дней, -1 с начала недели, -2 с начала месяца, -3 с начала квартала, -4 с начала года)
                             select {
                                 name = "reportPeriodType"
                                 option {
@@ -130,11 +132,14 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     selected = editWorkerParam.reportPeriod > 0
                                 }
                             }
-                            +" количество дней: "
+                            +" кол-во дней: "
                             input(
                                 type = InputType.number,
                                 name = "reportPeriodQuantity"
                             ) {
+//                                style = "width: 5em"
+                                min = "0"
+                                max = "999"
                                 if (editWorkerParam.reportPeriod > 0) value =
                                     editWorkerParam.reportPeriod.toString() else value = "0"
                             }
@@ -147,12 +152,17 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             }
                             repeat(2) { br() }
 
-                            +"Когда отправлять отчет: " //"1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - отчет не отправляем"
+                            +"Когда отправлять отчет: " //"1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно"
                             select {
                                 name = "sendWhenType"
                                 option {
                                     label = "Периодически"
                                     value = "1"
+                                    selected = editWorkerParam.sendWhenType.toString() == value
+                                }
+                                option {
+                                    label = "Ежедневно"
+                                    value = "0"
                                     selected = editWorkerParam.sendWhenType.toString() == value
                                 }
                                 option {
@@ -165,11 +175,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     value = "3"
                                     selected = editWorkerParam.sendWhenType.toString() == value
                                 }
-                                option {
-                                    label = "Отчет не отправляем"
-                                    value = "0"
-                                    selected = editWorkerParam.sendWhenType.toString() == value
-                                }
                             }
                             span {
                                 style = "color:red;font-size:smaller;font-style: italic;"
@@ -180,6 +185,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             +"Период отправки в минутах: "
                             input(type = InputType.number, name = "sendPeriod") {
+                                min = "1"
+                                max = "1440"
                                 value = editWorkerParam.sendPeriod.toString()
                             }
                             repeat(2) { br() }
@@ -243,9 +250,11 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             repeat(2) { br() }
 
                             +"Числа месяца для отправки отчета (32 - отправлять в последний день месяца): "
+                            br()
                             select {
                                 name = "sendMonthDay"
                                 multiple = true
+                                size = "5"
                                 for (day in 1..32) {
                                     option {
                                         label = day.toString()
@@ -261,7 +270,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             }
                             repeat(2) { br() }
 
-                            +"Отображать ли заголовок в отчете?: "
+                            +"Отображать ли названия колонок в заголовоке?: "
                             select {
                                 name = "messageHeader"
                                 option {
@@ -293,6 +302,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             }
                             +" в колонке номер: "
                             input(type = InputType.number, name = "messageSuffixCol") {
+                                min = "0"
+                                max = "20"
                                 value = editWorkerParam.messageSuffix.keys.first()
                                     .toString().toInt().plus(1).toString()
                             }
@@ -300,6 +311,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             +"Доп. строка (ИТОГО) с суммой колонки номер: "
                             input(type = InputType.number, name = "messageAmount") {
+                                min = "0"
+                                max = "20"
                                 value = editWorkerParam.messageAmount.toString()
                             }
                             +" (0 если не выводим)"
@@ -307,16 +320,20 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             +"В колонке номер: "
                             input(type = InputType.number, name = "messageWordLimitCol") {
+                                min = "0"
+                                max = "20"
                                 value = editWorkerParam.messageWordLimit.keys.first()
                                     .toString().toInt().plus(1).toString()
                                 required = true
                             }
+                            +" (0 если не применяем)"
                             +" количество слов не более "
                             input(type = InputType.number, name = "messageWordLimitSum") {
+                                min = "1"
+                                max = "20"
                                 value = editWorkerParam.messageWordLimit.values.first().toString()
                                 required = true
                             }
-                            +" (0 если не применяем)"
                             repeat(2) { br() }
 
 //                        span {
@@ -349,7 +366,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             post("/edit-worker") {
                 val workerList = WorkersRepository().get()
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
-                Logging.d(tag,receiveParam.toString())
+                Logging.d(tag, receiveParam.toString())
                 val htmlWorkerParam = WorkerParam(
                     workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                     workerName = receiveParam["workerName"]?.joinToString() ?: "",
@@ -383,14 +400,14 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
-                    Logging.i(tag,"Нажата кнопка DELETE")
+                    Logging.i(tag, "Нажата кнопка DELETE")
                     workerList?.remove(htmlWorkerParam.workerId)
                     WorkersRepository().set(workerList)
                     reportManager.changeWorkersConfig()
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
-                    Logging.i(tag,"Нажата кнопка SAVE")
+                    Logging.i(tag, "Нажата кнопка SAVE")
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
                     WorkersRepository().set(workerList)
                     reportManager.changeWorkersConfig()

@@ -23,6 +23,10 @@ fun Application.configureRouting() {
                         title {
                             +"iikoBotReport list workers"
                         }
+                        meta {
+                            name = "viewport"
+                            content = "width=device-width, initial-scale=1"
+                        }
                     }
                     body {
                         val workerList = WorkersRepository().get()
