@@ -17,6 +17,7 @@ object ReportRepositoryImpl : ReportRepository {
     private val server = "$SERVER_IP:$SERVER_PORT"
     private var loginCookies: MutableMap<String, String> = mutableMapOf()
     private val path = "/resto/service/reports/report.jspx"
+    private val pathForCheckCookies = "/resto/service/reports/report.css"
 
     init {
         try {
@@ -48,10 +49,14 @@ object ReportRepositoryImpl : ReportRepository {
                 ) {
                     return doc
                 } else {
+                    Logging.e(tag,"Получить данные не удалось, обновляем cookies, возвращаем null")
                     refreshCookies()
                     return null
                 }
-            } else return null
+            } else {
+                Logging.e(tag,"Получить данные не удалось... Возвращаем null")
+                return null
+            }
         } catch (e: Exception) {
             Logging.e(tag,e.toString())
             return null
@@ -72,23 +77,42 @@ object ReportRepositoryImpl : ReportRepository {
                 ) {
                     return doc
                 } else {
+                    Logging.e(tag,"Получить данные не удалось, обновляем cookies, возвращаем null")
                     refreshCookies()
                     return null
                 }
-            } else return null
+            } else {
+                Logging.e(tag,"Получить данные не удалось... Возвращаем null")
+                return null
+            }
         } catch (e: Exception) {
             Logging.e(tag,e.toString())
             return null
         }
     }
 
+    private fun checkCookiesActual(): Boolean {
+        val doc =
+            Jsoup.connect("$server$pathForCheckCookies")
+                .cookies(loginCookies)
+                .userAgent("Chrome/4.0.249.0 Safari/532.5")
+                .referrer(server)
+                .get()
+//        Logging.d(tag, doc.connection().response().url().path)
+        if ((doc.connection().response().url().path == pathForCheckCookies) && (doc.connection().response()
+                .statusCode() == 200)) return true else return false
+    }
+
     private fun checkCookies(): Boolean {
-        if (loginCookies.isEmpty()) return refreshCookies() else return true
+        if (loginCookies.isEmpty()) return refreshCookies() else {
+            val checkResult = if (!checkCookiesActual()) refreshCookies() else true
+            return checkResult
+        }
     }
 
     private fun refreshCookies(): Boolean {
         val res = Jsoup.connect("$server/resto/j_spring_security_check")
-            .data("j_username", login, "j_password", password, "submit", "Log+in")
+            .data("j_username", login, "j_password", password, "submit", "Log in", "_spring_security_remember_me", "on")
             .method(Connection.Method.POST)
             .execute()
         if (!((res.statusCode() == 200) && (res.url().path == "/resto/service/"))) {
