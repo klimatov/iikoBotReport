@@ -1,4 +1,4 @@
-package webServer.plugins
+package webServer
 
 import SecurityData.WEB_LOGIN
 import SecurityData.WEB_PASSWORD
@@ -19,13 +19,4 @@ fun Application.configureAuth() {
     			}
     		}
     	}
-
-/*    routing {
-        authenticate("auth-basic") {
-            get("/auth") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name}")
-            }
-        }
-    }*/
 }
