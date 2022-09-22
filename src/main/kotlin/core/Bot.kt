@@ -1,6 +1,7 @@
 package core
 
 import SecurityData.TELEGRAM_BOT_TOKEN
+import cache.InMemoryCache
 import dev.inmo.tgbotapi.bot.ktor.telegramBot
 import dev.inmo.tgbotapi.extensions.api.bot.getMe
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage
@@ -23,11 +24,17 @@ class Bot(private val job: CompletableJob) {
             onCommand("start") {
                 sendTextMessage(it.chat, "Стартуешь?")
             }
+
             onCommand("getmyid") {
                 val userId = it.asFromUser()?.user?.id?.chatId
                 val chatId = it.chat.id.chatId
                 sendTextMessage(it.chat, "Твой user ID: $userId\nТекущий chat ID: $chatId")
             }
+
+            onCommand("lasterrors") {
+                sendTextMessage(chat = it.chat, text = InMemoryCache.getErrors())
+            }
+
             Logging.i(tag,"Telegram Bot started! ${getMe()}")
         }.start()
     }

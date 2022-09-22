@@ -1,5 +1,6 @@
 package utils
 
+import cache.InMemoryCache
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -23,6 +24,7 @@ class Logging {
 
         fun e(tag: String, message: String) {
             toConsole(type = "E", tag = tag, message = message)
+            InMemoryCache.addError(dateTime = timeStamp(), sourceTag = tag, errorText = message)
         }
 
         fun d(tag: String, message: String) {
