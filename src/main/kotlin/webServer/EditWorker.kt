@@ -10,6 +10,7 @@ import kotlinx.html.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
+import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
@@ -346,7 +347,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             }
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
-                            
+
                             p(classes = "field") {
                                 label(classes = "label") {
                                     +"Отображать ли названия колонок в заголовке?"
@@ -476,6 +477,9 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 val workerList = WorkersRepository().get()
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
                 Logging.d(tag, receiveParam.toString())
+                val userIP = call.request.origin.remoteHost
+                val userName = call.principal<UserIdPrincipal>()?.name
+
 //                Logging.d(tag, receiveParam.get("sendWeekDay").toString())
                 val htmlWorkerParam = WorkerParam(
                     workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
@@ -510,14 +514,20 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
-                    Logging.i(tag, "Нажата кнопка DELETE")
+                    Logging.i(
+                        tag,
+                        "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
+                    )
                     workerList?.remove(htmlWorkerParam.workerId)
                     WorkersRepository().set(workerList)
                     reportManager.changeWorkersConfig()
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
-                    Logging.i(tag, "Нажата кнопка SAVE")
+                    Logging.i(
+                        tag,
+                        "User $userName [$userIP] pressed button SAVE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
+                    )
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
                     WorkersRepository().set(workerList)
                     reportManager.changeWorkersConfig()

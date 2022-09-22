@@ -8,6 +8,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
 import io.ktor.server.http.content.*
+import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.*
@@ -46,24 +47,24 @@ fun Application.configureRouting() {
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
-                                label(classes = "label") {
-                                    +"Список активных отчетов:"
-                                }
-                                workerList?.keys?.forEach {
-                                    p(classes = "field") {
-                                        a(href = "/edit-worker?workerId=$it", classes = "text-input") {
-                                            style = "text-decoration: none;"
-                                            title = it
-                                            +"${workerList[it]?.workerName}"
-                                            if (workerList[it]?.workerIsActive != true) {
-                                                span {
-                                                    style = "color:red;"
-                                                    +" (не активен)"
-                                                }
+                            label(classes = "label") {
+                                +"Список активных отчетов:"
+                            }
+                            workerList?.keys?.forEach {
+                                p(classes = "field") {
+                                    a(href = "/edit-worker?workerId=$it", classes = "text-input") {
+                                        style = "text-decoration: none;"
+                                        title = it
+                                        +"${workerList[it]?.workerName}"
+                                        if (workerList[it]?.workerIsActive != true) {
+                                            span {
+                                                style = "color:red;"
+                                                +" (не активен)"
                                             }
                                         }
                                     }
                                 }
+                            }
 
                             p(classes = "field") {
                                 a(href = "edit-worker", classes = "text-input") {
@@ -101,10 +102,15 @@ fun Application.configureRouting() {
             post("/") {
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
                 Logging.d(tag, receiveParam.toString())
+                val userIP = call.request.origin.remoteHost
+                val userName = call.principal<UserIdPrincipal>()?.name
                 val notes = receiveParam["notes"]?.joinToString()
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
-                    Logging.i(tag, "Нажата кнопка SAVE")
+                    Logging.i(
+                        tag,
+                        "User $userName [$userIP] pressed button SAVE for notes"
+                    )
                     NotesRepository().set(notes)
                 }
                 call.respondRedirect("/")
