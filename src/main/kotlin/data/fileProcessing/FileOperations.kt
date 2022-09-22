@@ -1,4 +1,4 @@
-package fileProcessing
+package data.fileProcessing
 
 import java.io.File
 import utils.Logging
@@ -16,14 +16,21 @@ class FileOperations {
     }
 
     fun read(fileName: String): String {
-        val reader = File(fileName).bufferedReader()
+        val file = File(fileName)
         var text = ""
-        try {
-            text = reader.readText()
-            Logging.i(tag,"Read from $fileName")
-        } finally {
-            reader.close()
-        }
+        if (isFileExist(file)) {
+            val reader = file.bufferedReader()
+            try {
+                text = reader.readText()
+                Logging.i(tag, "Read from $fileName")
+            } finally {
+                reader.close()
+            }
+        } else Logging.e(tag, "File $fileName is missing!")
         return text
+    }
+
+    private fun isFileExist(file: File): Boolean {
+        return file.isFile
     }
 }
