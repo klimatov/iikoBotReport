@@ -1,7 +1,8 @@
 package webServer
 
 import data.fileProcessing.NotesRepository
-import data.fileProcessing.WorkersRepository
+import data.fileProcessing.RemindersRepository
+import data.fileProcessing.ReportsRepository
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -43,20 +44,21 @@ fun Application.configureRouting() {
                         link(rel = "stylesheet", href = "main.css")
                     }
                     body {
-                        val workerList = WorkersRepository().get()
+                        val reportsList = ReportsRepository().get()
+                        val remindersList = RemindersRepository().get()
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
                             label(classes = "label") {
                                 +"Список активных отчетов:"
                             }
-                            workerList?.keys?.forEach {
+                            reportsList.keys.forEach {
                                 p(classes = "field") {
                                     a(href = "/edit-worker?workerId=$it", classes = "text-input") {
                                         style = "text-decoration: none;"
                                         title = it
-                                        +"${workerList[it]?.workerName}"
-                                        if (workerList[it]?.workerIsActive != true) {
+                                        +"${reportsList[it]?.workerName}"
+                                        if (reportsList[it]?.workerIsActive != true) {
                                             span {
                                                 style = "color:red;"
                                                 +" (не активен)"
@@ -70,6 +72,33 @@ fun Application.configureRouting() {
                                 a(href = "edit-worker", classes = "text-input") {
                                     style = "text-decoration: none;"
                                     +"Создать новый отчет"
+                                }
+                            }
+
+
+                            label(classes = "label") {
+                                +"Список активных напоминаний:"
+                            }
+                            remindersList.keys.forEach {
+                                p(classes = "field") {
+                                    a(href = "/edit-reminder?workerId=$it", classes = "text-input") {
+                                        style = "text-decoration: none;"
+                                        title = it
+                                        +"${remindersList[it]?.workerName}"
+                                        if (remindersList[it]?.workerIsActive != true) {
+                                            span {
+                                                style = "color:red;"
+                                                +" (не активен)"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            p(classes = "field") {
+                                a(href = "edit-reminder", classes = "text-input") {
+                                    style = "text-decoration: none;"
+                                    +"Создать новое напоминание"
                                 }
                             }
 

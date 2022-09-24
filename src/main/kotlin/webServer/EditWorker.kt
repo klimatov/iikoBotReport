@@ -2,7 +2,7 @@ package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
 import core.ReportManager
-import data.fileProcessing.WorkersRepository
+import data.fileProcessing.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -15,7 +15,7 @@ import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
-import models.WorkerParam
+import models.ReportWorkerParam
 import java.util.*
 import utils.Logging
 import java.io.File
@@ -31,9 +31,9 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             }
 
             get("/edit-worker") {
-                val workerList = WorkersRepository().get()
+                val workerList = ReportsRepository().get()
                 val newWorkerId = UUID.randomUUID().toString()
-                var editWorkerParam = WorkerParam(
+                var editWorkerParam = ReportWorkerParam(
                     workerId = newWorkerId, // ok
                     workerName = "Отчет-${newWorkerId.take(8)}", // ok
                     reportId = "REPORT_ID", // ok
@@ -214,7 +214,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             p(classes = "field required half") {
                                 label(classes = "label required") {
-                                    +"ID чата/юзера куда будет отправлятся отчет"
+                                    +"ID чата/юзера куда будет отправляться отчет"
                                 }
                                 input(type = InputType.number, name = "sendChatId", classes = "text-input") {
                                     value = editWorkerParam.sendChatId.toString()
@@ -474,14 +474,14 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             }
 
             post("/edit-worker") {
-                val workerList = WorkersRepository().get()
+                val workerList = ReportsRepository().get()
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
                 Logging.d(tag, receiveParam.toString())
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
 
 //                Logging.d(tag, receiveParam.get("sendWeekDay").toString())
-                val htmlWorkerParam = WorkerParam(
+                val htmlWorkerParam = ReportWorkerParam(
                     workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                     workerName = receiveParam["workerName"]?.joinToString() ?: "",
                     reportId = receiveParam["reportId"]?.joinToString() ?: "",
@@ -519,7 +519,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
                     )
                     workerList?.remove(htmlWorkerParam.workerId)
-                    WorkersRepository().set(workerList)
+                    ReportsRepository().set(workerList)
                     reportManager.changeWorkersConfig()
                 }
 
@@ -529,7 +529,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
                     )
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
-                    WorkersRepository().set(workerList)
+                    ReportsRepository().set(workerList)
                     reportManager.changeWorkersConfig()
                 }
                 call.respondRedirect("/")

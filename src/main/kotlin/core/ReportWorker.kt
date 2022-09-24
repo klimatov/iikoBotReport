@@ -6,7 +6,7 @@ import domain.models.ReportParam
 import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.NonCancellable.isActive
-import models.WorkerParam
+import models.ReportWorkerParam
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import utils.Logging
@@ -32,7 +32,7 @@ class ReportWorker(bot: Bot) {
     private var lastSendDate: String = "01.01.2000"
     private var firstStart: Boolean = true
 
-    suspend fun process(workerParam: WorkerParam) {
+    suspend fun process(workerParam: ReportWorkerParam) {
         while (isActive) {
             when (workerParam.sendWhenType) {
                 1 -> sendPeriodical(workerParam)
@@ -41,7 +41,7 @@ class ReportWorker(bot: Bot) {
         }
     }
 
-    private suspend fun sendOnSchedule(workerParam: WorkerParam) {
+    private suspend fun sendOnSchedule(workerParam: ReportWorkerParam) {
         val todayDT = LocalDateTime.now()
         val todayDate = todayDT.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         val secToSendTime =
@@ -83,13 +83,13 @@ class ReportWorker(bot: Bot) {
         delay(delayTime)
     }
 
-    private suspend fun sendPeriodical(workerParam: WorkerParam) {
+    private suspend fun sendPeriodical(workerParam: ReportWorkerParam) {
         Logging.i(tag, "process worker [${workerParam.workerName}] - ${workerParam.workerId}...")
         makeReportPostUseCase.execute(mapToDomain(workerParam = workerParam))
         delay(workerParam.sendPeriod.toDuration(DurationUnit.MINUTES))
     }
 
-    private fun mapToDomain(workerParam: WorkerParam): ReportParam {
+    private fun mapToDomain(workerParam: ReportWorkerParam): ReportParam {
         return ReportParam(
             reportId = workerParam.reportId,
             reportPeriod = workerParam.reportPeriod,

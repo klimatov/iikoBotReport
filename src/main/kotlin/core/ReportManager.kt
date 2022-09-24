@@ -1,21 +1,21 @@
 package core
 
-import data.fileProcessing.WorkersRepository
+import data.fileProcessing.ReportsRepository
 import kotlinx.coroutines.*
-import models.WorkerParam
+import models.ReportWorkerParam
 import utils.Logging
 
 class ReportManager(private val bot: Bot) {
     private val tag = this::class.java.simpleName
     private val workerScopeList: MutableMap<String, Job> = mutableMapOf()
-    private var workerList: MutableMap<String, WorkerParam> = mutableMapOf()
+    private var workerList: MutableMap<String, ReportWorkerParam> = mutableMapOf()
     suspend fun start() {
-        workerList = WorkersRepository().get() ?: mutableMapOf() // загружаем список воркеров
+        workerList = ReportsRepository().get() ?: mutableMapOf() // загружаем список воркеров
         workerList.forEach {
             if (it.value.workerIsActive) addWorker(it.value) // запускаем только если воркер активен
         }
     }
-    suspend fun addWorker(workerParam: WorkerParam) {
+    suspend fun addWorker(workerParam: ReportWorkerParam) {
         if (!workerScopeList.containsKey(workerParam.workerId)) {
             Logging.i(tag,"start worker ${workerParam.workerId}...")
             val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerParam.workerId)) {
@@ -38,7 +38,7 @@ class ReportManager(private val bot: Bot) {
 
     suspend fun changeWorkersConfig() {
         val oldWorkerList = workerList // сохранили список работающих воркеров
-        workerList = WorkersRepository().get() ?: mutableMapOf() // получили актуальный список воркеров
+        workerList = ReportsRepository().get() ?: mutableMapOf() // получили актуальный список воркеров
         workerList.forEach {// перебираем актуальные воркеры
             if (oldWorkerList.containsKey(it.key) && it.value != oldWorkerList[it.key]) {
                             // если воркер есть в старом списке и конфиг воркера изменился - перезапускаем воркер

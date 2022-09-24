@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import webServer.configureEditReminder
 
 val job = SupervisorJob()
 private val bot by lazy { Bot(job) }
@@ -45,6 +46,7 @@ fun main() {
         configureAuth()
         configureRouting()
         configureEditWorker(reportManager)
+        configureEditReminder(reportManager)
     }.start(wait = true)
 
     while (true) {
