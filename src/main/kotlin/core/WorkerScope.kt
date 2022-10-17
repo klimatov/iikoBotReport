@@ -2,14 +2,13 @@ package core
 
 import data.repository.BotRepositoryImpl
 import data.repository.ReportRepositoryImpl
+import domain.models.ReminderParam
 import domain.models.ReportParam
+import domain.usecases.MakeReminderPostUseCase
 import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.NonCancellable.isActive
-import models.ActiveWorkerParam
-import models.ReportWorkerParam
-import models.WorkerParam
-import models.WorkerType
+import models.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import utils.Logging
@@ -32,6 +31,10 @@ class WorkerScope(bot: Bot) {
         MakeReportPostUseCase(reportRepository = reportRepository, botRepository = botRepository)
     }
 
+    private val makeReminderPostUseCase by lazy {
+        MakeReminderPostUseCase(botRepository = botRepository)
+    }
+
     private var lastSendDate: String = "01.01.2000"
     private var firstStart: Boolean = true
 
@@ -42,6 +45,11 @@ class WorkerScope(bot: Bot) {
         anyWorkerParam = reportWorkerParam
         workerType = WorkerType.REPORT
         process(reportWorkerParam.workerParam)
+    }
+    suspend fun processReminder(reminderWorkerParam: ReminderWorkerParam) {
+        anyWorkerParam = reminderWorkerParam
+        workerType = WorkerType.REMINDER
+        process(reminderWorkerParam.workerParam)
     }
 
     suspend fun process(workerParam: WorkerParam) {
@@ -56,9 +64,11 @@ class WorkerScope(bot: Bot) {
     private suspend fun sendMessage() {
         when (workerType) {
             WorkerType.REPORT -> {
-                makeReportPostUseCase.execute(mapToDomain(workerParam = anyWorkerParam as ReportWorkerParam))
+                makeReportPostUseCase.execute(mapReportToDomain(workerParam = anyWorkerParam as ReportWorkerParam))
             }
-            WorkerType.REMINDER -> {}
+            WorkerType.REMINDER -> {
+                makeReminderPostUseCase.execute(mapReminderToDomain(reminderWorkerParam = anyWorkerParam as ReminderWorkerParam))
+            }
         }
     }
 
@@ -120,7 +130,16 @@ class WorkerScope(bot: Bot) {
         delay(delayTime)
     }
 
-    private fun mapToDomain(workerParam: ReportWorkerParam): ReportParam {
+    private fun mapReminderToDomain(reminderWorkerParam: ReminderWorkerParam): ReminderParam {
+        return ReminderParam(
+            sendChatId = reminderWorkerParam.workerParam.sendChatId,
+            nameInHeader = reminderWorkerParam.workerParam.nameInHeader,
+            workerName = reminderWorkerParam.workerParam.workerName,
+            reminderText = reminderWorkerParam.reminderText
+        )
+    }
+
+    private fun mapReportToDomain(workerParam: ReportWorkerParam): ReportParam {
         return ReportParam(
             reportId = workerParam.reportId,
             reportPeriod = workerParam.reportPeriod,

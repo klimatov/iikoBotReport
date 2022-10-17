@@ -1,5 +1,6 @@
 package core
 
+import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
 import kotlinx.coroutines.*
 import models.*
@@ -19,6 +20,17 @@ class WorkersManager(private val bot: Bot) {
                 ActiveWorkerParam(
                     workerId = it.value.workerParam.workerId,
                     workerType = WorkerType.REPORT,
+                    workerState = WorkerState.CREATE,
+                    workerIsActive = it.value.workerParam.workerIsActive
+                ) // если активен, добавляем в список воркеров
+        }
+
+        remindersList = RemindersRepository().get() ?: mutableMapOf() // загружаем список напоминаний
+        remindersList.forEach {
+            if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
+                ActiveWorkerParam(
+                    workerId = it.value.workerParam.workerId,
+                    workerType = WorkerType.REMINDER,
                     workerState = WorkerState.CREATE,
                     workerIsActive = it.value.workerParam.workerIsActive
                 ) // если активен, добавляем в список воркеров
@@ -46,7 +58,9 @@ class WorkersManager(private val bot: Bot) {
                     WorkerType.REPORT -> {
                         WorkerScope(bot = bot).processReport(reportsList[workerParam.workerId] ?: ReportWorkerParam())
                     }
-                    WorkerType.REMINDER -> {}
+                    WorkerType.REMINDER -> {
+                        WorkerScope(bot = bot).processReminder(remindersList[workerParam.workerId] ?: ReminderWorkerParam())
+                    }
                 }
             }
             scope.start()
@@ -91,7 +105,16 @@ class WorkersManager(private val bot: Bot) {
                 if (workerState == WorkerState.DELETE) reportsList.remove(workerData.workerParam.workerId) else
                     reportsList[workerData.workerParam.workerId] = workerData
             }
-            is ReminderWorkerParam -> {}
+            is ReminderWorkerParam -> {
+                activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(
+                    workerId = workerData.workerParam.workerId,
+                    workerType = WorkerType.REMINDER,
+                    workerState = workerState,
+                    workerIsActive = workerData.workerParam.workerIsActive
+                )
+                if (workerState == WorkerState.DELETE) remindersList.remove(workerData.workerParam.workerId) else
+                    remindersList[workerData.workerParam.workerId] = workerData
+            }
         }
         processWorkers()
     }

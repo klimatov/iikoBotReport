@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import utils.Logging
+
 class MakeReportPostUseCase(private val reportRepository: ReportRepository, private val botRepository: BotRepository) {
     private val tag = this::class.java.simpleName
     private var oldReport = ReportResult(null)
@@ -35,8 +36,11 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
             )
             val sendResult = SendReportMessage(botRepository = botRepository).execute(messageParam)
             oldReport.table = result.table
-            Logging.i(tag,"Данные изменились, ${if (sendResult) "отправлены в чат" else "отправить в чат НЕ УДАЛОСЬ"}...")
-        } else Logging.i(tag,"Данные не изменились...")
+            Logging.i(
+                tag,
+                "Данные изменились, ${if (sendResult) "отправлены в чат" else "отправить в чат НЕ УДАЛОСЬ"}..."
+            )
+        } else Logging.i(tag, "Данные не изменились...")
     }
 
     private fun mapToRequestParam(reportParam: ReportParam): RequestParam {
