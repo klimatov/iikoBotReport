@@ -10,17 +10,17 @@ class WorkersManager(private val bot: Bot) {
     private val scopesList: MutableMap<String, Job> = mutableMapOf()
     private var reportsList: MutableMap<String, ReportWorkerParam> = mutableMapOf()
     private var remindersList: MutableMap<String, ReminderWorkerParam> = mutableMapOf()
-    private var activeWorkersList: MutableMap<String, WorkersParam> = mutableMapOf()
+    private var activeWorkersList: MutableMap<String, ActiveWorkerParam> = mutableMapOf()
 
     suspend fun start() {
         reportsList = ReportsRepository().get() ?: mutableMapOf() // загружаем список репортов
         reportsList.forEach {
-            if (it.value.workerIsActive) activeWorkersList[it.value.workerId] =
-                WorkersParam(
-                    workerId = it.value.workerId,
+            if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
+                ActiveWorkerParam(
+                    workerId = it.value.workerParam.workerId,
                     workerType = WorkerType.REPORT,
                     workerState = WorkerState.CREATE,
-                    workerIsActive = it.value.workerIsActive
+                    workerIsActive = it.value.workerParam.workerIsActive
                 ) // если активен, добавляем в список воркеров
         }
 
@@ -38,7 +38,7 @@ class WorkersManager(private val bot: Bot) {
         }
     }
 
-    private suspend fun createWorker(workerParam: WorkersParam) { //если скоупа нет и воркер активен, то запускаем
+    private suspend fun createWorker(workerParam: ActiveWorkerParam) { //если скоупа нет и воркер активен, то запускаем
         if ((!scopesList.containsKey(workerParam.workerId)) && (workerParam.workerIsActive)) {
             Logging.i(tag, "Появился новый worker ${workerParam.workerId}, ЗАПУСК")
             val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerParam.workerId)) {
@@ -60,7 +60,7 @@ class WorkersManager(private val bot: Bot) {
         }
     }
 
-    private suspend fun updateWorker(workerParam: WorkersParam) {
+    private suspend fun updateWorker(workerParam: ActiveWorkerParam) {
         if (scopesList.containsKey(workerParam.workerId)) {
             Logging.i(tag, "Изменение конфигурации worker'а ${workerParam.workerId}, ОБРАБОТКА")
             cancelWorker(workerParam.workerId)
@@ -68,7 +68,7 @@ class WorkersManager(private val bot: Bot) {
         createWorker(workerParam)
     }
 
-    private suspend fun deleteWorker(workerParam: WorkersParam) {
+    private suspend fun deleteWorker(workerParam: ActiveWorkerParam) {
         Logging.i(tag, "В конфигурации удален worker ${workerParam.workerId}, УДАЛЕНИЕ")
         cancelWorker(workerParam.workerId)
         activeWorkersList[workerParam.workerId]?.workerState = WorkerState.DELETED
@@ -83,14 +83,14 @@ class WorkersManager(private val bot: Bot) {
     suspend fun makeChangeWorker(workerState: WorkerState, workerData: Any) {
         when (workerData) {
             is ReportWorkerParam -> {
-                activeWorkersList[workerData.workerId] = WorkersParam(
-                    workerId = workerData.workerId,
+                activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(
+                    workerId = workerData.workerParam.workerId,
                     workerType = WorkerType.REPORT,
                     workerState = workerState,
-                    workerIsActive = workerData.workerIsActive
+                    workerIsActive = workerData.workerParam.workerIsActive
                 )
-                if (workerState == WorkerState.DELETE) reportsList.remove(workerData.workerId) else
-                    reportsList[workerData.workerId] = workerData
+                if (workerState == WorkerState.DELETE) reportsList.remove(workerData.workerParam.workerId) else
+                    reportsList[workerData.workerParam.workerId] = workerData
             }
             is ReminderWorkerParam -> {}
         }

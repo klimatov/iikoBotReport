@@ -57,8 +57,8 @@ fun Application.configureRouting() {
                                     a(href = "/edit-worker?workerId=$it", classes = "text-input") {
                                         style = "text-decoration: none;"
                                         title = it
-                                        +"${reportsList[it]?.workerName}"
-                                        if (reportsList[it]?.workerIsActive != true) {
+                                        +"${reportsList[it]?.workerParam?.workerName}"
+                                        if (reportsList[it]?.workerParam?.workerIsActive != true) {
                                             span {
                                                 style = "color:red;"
                                                 +" (не активен)"
@@ -84,8 +84,8 @@ fun Application.configureRouting() {
                                     a(href = "/edit-reminder?workerId=$it", classes = "text-input") {
                                         style = "text-decoration: none;"
                                         title = it
-                                        +"${remindersList[it]?.workerName}"
-                                        if (remindersList[it]?.workerIsActive != true) {
+                                        +"${remindersList[it]?.workerParam?.workerName}"
+                                        if (remindersList[it]?.workerParam?.workerIsActive != true) {
                                             span {
                                                 style = "color:red;"
                                                 +" (не активен)"

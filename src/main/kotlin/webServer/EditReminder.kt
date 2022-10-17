@@ -15,6 +15,7 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import models.ReminderWorkerParam
+import models.WorkerParam
 import models.WorkerState
 import java.util.*
 import utils.Logging
@@ -34,16 +35,18 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                 val reminderList = RemindersRepository().get()
                 val newWorkerId = UUID.randomUUID().toString()
                 var editReminderParam = ReminderWorkerParam(
-                    workerId = newWorkerId, // ok
-                    workerName = "Напоминание-${newWorkerId.take(8)}", // ok
-                    reminderText = "", // текст напоминания
-                    sendChatId = TELEGRAM_CHAT_ID, // ok
-                    sendWhenType = 1,
-                    sendPeriod = 5,
-                    sendTime = listOf("10:00"),
-                    sendWeekDay = listOf(),
-                    sendMonthDay = listOf(),
-                    nameInHeader = true
+                    workerParam = WorkerParam(
+                        workerId = newWorkerId, // ok
+                        workerName = "Напоминание-${newWorkerId.take(8)}", // ok
+                        sendChatId = TELEGRAM_CHAT_ID, // ok
+                        sendWhenType = 1,
+                        sendPeriod = 5,
+                        sendTime = listOf("10:00"),
+                        sendWeekDay = listOf(),
+                        sendMonthDay = listOf(),
+                        nameInHeader = true
+                    ),
+                    reminderText = "" // текст напоминания
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reminderList.containsKey(workerId) == true) editReminderParam = reminderList[workerId]!!
@@ -68,7 +71,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                             p(classes = "field") {
                                 input(type = InputType.checkBox, name = "workerIsActive", classes = "checkbox-input") {
-                                    checked = editReminderParam.workerIsActive
+                                    checked = editReminderParam.workerParam.workerIsActive
                                     id = "workerIsActive"
                                 }
                                 label(classes = "checkbox-label") {
@@ -77,12 +80,12 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                             "var c = document.querySelector('#workerIsActive');\n" +
                                             "c.checked = !c.checked }\n" +
                                             "setCheckbox();"
-                                    +"Напоминание с ID: ${editReminderParam.workerId} активно"
+                                    +"Напоминание с ID: ${editReminderParam.workerParam.workerId} активно"
                                 }
                             }
                             hiddenInput {
                                 name = "workerId"
-                                value = editReminderParam.workerId
+                                value = editReminderParam.workerParam.workerId
                             }
 
 
@@ -91,14 +94,14 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                     +"Название напоминания"
                                 }
                                 input(type = InputType.text, name = "workerName", classes = "text-input") {
-                                    value = editReminderParam.workerName
+                                    value = editReminderParam.workerParam.workerName
                                     required = true
                                     id = "workerName"
                                 }
                             }
                             p(classes = "field half") {
                                 input(type = InputType.checkBox, name = "nameInHeader", classes = "checkbox-input") {
-                                    checked = editReminderParam.nameInHeader
+                                    checked = editReminderParam.workerParam.nameInHeader
                                     id = "nameInHeader"
                                 }
                                 label(classes = "checkbox-label") {
@@ -116,7 +119,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                     +"ID чата/юзера куда будет отправляться напоминание"
                                 }
                                 input(type = InputType.number, name = "sendChatId", classes = "text-input") {
-                                    value = editReminderParam.sendChatId.toString()
+                                    value = editReminderParam.workerParam.sendChatId.toString()
                                     required = true
                                 }
                             }
@@ -131,25 +134,25 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                     option {
 //                                        label = "Периодически"
                                         value = "1"
-                                        selected = editReminderParam.sendWhenType.toString() == value
+                                        selected = editReminderParam.workerParam.sendWhenType.toString() == value
                                         +"Периодически"
                                     }
                                     option {
 //                                        label = "Ежедневно"
                                         value = "0"
-                                        selected = editReminderParam.sendWhenType.toString() == value
+                                        selected = editReminderParam.workerParam.sendWhenType.toString() == value
                                         +"Ежедневно"
                                     }
                                     option {
 //                                        label = "Дни недели"
                                         value = "2"
-                                        selected = editReminderParam.sendWhenType.toString() == value
+                                        selected = editReminderParam.workerParam.sendWhenType.toString() == value
                                         +"Дни недели"
                                     }
                                     option {
 //                                        label = "Числа месяца"
                                         value = "3"
-                                        selected = editReminderParam.sendWhenType.toString() == value
+                                        selected = editReminderParam.workerParam.sendWhenType.toString() == value
                                         +"Числа месяца"
                                     }
                                 }
@@ -163,7 +166,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                 input(type = InputType.number, name = "sendPeriod", classes = "text-input") {
                                     min = "1"
                                     max = "1440"
-                                    value = editReminderParam.sendPeriod.toString()
+                                    value = editReminderParam.workerParam.sendPeriod.toString()
                                 }
                             }
 
@@ -173,7 +176,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                     +"Время отправки (дни/недели/месяцы)"
                                 }
                                 input(type = InputType.time, name = "sendTime", classes = "text-input") {
-                                    value = editReminderParam.sendTime.joinToString()
+                                    value = editReminderParam.workerParam.sendTime.joinToString()
                                 }
                             }
 
@@ -203,7 +206,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                             ) {
                                                 value = day.toString()
                                                 id = "sendWeekDay-${day}"
-                                                checked = editReminderParam.sendWeekDay.toString().contains(value)
+                                                checked =
+                                                    editReminderParam.workerParam.sendWeekDay.toString().contains(value)
                                             }
                                             label(classes = "checkbox-label") {
                                                 onClick = "function setCheckbox() {\n" +
@@ -231,7 +235,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                             ) {
                                                 value = day.toString()
                                                 id = "sendMonthDay-${day}"
-                                                checked = editReminderParam.sendMonthDay.contains(value.toInt())
+                                                checked =
+                                                    editReminderParam.workerParam.sendMonthDay.contains(value.toInt())
                                             }
                                             label(classes = "checkbox-label") {
                                                 onClick = "function setCheckbox() {\n" +
@@ -306,25 +311,25 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
 //                Logging.d(tag, receiveParam.get("sendWeekDay").toString())
                 val htmlReminderParam = ReminderWorkerParam(
-                    workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
-                    workerName = receiveParam["workerName"]?.joinToString() ?: "",
-                    reminderText = receiveParam["reminderText"]?.joinToString() ?: "",
-                    sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
-                    sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
-                    sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
-                    sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
-                    sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
-                    sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
-                    nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
-                    workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"
+                    workerParam = WorkerParam(workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
+                        workerName = receiveParam["workerName"]?.joinToString() ?: "",
+                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
+                        sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
+                        sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
+                        sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
+                        sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
+                        sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
+                        nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
+                        workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"),
+                    reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(
                         tag,
-                        "User $userName [$userIP] pressed button DELETE for worker ${htmlReminderParam.workerName} - ${htmlReminderParam.workerId}"
+                        "User $userName [$userIP] pressed button DELETE for worker ${htmlReminderParam.workerParam.workerName} - ${htmlReminderParam.workerParam.workerId}"
                     )
-                    reminderList.remove(htmlReminderParam.workerId)
+                    reminderList.remove(htmlReminderParam.workerParam.workerId)
                     RemindersRepository().set(reminderList)
 //                    reportManager.changeWorkersConfig()
                     workersManager.makeChangeWorker(
@@ -336,9 +341,9 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
                     Logging.i(
                         tag,
-                        "User $userName [$userIP] pressed button SAVE for worker ${htmlReminderParam.workerName} - ${htmlReminderParam.workerId}"
+                        "User $userName [$userIP] pressed button SAVE for worker ${htmlReminderParam.workerParam.workerName} - ${htmlReminderParam.workerParam.workerId}"
                     )
-                    reminderList.put(htmlReminderParam.workerId, htmlReminderParam)
+                    reminderList.put(htmlReminderParam.workerParam.workerId, htmlReminderParam)
                     RemindersRepository().set(reminderList)
 //                    reportManager.changeWorkersConfig()
                     workersManager.makeChangeWorker(

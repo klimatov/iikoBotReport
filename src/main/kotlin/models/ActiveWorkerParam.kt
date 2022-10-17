@@ -1,6 +1,6 @@
 package models
 
-data class WorkersParam(
+data class ActiveWorkerParam(
     val workerId: String,
     val workerType: WorkerType,
     var workerState: WorkerState,
