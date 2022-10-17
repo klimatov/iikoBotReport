@@ -42,10 +42,9 @@ class WorkersManager(private val bot: Bot) {
         if ((!scopesList.containsKey(workerParam.workerId)) && (workerParam.workerIsActive)) {
             Logging.i(tag, "Появился новый worker ${workerParam.workerId}, ЗАПУСК")
             val scope = CoroutineScope(Dispatchers.Default).launch(CoroutineName(workerParam.workerId)) {
-
                 when (workerParam.workerType) {
                     WorkerType.REPORT -> {
-                        ReportWorker(bot = bot).process(reportsList[workerParam.workerId] ?: ReportWorkerParam())
+                        WorkerScope(bot = bot).processReport(reportsList[workerParam.workerId] ?: ReportWorkerParam())
                     }
                     WorkerType.REMINDER -> {}
                 }
