@@ -1,7 +1,7 @@
 package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
-import core.ReportManager
+import core.WorkersManager
 import data.fileProcessing.RemindersRepository
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -15,11 +15,12 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import models.ReminderWorkerParam
+import models.WorkerState
 import java.util.*
 import utils.Logging
 import java.io.File
 
-fun Application.configureEditReminder(reportManager: ReportManager) {
+fun Application.configureEditReminder(workersManager: WorkersManager) {
     val tag = "configureEditReminder"
     routing {
         authenticate("auth-basic") {
@@ -325,7 +326,11 @@ fun Application.configureEditReminder(reportManager: ReportManager) {
                     )
                     reminderList.remove(htmlReminderParam.workerId)
                     RemindersRepository().set(reminderList)
-                    reportManager.changeWorkersConfig()
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.DELETE,
+                        workerData = htmlReminderParam
+                    )
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
@@ -335,7 +340,11 @@ fun Application.configureEditReminder(reportManager: ReportManager) {
                     )
                     reminderList.put(htmlReminderParam.workerId, htmlReminderParam)
                     RemindersRepository().set(reminderList)
-                    reportManager.changeWorkersConfig()
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.UPDATE,
+                        workerData = htmlReminderParam
+                    )
                 }
                 call.respondRedirect("/")
             }

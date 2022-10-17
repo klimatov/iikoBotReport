@@ -1,7 +1,7 @@
 package models
 
 data class ReportWorkerParam(
-    val workerId: String, // ID отчета (worker'а)
+    val workerId: String = "", // ID отчета (worker'а)
     val workerName: String = "", // название отчета
     val reportId: String = "", // ID отчета в iiko
     val reportPeriod: Int = 0, // период данных для формирования отчета из iiko

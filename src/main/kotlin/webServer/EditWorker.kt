@@ -1,7 +1,7 @@
 package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
-import core.ReportManager
+import core.WorkersManager
 import data.fileProcessing.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
@@ -16,11 +16,12 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import models.ReportWorkerParam
+import models.WorkerState
 import java.util.*
 import utils.Logging
 import java.io.File
 
-fun Application.configureEditWorker(reportManager: ReportManager) {
+fun Application.configureEditWorker(workersManager: WorkersManager) {
     val tag = "configureEditWorker"
     routing {
         authenticate("auth-basic") {
@@ -35,7 +36,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 val newWorkerId = UUID.randomUUID().toString()
                 var editWorkerParam = ReportWorkerParam(
                     workerId = newWorkerId, // ok
-                    workerName = "Отчет-${newWorkerId.take(8)}", // ok
+                    workerName = "Отчет-${newWorkerId.takeLast(12)}", // ok
                     reportId = "REPORT_ID", // ok
                     reportPeriod = 0, //ok
                     sendChatId = TELEGRAM_CHAT_ID, // ok
@@ -480,7 +481,6 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
 
-//                Logging.d(tag, receiveParam.get("sendWeekDay").toString())
                 val htmlWorkerParam = ReportWorkerParam(
                     workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                     workerName = receiveParam["workerName"]?.joinToString() ?: "",
@@ -520,7 +520,11 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     )
                     workerList?.remove(htmlWorkerParam.workerId)
                     ReportsRepository().set(workerList)
-                    reportManager.changeWorkersConfig()
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.DELETE,
+                        workerData = htmlWorkerParam
+                    )
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
@@ -530,7 +534,11 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                     )
                     workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
                     ReportsRepository().set(workerList)
-                    reportManager.changeWorkersConfig()
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.UPDATE,
+                        workerData = htmlWorkerParam
+                    )
                 }
                 call.respondRedirect("/")
             }
