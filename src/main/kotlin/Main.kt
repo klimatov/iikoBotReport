@@ -1,7 +1,7 @@
 import SecurityData.WEB_HOST
 import SecurityData.WEB_PORT
 import core.Bot
-import core.ReportManager
+import core.WorkersManager
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -15,15 +15,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import webServer.configureEditReminder
 
 val job = SupervisorJob()
 private val bot by lazy { Bot(job) }
-private val reportManager by lazy(LazyThreadSafetyMode.NONE) { ReportManager(bot) }
+private val workersManager by lazy(LazyThreadSafetyMode.NONE) { WorkersManager(bot) }
 
 fun main() {
     CoroutineScope(Dispatchers.Default + job).launch {
         bot.start()
-        reportManager.start()
+        workersManager.start()
     }.start()
 
     embeddedServer(factory = Netty, port = WEB_PORT, host = WEB_HOST) {
@@ -44,7 +45,8 @@ fun main() {
         }
         configureAuth()
         configureRouting()
-        configureEditWorker(reportManager)
+        configureEditWorker(workersManager)
+        configureEditReminder(workersManager)
     }.start(wait = true)
 
     while (true) {

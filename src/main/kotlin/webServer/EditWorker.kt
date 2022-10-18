@@ -1,8 +1,8 @@
 package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
-import core.ReportManager
-import data.fileProcessing.WorkersRepository
+import core.WorkersManager
+import data.fileProcessing.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -15,12 +15,14 @@ import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import models.ReportWorkerParam
 import models.WorkerParam
+import models.WorkerState
 import java.util.*
 import utils.Logging
 import java.io.File
 
-fun Application.configureEditWorker(reportManager: ReportManager) {
+fun Application.configureEditWorker(workersManager: WorkersManager) {
     val tag = "configureEditWorker"
     routing {
         authenticate("auth-basic") {
@@ -31,24 +33,26 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             }
 
             get("/edit-worker") {
-                val workerList = WorkersRepository().get()
+                val workerList = ReportsRepository().get()
                 val newWorkerId = UUID.randomUUID().toString()
-                var editWorkerParam = WorkerParam(
-                    workerId = newWorkerId, // ok
-                    workerName = "Отчет-${newWorkerId.take(8)}", // ok
+                var editWorkerParam = ReportWorkerParam(
+                    workerParam = WorkerParam(
+                        sendChatId = TELEGRAM_CHAT_ID, // ok
+                        sendWhenType = 1,
+                        sendPeriod = 5,
+                        sendTime = listOf("10:00"),
+                        sendWeekDay = listOf(),
+                        sendMonthDay = listOf(),
+                        nameInHeader = true,
+                        workerId = newWorkerId, // ok
+                        workerName = "Отчет-${newWorkerId.takeLast(12)}" // ok
+                    ),
                     reportId = "REPORT_ID", // ok
                     reportPeriod = 0, //ok
-                    sendChatId = TELEGRAM_CHAT_ID, // ok
-                    sendWhenType = 1,
-                    sendPeriod = 5,
-                    sendTime = listOf("10:00"),
-                    sendWeekDay = listOf(),
-                    sendMonthDay = listOf(),
                     messageHeader = true, //ok
                     messageSuffix = mapOf(Pair(-1, " шт.")), // ok
                     messageAmount = 0, // ok
-                    messageWordLimit = mapOf(Pair(-1, 1)),
-                    nameInHeader = true
+                    messageWordLimit = mapOf(Pair(-1, 1))
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (workerList?.containsKey(workerId) == true) editWorkerParam = workerList[workerId]!!
@@ -73,7 +77,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             p(classes = "field") {
                                 input(type = InputType.checkBox, name = "workerIsActive", classes = "checkbox-input") {
-                                    checked = editWorkerParam.workerIsActive
+                                    checked = editWorkerParam.workerParam.workerIsActive
                                     id = "workerIsActive"
                                 }
                                 label(classes = "checkbox-label") {
@@ -82,12 +86,12 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                             "var c = document.querySelector('#workerIsActive');\n" +
                                             "c.checked = !c.checked }\n" +
                                             "setCheckbox();"
-                                    +"Отчет с ID: ${editWorkerParam.workerId} активен"
+                                    +"Отчет с ID: ${editWorkerParam.workerParam.workerId} активен"
                                 }
                             }
                             hiddenInput {
                                 name = "workerId"
-                                value = editWorkerParam.workerId
+                                value = editWorkerParam.workerParam.workerId
                             }
 
 
@@ -96,14 +100,14 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     +"Название отчета"
                                 }
                                 input(type = InputType.text, name = "workerName", classes = "text-input") {
-                                    value = editWorkerParam.workerName
+                                    value = editWorkerParam.workerParam.workerName
                                     required = true
                                     id = "workerName"
                                 }
                             }
                             p(classes = "field half") {
                                 input(type = InputType.checkBox, name = "nameInHeader", classes = "checkbox-input") {
-                                    checked = editWorkerParam.nameInHeader
+                                    checked = editWorkerParam.workerParam.nameInHeader
                                     id = "nameInHeader"
                                 }
                                 label(classes = "checkbox-label") {
@@ -214,10 +218,10 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
 
                             p(classes = "field required half") {
                                 label(classes = "label required") {
-                                    +"ID чата/юзера куда будет отправлятся отчет"
+                                    +"ID чата/юзера куда будет отправляться отчет"
                                 }
                                 input(type = InputType.number, name = "sendChatId", classes = "text-input") {
-                                    value = editWorkerParam.sendChatId.toString()
+                                    value = editWorkerParam.workerParam.sendChatId.toString()
                                     required = true
                                 }
                             }
@@ -232,25 +236,29 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     option {
 //                                        label = "Периодически"
                                         value = "1"
-                                        selected = editWorkerParam.sendWhenType.toString() == value
+                                        selected =
+                                            editWorkerParam.workerParam.sendWhenType.toString() == value
                                         +"Периодически"
                                     }
                                     option {
 //                                        label = "Ежедневно"
                                         value = "0"
-                                        selected = editWorkerParam.sendWhenType.toString() == value
+                                        selected =
+                                            editWorkerParam.workerParam.sendWhenType.toString() == value
                                         +"Ежедневно"
                                     }
                                     option {
 //                                        label = "Дни недели"
                                         value = "2"
-                                        selected = editWorkerParam.sendWhenType.toString() == value
+                                        selected =
+                                            editWorkerParam.workerParam.sendWhenType.toString() == value
                                         +"Дни недели"
                                     }
                                     option {
 //                                        label = "Числа месяца"
                                         value = "3"
-                                        selected = editWorkerParam.sendWhenType.toString() == value
+                                        selected =
+                                            editWorkerParam.workerParam.sendWhenType.toString() == value
                                         +"Числа месяца"
                                     }
                                 }
@@ -264,7 +272,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                 input(type = InputType.number, name = "sendPeriod", classes = "text-input") {
                                     min = "1"
                                     max = "1440"
-                                    value = editWorkerParam.sendPeriod.toString()
+                                    value = editWorkerParam.workerParam.sendPeriod.toString()
                                 }
                             }
 
@@ -274,7 +282,7 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                     +"Время отправки (дни/недели/месяцы)"
                                 }
                                 input(type = InputType.time, name = "sendTime", classes = "text-input") {
-                                    value = editWorkerParam.sendTime.joinToString()
+                                    value = editWorkerParam.workerParam.sendTime.joinToString()
                                 }
                             }
 
@@ -304,7 +312,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                             ) {
                                                 value = day.toString()
                                                 id = "sendWeekDay-${day}"
-                                                checked = editWorkerParam.sendWeekDay.toString().contains(value)
+                                                checked = editWorkerParam.workerParam.sendWeekDay.toString()
+                                                    .contains(value)
                                             }
                                             label(classes = "checkbox-label") {
                                                 onClick = "function setCheckbox() {\n" +
@@ -332,7 +341,8 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                                             ) {
                                                 value = day.toString()
                                                 id = "sendMonthDay-${day}"
-                                                checked = editWorkerParam.sendMonthDay.contains(value.toInt())
+                                                checked =
+                                                    editWorkerParam.workerParam.sendMonthDay.contains(value.toInt())
                                             }
                                             label(classes = "checkbox-label") {
                                                 onClick = "function setCheckbox() {\n" +
@@ -474,27 +484,30 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
             }
 
             post("/edit-worker") {
-                val workerList = WorkersRepository().get()
+                val workerList = ReportsRepository().get()
                 val receiveParam: Map<String, List<String>> = call.receiveParameters().toMap()
                 Logging.d(tag, receiveParam.toString())
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
 
-//                Logging.d(tag, receiveParam.get("sendWeekDay").toString())
-                val htmlWorkerParam = WorkerParam(
-                    workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
-                    workerName = receiveParam["workerName"]?.joinToString() ?: "",
-                    reportId = receiveParam["reportId"]?.joinToString() ?: "",
+                val htmlWorkerParam = ReportWorkerParam(
+                    workerParam = WorkerParam(
+                        workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
+                        workerName = receiveParam["workerName"]?.joinToString() ?: "",
+                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
+                        sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
+                        sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
+                        sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
+                        sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
+                        sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
+                        nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
+                        workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
+                    ),
+                    reportId = receiveParam ["reportId"]?.joinToString() ?: "",
                     reportPeriod = (if ((receiveParam["reportPeriodType"]?.joinToString()?.toInt()
                             ?: 0) > 0
                     ) receiveParam["reportPeriodQuantity"]?.joinToString()
                         ?.toInt() else receiveParam["reportPeriodType"]?.joinToString()?.toInt()) ?: 0,
-                    sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
-                    sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
-                    sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
-                    sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
-                    sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
-                    sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
                     messageHeader = receiveParam["messageHeader"]?.joinToString().toBoolean(),
                     messageSuffix = mapOf(
                         Pair(
@@ -509,28 +522,34 @@ fun Application.configureEditWorker(reportManager: ReportManager) {
                             receiveParam["messageWordLimitSum"]?.joinToString()?.toInt()
                         ) as Pair<Int, Int>
                     ),
-                    nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
-                    workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(
                         tag,
-                        "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
+                        "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerParam.workerName} - ${htmlWorkerParam.workerParam.workerId}"
                     )
-                    workerList?.remove(htmlWorkerParam.workerId)
-                    WorkersRepository().set(workerList)
-                    reportManager.changeWorkersConfig()
+                    workerList?.remove(htmlWorkerParam.workerParam.workerId)
+                    ReportsRepository().set(workerList)
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.DELETE,
+                        workerData = htmlWorkerParam
+                    )
                 }
 
                 if (receiveParam.containsKey("saveButton")) {                                   // - SAVE !!!
                     Logging.i(
                         tag,
-                        "User $userName [$userIP] pressed button SAVE for worker ${htmlWorkerParam.workerName} - ${htmlWorkerParam.workerId}"
+                        "User $userName [$userIP] pressed button SAVE for worker ${htmlWorkerParam.workerParam.workerName} - ${htmlWorkerParam.workerParam.workerId}"
                     )
-                    workerList?.put(htmlWorkerParam.workerId, htmlWorkerParam)
-                    WorkersRepository().set(workerList)
-                    reportManager.changeWorkersConfig()
+                    workerList?.put(htmlWorkerParam.workerParam.workerId, htmlWorkerParam)
+                    ReportsRepository().set(workerList)
+//                    reportManager.changeWorkersConfig()
+                    workersManager.makeChangeWorker(
+                        workerState = WorkerState.UPDATE,
+                        workerData = htmlWorkerParam
+                    )
                 }
                 call.respondRedirect("/")
             }
