@@ -5,9 +5,6 @@ import core.WorkersManager
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
-import webServer.configureAuth
-import webServer.configureEditWorker
-import webServer.configureRouting
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cachingheaders.*
@@ -15,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import webServer.configureEditReminder
+import webServer.*
 
 val job = SupervisorJob()
 private val bot by lazy { Bot(job) }
@@ -47,6 +44,7 @@ fun main() {
         configureRouting()
         configureEditWorker(workersManager)
         configureEditReminder(workersManager)
+        configureEditNameIdBundle()
     }.start(wait = true)
 
     while (true) {
