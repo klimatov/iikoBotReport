@@ -163,43 +163,36 @@ private fun UL.newBundle(
             input(type = InputType.text, name = "name${bundleParam.botUserId}", classes = "text-input") {
                 value = bundleParam.name
                 title = "Имя чата/пользователя"
-//                id = "name${bundleParam.botUserId}"
                 readonly = true
+                required = true
             }
         }
         p(classes = "field withicons") {
-            input(type = InputType.text, name = "tgid${bundleParam.botUserId}", classes = "text-input") {
+            input(type = InputType.number, name = "tgid${bundleParam.botUserId}", classes = "text-input") {
                 value = bundleParam.telegramId.toString()
                 title = "ID в telegram"
-//                id = "tgid${bundleParam.botUserId}"
                 readonly = true
+                required = true
             }
         }
         p(classes = "icons") {
             onClick = "editButtonPress(this);"
-//            onClick = "editButtonPress(${bundleParam.botUserId});"
             img(classes = "resize", alt = "EDIT", src = "png/pencil.png") {
-//                id = "edit${bundleParam.botUserId}"
             }
         }
         p(classes = "icons") {
             img(classes = "resize", alt = "CHECK", src = "png/arrow_circle.png") {
-//                id = "check${bundleParam.botUserId}"
             }
         }
         p(classes = "icons") {
             onClick = "deleteButtonPress(this);"
-//            onClick = "deleteButtonPress(${bundleParam.botUserId});"
             img(classes = "resize", alt = "DELETE", src = "png/trash.png") {
-//                id = "delete${bundleParam.botUserId}"
             }
         }
         hiddenInput {
             name = "id${bundleParam.botUserId}"
             value = "${bundleParam.botUserId}"
         }
-
         style { +"#template {display: none;}" }
-
     }
 }
