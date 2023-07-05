@@ -26,7 +26,7 @@ fun Application.configureEditNameIdBundle() {
                 files("css")
             }
             get("/edit-name-id-bundle") {
-                val bundleParamList = NameIdBundleRepository.get()
+                val nameIdBundleList = NameIdBundleRepository.get()
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
                         title {
@@ -50,7 +50,7 @@ fun Application.configureEditNameIdBundle() {
 
                             ul(classes = "ul") {
                                 newBundle() // добавляем скрытый шаблон
-                                bundleParamList.forEach { bundleParam ->
+                                nameIdBundleList.forEach { bundleParam ->
                                     newBundle(bundleParam)
                                 }
                             }
@@ -79,7 +79,7 @@ fun Application.configureEditNameIdBundle() {
                                         hiddenInput {
                                             id = "counter"
                                             value =
-                                                "${(bundleParamList.maxWithOrNull(Comparator.comparingInt { it.botUserId })?.botUserId ?: 0)}"
+                                                "${(nameIdBundleList.maxWithOrNull(Comparator.comparingInt { it.botUserId })?.botUserId ?: 0)}"
                                         }
                                     }
 

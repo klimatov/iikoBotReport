@@ -26,7 +26,7 @@ internal class FormatTextTest {
         val messageParam: MessageParam = MessageParam(
             reportResult = ReportResult(table),
             oldReport = ReportResult(tableOld),
-            sendChatId = 0,
+            sendChatId = listOf(),
             messageHeader = false,
             messageSuffix = mapOf(Pair(1," руб."),Pair(10," шт.")),
             messageAmount = 2

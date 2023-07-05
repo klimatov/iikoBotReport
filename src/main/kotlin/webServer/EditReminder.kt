@@ -2,6 +2,7 @@ package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
 import core.WorkersManager
+import data.fileProcessing.NameIdBundleRepository
 import data.fileProcessing.RemindersRepository
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -32,13 +33,14 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
             }
 
             get("/edit-reminder") {
+                val nameIdBundleList = NameIdBundleRepository.get()
                 val reminderList = RemindersRepository().get()
                 val newWorkerId = UUID.randomUUID().toString()
                 var editReminderParam = ReminderWorkerParam(
                     workerParam = WorkerParam(
                         workerId = newWorkerId, // ok
                         workerName = "Напоминание-${newWorkerId.take(8)}", // ok
-                        sendChatId = TELEGRAM_CHAT_ID, // ok
+                        sendChatId = listOf(), // ok
                         sendWhenType = 1,
                         sendPeriod = 5,
                         sendTime = listOf("10:00"),
@@ -114,7 +116,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                 }
                             }
 
-                            sendChatIdField(editReminderParam.workerParam.sendChatId.toString())
+                            sendChatIdField(listOf(editReminderParam.workerParam.sendChatId.toString()), nameIdBundleList)
 
                             p(classes = "field half") {
                                 label(classes = "label") {
@@ -304,7 +306,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                 val htmlReminderParam = ReminderWorkerParam(
                     workerParam = WorkerParam(workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                         workerName = receiveParam["workerName"]?.joinToString() ?: "",
-                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
+                        sendChatId = receiveParam["sendChatId"]?.map { it.toLong() } ?: listOf(),
+//                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
                         sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
                         sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
                         sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
@@ -314,6 +317,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"),
                     reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
+                Logging.d(tag, receiveParam["sendChatId"].toString())
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(

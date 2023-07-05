@@ -9,8 +9,14 @@ class SendReminderMessage(private val botRepository: BotRepository) {
 
     suspend fun execute(reminderParam: ReminderParam): Boolean {
         val messageText = FormatText().reminder(reminderParam)
-        if (messageText.isNotEmpty()) {
-            return botRepository.sendMessageToChat(text = messageText, sendChatId = reminderParam.sendChatId)
+        if ((messageText.isNotEmpty()) && (reminderParam.sendChatId.isNotEmpty())) {
+            var resultFlag = true
+            reminderParam.sendChatId.forEach {
+                if (!botRepository.sendMessageToChat(text = messageText, sendChatId = it)) {
+                    resultFlag = false
+                }
+            }
+            return resultFlag // TODO: переделать на отправку результата по каждому адресату
         } else return false
     }
 }

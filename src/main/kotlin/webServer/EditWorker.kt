@@ -2,6 +2,7 @@ package webServer
 
 import SecurityData.TELEGRAM_CHAT_ID
 import core.WorkersManager
+import data.fileProcessing.NameIdBundleRepository
 import data.fileProcessing.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
@@ -33,11 +34,12 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
             }
 
             get("/edit-worker") {
+                val nameIdBundleList = NameIdBundleRepository.get()
                 val workerList = ReportsRepository().get()
                 val newWorkerId = UUID.randomUUID().toString()
                 var editWorkerParam = ReportWorkerParam(
                     workerParam = WorkerParam(
-                        sendChatId = TELEGRAM_CHAT_ID, // ok
+                        sendChatId = listOf(), // ok
                         sendWhenType = 1,
                         sendPeriod = 5,
                         sendTime = listOf("10:00"),
@@ -216,7 +218,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                             }
 
 
-                            sendChatIdField(editWorkerParam.workerParam.sendChatId.toString())
+                            sendChatIdField(listOf(editWorkerParam.workerParam.sendChatId.toString()), nameIdBundleList)
 
 
                             p(classes = "field half") {
@@ -486,7 +488,8 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                     workerParam = WorkerParam(
                         workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                         workerName = receiveParam["workerName"]?.joinToString() ?: "",
-                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
+                        sendChatId = receiveParam["sendChatId"]?.map { it.toLong() } ?: listOf(),
+//                        sendChatId = receiveParam["sendChatId"]?.joinToString()?.toLong() ?: 0,
                         sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
                         sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
                         sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),

@@ -52,7 +52,7 @@ class WorkerScope(bot: Bot) {
         process(reminderWorkerParam.workerParam)
     }
 
-    suspend fun process(workerParam: WorkerParam) {
+    private suspend fun process(workerParam: WorkerParam) {
         while (isActive) {
             when (workerParam.sendWhenType) {
                 1 -> sendPeriodical(workerParam)

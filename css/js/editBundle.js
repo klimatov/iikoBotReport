@@ -12,16 +12,18 @@ function editButtonPress(id) {
 }
 
 function deleteButtonPress(id) {
-    console.log(id);
-    var delElement = id.parentElement;
-    delElement.style.display = 'none';
+//    console.log(id);
+    let delElement = id.parentElement;
+//    delElement.style.display = 'none';
+//    delElement.id = "delete"
+    delElement.parentNode.removeChild(delElement)
 }
 
 function addButtonPress() {
     let count = parseInt(document.getElementById('counter').value) + 1;
     document.getElementById('counter').value = count;
     let template = document.getElementById('template');
-    console.log(template)
+//    console.log(template)
     let new_element = template.cloneNode(true);
     new_element.style.display = '';
     new_element.children[0].children[0].name = 'name' + count;
@@ -32,7 +34,7 @@ function addButtonPress() {
     let del = new_element.getElementsByTagName('style')[0]
     del.parentNode.removeChild(del)
     new_element.id = "new"
-    console.log(new_element);
+//    console.log(new_element);
     template.after(new_element);
-    console.log(count);
+//    console.log(count);
 }
