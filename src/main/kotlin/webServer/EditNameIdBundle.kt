@@ -139,7 +139,7 @@ fun Application.configureEditNameIdBundle() {
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
 
-                call.respondRedirect("/edit-name-id-bundle")
+                call.respondRedirect("/")
             }
 
 

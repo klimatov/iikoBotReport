@@ -102,6 +102,16 @@ fun Application.configureRouting() {
                                 }
                             }
 
+                            label(classes = "label") {
+                                +"Настройки:"
+                            }
+
+                            p(classes = "field") {
+                                a(href = "edit-name-id-bundle", classes = "text-input") {
+                                    style = "text-decoration: none;"
+                                    +"Настроить список адресатов telegram"
+                                }
+                            }
 
                             p(classes = "field") {
                                 label(classes = "label") {
