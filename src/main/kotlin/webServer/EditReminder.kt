@@ -114,16 +114,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                 }
                             }
 
-                            p(classes = "field required half") {
-                                label(classes = "label required") {
-                                    +"ID чата/юзера куда будет отправляться напоминание"
-                                }
-                                input(type = InputType.number, name = "sendChatId", classes = "text-input") {
-                                    value = editReminderParam.workerParam.sendChatId.toString()
-                                    required = true
-                                }
-                            }
-
+                            sendChatIdField(editReminderParam.workerParam.sendChatId.toString())
 
                             p(classes = "field half") {
                                 label(classes = "label") {

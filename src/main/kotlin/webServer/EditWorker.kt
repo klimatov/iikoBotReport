@@ -216,15 +216,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                             }
 
 
-                            p(classes = "field required half") {
-                                label(classes = "label required") {
-                                    +"ID чата/юзера куда будет отправляться отчет"
-                                }
-                                input(type = InputType.number, name = "sendChatId", classes = "text-input") {
-                                    value = editWorkerParam.workerParam.sendChatId.toString()
-                                    required = true
-                                }
-                            }
+                            sendChatIdField(editWorkerParam.workerParam.sendChatId.toString())
 
 
                             p(classes = "field half") {
@@ -556,3 +548,4 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
         }
     }
 }
+
