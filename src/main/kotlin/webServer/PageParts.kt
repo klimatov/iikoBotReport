@@ -128,7 +128,7 @@ fun FORM.sendTimeField(sendTime: List<String>) {
     p(classes = "field half") {
         id = "sendTime"
         label(classes = "label") {
-            +"Время отправки (дни/недели/месяцы)"
+            +"Время отправки"
         }
         input(type = InputType.time, name = "sendTime", classes = "text-input") {
             value = sendTime.joinToString()

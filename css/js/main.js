@@ -52,12 +52,41 @@ function setCheckbox(id) {
     c.checked = !c.checked;
 }
 
-function onSelectWhenType(select) {
-    var selectedOption = select.options[select.selectedIndex]
-    console.log('Выбор: ' + selectedOption.value)
-}
-
 function editOnLoad() {
     var select = document.getElementsByName('sendWhenType')[0]
     onSelectWhenType(select)
+}
+
+function onSelectWhenType(select) { //"1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно"
+    var selectedOption = select.options[select.selectedIndex]
+    console.log('Выбор: >' + selectedOption.value + '<')
+
+    switch(selectedOption.value) {
+        case '0':
+            document.getElementById('sendPeriod').style.display = 'none';
+            document.getElementById('sendTime').style.display = '';
+            document.getElementById('sendWeekDay').style.display = 'none';
+            document.getElementById('sendMonthDay').style.display = 'none';
+            break;
+        case '1':
+            document.getElementById('sendPeriod').style.display = '';
+            document.getElementById('sendTime').style.display = 'none';
+            document.getElementById('sendWeekDay').style.display = 'none';
+            document.getElementById('sendMonthDay').style.display = 'none';
+        break;
+        case '2':
+            document.getElementById('sendPeriod').style.display = 'none';
+            document.getElementById('sendTime').style.display = '';
+            document.getElementById('sendWeekDay').style.display = '';
+            document.getElementById('sendMonthDay').style.display = 'none';
+        break;
+        case '3':
+            document.getElementById('sendPeriod').style.display = 'none';
+            document.getElementById('sendTime').style.display = '';
+            document.getElementById('sendWeekDay').style.display = 'none';
+            document.getElementById('sendMonthDay').style.display = '';
+        break;
+        default:
+            console.log("Непредусмотренный вариант")
+    }
 }
