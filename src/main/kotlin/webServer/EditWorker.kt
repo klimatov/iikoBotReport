@@ -218,7 +218,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                             }
 
 
-                            sendChatIdField(listOf(editWorkerParam.workerParam.sendChatId.toString()), nameIdBundleList)
+                            sendChatIdField(editWorkerParam.workerParam.sendChatId, nameIdBundleList)
 
 
                             p(classes = "field half") {

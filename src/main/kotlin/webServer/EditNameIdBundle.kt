@@ -47,32 +47,24 @@ fun Application.configureEditNameIdBundle() {
                     }
                     body {
                         postForm(classes = "form") {
-
                             ul(classes = "ul") {
                                 newBundle() // добавляем скрытый шаблон
                                 nameIdBundleList.forEach { bundleParam ->
                                     newBundle(bundleParam)
                                 }
                             }
-
-                            //!!!!! ---------------------------------------------------------------------------------------------------------------
-
                             p(classes = "field half") {
-
                                 ul(classes = "options") {
-
                                     li(classes = "option") {
                                         input(type = InputType.submit, classes = "button") {
                                             name = "saveButton"
                                             value = "Сохранить"
                                         }
                                     }
-
                                     li(classes = "option") {
                                         input(type = InputType.button, classes = "button") {
                                             name = "addButton"
                                             onClick =
-//                                                "addButtonPress(this);"
                                                 "addButtonPress();"
                                             value = "Добавить"
                                         }
@@ -82,7 +74,6 @@ fun Application.configureEditNameIdBundle() {
                                                 "${(nameIdBundleList.maxWithOrNull(Comparator.comparingInt { it.botUserId })?.botUserId ?: 0)}"
                                         }
                                     }
-
                                     li(classes = "option") {
                                         input(type = InputType.button, classes = "button") {
                                             name = "backButton"
@@ -92,21 +83,13 @@ fun Application.configureEditNameIdBundle() {
                                     }
                                 }
                             }
-
-//!!!!! ---------------------------------------------------------------------------------------------------------------
-
                         }
-
-
                         script(type = "text/javascript", src = "js/editBundle.js") {}
-
-
                     }
                 }
             }
 
             post("/edit-name-id-bundle") {
-//                Logging.d(tag, call.receiveParameters().toString())
                 val bundleParamList: MutableList<BundleParam> = mutableListOf()
                 val receiveParam: Map<String, String> =
                     call.receiveParameters()
@@ -131,18 +114,13 @@ fun Application.configureEditNameIdBundle() {
                     )
                 }
 
-                Logging.d(tag, bundleParamList.toString())
-
                 NameIdBundleRepository.set(bundleParamList)
-
 
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
 
                 call.respondRedirect("/")
             }
-
-
         }
     }
 }

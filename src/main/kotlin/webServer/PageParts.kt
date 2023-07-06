@@ -3,21 +3,14 @@ package webServer
 import kotlinx.html.*
 import models.BundleParam
 
-fun FORM.sendChatIdField(fieldValue: List<String>, nameIdBundleList: List<BundleParam>) {
+fun FORM.sendChatIdField(fieldValues: List<Long>, nameIdBundleList: List<BundleParam>) {
+    val tag = "sendChatIdField"
     div(classes = "field") {
-//    p(classes = "field required half") {
         label(classes = "label required") {
             +"ID чата/юзера куда будут отправляться данные"
         }
-//        input(type = InputType.number, name = "sendChatId", classes = "text-input") {
-//            value = fieldValue
-//            required = true
-//        }
-
-
         ul(classes = "checkboxes") {
-
-            nameIdBundleList.forEach {nameIdBundle ->
+            nameIdBundleList.forEach { nameIdBundle ->
                 li(classes = "checkbox") {
                     input(
                         type = InputType.checkBox,
@@ -26,7 +19,7 @@ fun FORM.sendChatIdField(fieldValue: List<String>, nameIdBundleList: List<Bundle
                     ) {
                         value = nameIdBundle.telegramId.toString()
                         id = "tgid-${nameIdBundle.telegramId}"
-                        checked = fieldValue.contains(value)
+                        checked = fieldValues.contains(value.toLongOrNull())
                     }
                     label(classes = "checkbox-label") {
                         onClick = "function setBundleCheckbox() {\n" +
@@ -36,14 +29,8 @@ fun FORM.sendChatIdField(fieldValue: List<String>, nameIdBundleList: List<Bundle
                         +nameIdBundle.name
                     }
                 }
-
-
-
             }
-
         }
     }
-
-
 }
 

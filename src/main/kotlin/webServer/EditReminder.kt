@@ -116,7 +116,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                                 }
                             }
 
-                            sendChatIdField(listOf(editReminderParam.workerParam.sendChatId.toString()), nameIdBundleList)
+                            sendChatIdField(editReminderParam.workerParam.sendChatId, nameIdBundleList)
 
                             p(classes = "field half") {
                                 label(classes = "label") {
