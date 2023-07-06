@@ -84,7 +84,7 @@ fun Application.configureEditNameIdBundle() {
                                 }
                             }
                         }
-                        script(type = "text/javascript", src = "js/editBundle.js") {}
+                        script(type = "text/javascript", src = "js/main.js") {}
                     }
                 }
             }

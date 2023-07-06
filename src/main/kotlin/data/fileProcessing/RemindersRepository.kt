@@ -9,7 +9,6 @@ class RemindersRepository {
     private val tag = this::class.java.simpleName
     fun get(): MutableMap<String, ReminderWorkerParam> {
         val serializedData = FileOperations().read("reminders.cfg")
-        Logging.d(tag,serializedData)
         val type = object : TypeToken<MutableMap<String, ReminderWorkerParam>>() {}.type
         var workerList =
             Gson().fromJson<MutableMap<String, ReminderWorkerParam>>(serializedData, type)
