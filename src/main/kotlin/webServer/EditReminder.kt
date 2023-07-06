@@ -86,6 +86,9 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                             sendMonthDay(editReminderParam.workerParam.sendMonthDay)
 
+
+                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
                                 label(classes = "label") {
@@ -130,7 +133,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"),
                     reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
-                Logging.d(tag, receiveParam["sendChatId"].toString())
+                Logging.d(tag, receiveParam["sendDateTime"].toString())
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(

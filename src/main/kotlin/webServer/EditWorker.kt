@@ -180,6 +180,9 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
 
                             sendMonthDay(editWorkerParam.workerParam.sendMonthDay)
 
+
+                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field") {
                                 label(classes = "label") {

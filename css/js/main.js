@@ -57,7 +57,7 @@ function editOnLoad() {
     onSelectWhenType(select)
 }
 
-function onSelectWhenType(select) { //"1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно"
+function onSelectWhenType(select) { //1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно, 4 - В указанные даты
     var selectedOption = select.options[select.selectedIndex]
     console.log('Выбор: >' + selectedOption.value + '<')
 
@@ -67,26 +67,60 @@ function onSelectWhenType(select) { //"1 - периодически, 2 - дни 
             document.getElementById('sendTime').style.display = '';
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
+            document.getElementById('sendDateTime').style.display = 'none';
             break;
         case '1':
             document.getElementById('sendPeriod').style.display = '';
             document.getElementById('sendTime').style.display = 'none';
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
+            document.getElementById('sendDateTime').style.display = 'none';
         break;
         case '2':
             document.getElementById('sendPeriod').style.display = 'none';
             document.getElementById('sendTime').style.display = '';
             document.getElementById('sendWeekDay').style.display = '';
             document.getElementById('sendMonthDay').style.display = 'none';
+            document.getElementById('sendDateTime').style.display = 'none';
         break;
         case '3':
             document.getElementById('sendPeriod').style.display = 'none';
             document.getElementById('sendTime').style.display = '';
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = '';
+            document.getElementById('sendDateTime').style.display = 'none';
+        break;
+        case '4':
+            document.getElementById('sendPeriod').style.display = 'none';
+            document.getElementById('sendTime').style.display = 'none';
+            document.getElementById('sendWeekDay').style.display = 'none';
+            document.getElementById('sendMonthDay').style.display = 'none';
+            document.getElementById('sendDateTime').style.display = '';
         break;
         default:
             console.log("Непредусмотренный вариант")
     }
+}
+
+function sendDateTimeClick(iconClickElement){
+    let del = iconClickElement.parentElement;
+    del.parentNode.removeChild(del)
+}
+
+function addDateTimeField(iconClickElement){
+    let template = document.getElementById('sendDateTimeTemplate');
+    let new_element = template.cloneNode(true);
+    new_element.style.display = '';
+    let del = new_element.getElementsByTagName('style')[0];
+    del.parentNode.removeChild(del);
+    new_element.id = "new";
+
+    var currentDate = new Date();
+    currentDate.setUTCHours(currentDate.getUTCHours() + 7);
+    var localDate = currentDate.toISOString().split(':')
+    var nowDate = localDate[0] + ':' + localDate[1]
+    console.log(new_element);
+    new_element.children[0].children[0].value = nowDate
+
+    template.after(new_element);
 }

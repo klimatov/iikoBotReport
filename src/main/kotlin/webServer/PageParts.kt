@@ -2,7 +2,6 @@ package webServer
 
 import kotlinx.html.*
 import models.BundleParam
-import models.ReminderWorkerParam
 
 fun FORM.workerIdField(workerId: String, workerIsActive: Boolean, workerTypeName: String) {
     val fieldName = "workerIsActive"
@@ -81,7 +80,8 @@ fun FORM.sendChatIdField(fieldValues: List<Long>, nameIdBundleList: List<BundleP
 fun FORM.sendWhenTypeField(sendWhenType: Int, workerTypeName: String) {
     p(classes = "field half") {
         label(classes = "label") {
-            +"Когда отправлять $workerTypeName" //"1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно"
+            +"Когда отправлять $workerTypeName"
+        //1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно, 4 - В указанные даты
         }
         select(classes = "select") {
             name = "sendWhenType"
@@ -105,6 +105,11 @@ fun FORM.sendWhenTypeField(sendWhenType: Int, workerTypeName: String) {
                 value = "3"
                 selected = sendWhenType.toString() == value
                 +"Числа месяца"
+            }
+            option {
+                value = "4"
+                selected = sendWhenType.toString() == value
+                +"В указанные даты"
             }
         }
     }
@@ -130,7 +135,7 @@ fun FORM.sendTimeField(sendTime: List<String>) {
         label(classes = "label") {
             +"Время отправки"
         }
-        input(type = InputType.time, name = "sendTime", classes = "text-input") {
+        input(type = InputType.time, name = "sendTime", classes = "text-input time") {
             value = sendTime.joinToString()
         }
     }
@@ -226,5 +231,51 @@ fun FORM.bottomButtonsField() {
                 }
             }
         }
+    }
+}
+
+fun FORM.sendDateField(sendDateTimeList: List<String>) {
+    div(classes = "field") {
+        id = "sendDateTime"
+        label(classes = "label") {
+            +"Даты и время отправки"
+        }
+        ul(classes = "checkboxes") {
+            sendDateFieldElement("2000-01-01T00:00") // template
+            sendDateTimeList.forEach { sendDateTime ->
+                sendDateFieldElement(sendDateTime)
+            }
+            li(classes = "checkbox") {
+                p(classes = "icons") {
+                    onClick = "addDateTimeField(this);"
+                    img(classes = "resize", alt = "ADD", src = "png/plus.png") {
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+private fun UL.sendDateFieldElement(sendDateTime: String) {
+    li(classes = "checkbox") {
+        if (sendDateTime == "2000-01-01T00:00") { // скрытый шаблон для новых строк
+            id = "sendDateTimeTemplate"
+        }
+        p(classes = "one_line") {
+            input(
+                type = InputType.dateTimeLocal,
+                classes = "text-input time",
+                name = "sendDateTime"
+            ) {
+                value = sendDateTime
+            }
+        }
+        p(classes = "icons") {
+            onClick = "sendDateTimeClick(this);"
+            img(classes = "resize", alt = "DELETE", src = "png/trash.png") {
+            }
+        }
+        style { +"#sendDateTimeTemplate {display: none;}" }
     }
 }

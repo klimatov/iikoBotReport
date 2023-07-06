@@ -88,7 +88,7 @@ body {
 } /* цвет фона фокуса */
 
 .form .option-input, .form .checkbox-input {
-  border: 0;
+  border: none;
   clip: rect(0 0 0 0); /* область позиционированного элемента, в которой будет показано его содержимое. Все, что не помещается в эту область, будет обрезано и становится невидимым */
   height: 1px;
   margin: -1px;
@@ -242,19 +242,18 @@ body {
 .form .resize{
     height: 1.6em;
     width: 100%;
-filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
 }
 
 .form .icons {
     height: auto;
     width: auto;
-      line-height: normal;
-      cursor: pointer;
-  background-color: #222222;
-  color: white;
-      color: white;
-        margin: 0 0 1.5em 0;
-        padding: 0.4em 0.4em;
+    line-height: normal;
+    cursor: pointer;
+    background-color: #222222;
+    color: white;
+    margin: 0 0 1.5em 0;
+    padding: 0.4em 0.4em;
   }
 
   @media screen and (min-width: 40em) {
@@ -262,4 +261,45 @@ filter: brightness(0) invert(1);
       width: calc(40% - 1px);
     }
   } /* ширина для полей c иконками */
+
+  @media screen and (min-width: 40em) {
+    .form .text-input.withicons {
+      width: calc(40% - 1px);
+    }
+  } /* ширина для полей c иконками */
+
+  .form .one_line {
+    height: auto;
+    width: auto;
+    margin: 0 0 1.5em 0;
+    padding: 0 1px;
+  }
+
+  .form .text-input[type="time"] {
+    cursor: pointer;
+  }
+
+  .form .text-input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    height: 1em;
+    filter: brightness(0) invert(1);
+    }
+
+  .form .text-input[type="datetime-local"] {
+    cursor: pointer;
+  }
+
+  .form .text-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    height: 1em;
+    filter: brightness(0) invert(1);
+    }
+
+  .form .text-input.time {
+      padding-top: 0.62em;
+      padding-bottom: 0.62em;
+  }
+
+
+
 
