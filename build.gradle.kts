@@ -6,8 +6,8 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.7.10"
-    id("io.ktor.plugin") version "2.1.0"
+    kotlin("jvm") version "1.8.22"
+    id("io.ktor.plugin") version "2.3.2"
 }
 
 group = "com.github.klimatov"
@@ -22,15 +22,19 @@ application {
 repositories {
     mavenCentral()
 }
-
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of("11"))
+    }
+}
 dependencies {
-    implementation ("dev.inmo:tgbotapi:1.0.1")
+    implementation ("dev.inmo:tgbotapi:9.0.0")
     implementation("org.jsoup:jsoup:1.15.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     implementation("org.junit.jupiter:junit-jupiter:5.9.0")
 
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.0")
     implementation("io.ktor:ktor-server-html-builder-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
