@@ -137,8 +137,6 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                     ),
                     reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
-                Logging.d(tag, "datetimeRaw: ${htmlReminderParam.workerParam.sendDateTimeList.toString()}")
-                Logging.d(tag, "datetime: ${htmlReminderParam.workerParam.sendDateTimeList.toString()}")
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(
