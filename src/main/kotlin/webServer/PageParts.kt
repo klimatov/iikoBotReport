@@ -2,6 +2,7 @@ package webServer
 
 import kotlinx.html.*
 import models.BundleParam
+import java.time.LocalDateTime
 
 fun FORM.workerIdField(workerId: String, workerIsActive: Boolean, workerTypeName: String) {
     val fieldName = "workerIsActive"
@@ -266,7 +267,11 @@ private fun UL.sendDateFieldElement(sendDateTime: String) {
         p(classes = "one_line") {
             input(
                 type = InputType.dateTimeLocal,
-                classes = "text-input time",
+                classes = if (LocalDateTime.parse(sendDateTime) < LocalDateTime.now()) {
+                    "text-input time outdated"
+                } else {
+                    "text-input time actual"
+                },
                 name = "sendDateTime"
             ) {
                 value = sendDateTime

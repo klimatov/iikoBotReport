@@ -302,6 +302,12 @@ body {
       padding-bottom: 0.62em;
   }
 
+  .form .text-input.time.actual {
+      color: white;
+  }
 
+  .form .text-input.time.outdated {
+      color: red;
+  }
 
 
