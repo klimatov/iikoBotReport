@@ -122,5 +122,5 @@ function addDateTimeField(iconClickElement){
     console.log(new_element);
     new_element.children[0].children[0].value = nowDate
 
-    template.after(new_element);
+    document.getElementById('sendDateTimePlus').before(new_element);
 }

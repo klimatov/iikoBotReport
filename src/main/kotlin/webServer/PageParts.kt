@@ -246,6 +246,7 @@ fun FORM.sendDateField(sendDateTimeList: List<String>) {
                 sendDateFieldElement(sendDateTime)
             }
             li(classes = "checkbox") {
+                id = "sendDateTimePlus"
                 p(classes = "icons") {
                     onClick = "addDateTimeField(this);"
                     img(classes = "resize", alt = "ADD", src = "png/plus.png") {
