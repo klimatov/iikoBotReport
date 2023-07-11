@@ -45,7 +45,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         sendTime = listOf("10:00"),
                         sendWeekDay = listOf(),
                         sendMonthDay = listOf(),
-                        nameInHeader = true
+                        nameInHeader = true,
+                        sendDateTimeList = listOf()
                     ),
                     reminderText = "" // текст напоминания
                 )
@@ -87,7 +88,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             sendMonthDay(editReminderParam.workerParam.sendMonthDay)
 
 
-                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+                            sendDateField(editReminderParam.workerParam.sendDateTimeList)
+//                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -130,10 +132,13 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
                         sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
                         nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
-                        workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on"),
+                        workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
+                        sendDateTimeList = (receiveParam["sendDateTime"]?.filter { it != "2000-01-01T00:00"} ?: listOf()),
+                    ),
                     reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
-                Logging.d(tag, receiveParam["sendDateTime"].toString())
+                Logging.d(tag, "datetimeRaw: ${htmlReminderParam.workerParam.sendDateTimeList.toString()}")
+                Logging.d(tag, "datetime: ${htmlReminderParam.workerParam.sendDateTimeList.toString()}")
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(

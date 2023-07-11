@@ -47,7 +47,8 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                         sendMonthDay = listOf(),
                         nameInHeader = true,
                         workerId = newWorkerId, // ok
-                        workerName = "Отчет-${newWorkerId.takeLast(12)}" // ok
+                        workerName = "Отчет-${newWorkerId.takeLast(12)}", // ok
+                        sendDateTimeList = listOf()
                     ),
                     reportId = "REPORT_ID", // ok
                     reportPeriod = 0, //ok
@@ -181,7 +182,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                             sendMonthDay(editWorkerParam.workerParam.sendMonthDay)
 
 
-                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+                            sendDateField(editWorkerParam.workerParam.sendDateTimeList)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field") {
@@ -301,6 +302,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                         sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
                         nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
+                        sendDateTimeList = receiveParam["sendDateTime"]?.filter { it != "2000-01-01T00:00"} ?: listOf(),
                     ),
                     reportId = receiveParam["reportId"]?.joinToString() ?: "",
                     reportPeriod = (if ((receiveParam["reportPeriodType"]?.joinToString()?.toInt()

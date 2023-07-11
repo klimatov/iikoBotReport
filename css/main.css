@@ -232,7 +232,7 @@ body {
 		background:url('arrow.png') no-repeat right center;
 	background-size:25px;
 	background-color:#222222;
-	
+    cursor: pointer;
 }
 
 .form .select::-ms-expand {
@@ -276,7 +276,7 @@ body {
   }
 
   .form .text-input[type="time"] {
-    cursor: pointer;
+    cursor: default;
   }
 
   .form .text-input[type="time"]::-webkit-calendar-picker-indicator {
@@ -286,13 +286,15 @@ body {
     }
 
   .form .text-input[type="datetime-local"] {
-    cursor: pointer;
+    cursor: default;
   }
 
   .form .text-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     height: 1em;
     filter: brightness(0) invert(1);
+    margin-left: -10px;
+    margin-right: -10px;
     }
 
   .form .text-input.time {
