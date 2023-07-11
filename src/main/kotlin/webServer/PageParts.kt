@@ -267,7 +267,7 @@ private fun UL.sendDateFieldElement(sendDateTime: String) {
         p(classes = "one_line") {
             input(
                 type = InputType.dateTimeLocal,
-                classes = if (LocalDateTime.parse(sendDateTime) < LocalDateTime.now()) {
+                classes = if ((LocalDateTime.parse(sendDateTime) < LocalDateTime.now())&&(sendDateTime != "2000-01-01T00:00")) {
                     "text-input time outdated"
                 } else {
                     "text-input time actual"

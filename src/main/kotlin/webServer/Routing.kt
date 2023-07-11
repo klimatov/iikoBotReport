@@ -50,7 +50,7 @@ fun Application.configureRouting() {
                         postForm(classes = "form") {
 
                             label(classes = "label") {
-                                +"Список активных отчетов:"
+                                +"Список отчетов:"
                             }
                             reportsList.keys.forEach {
                                 p(classes = "field") {
@@ -77,7 +77,7 @@ fun Application.configureRouting() {
 
 
                             label(classes = "label") {
-                                +"Список активных напоминаний:"
+                                +"Список напоминаний:"
                             }
                             remindersList.keys.forEach {
                                 p(classes = "field") {

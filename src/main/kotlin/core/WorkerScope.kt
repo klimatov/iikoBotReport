@@ -184,11 +184,12 @@ class WorkerScope(bot: Bot) {
     private fun nextSendTime(todayDate: String, sendTime: String): String {
         var sendTime1 = sendTime
         if ((sendDateTimeMap.isEmpty()) || (!sendDateTimeMap.containsKey(todayDate))) { // если список дат пуст или сегодня не отправляем
-            sendTime1 = "23:59"
+            sendTime1 = "23:59:59"
         } else {
             sendTime1 = sendDateTimeMap[todayDate]?.minOrNull()
-                ?: "23:59" // если список пуст, то 23:59 иначе ближайшее время
+                ?: "23:59:59" // если список пуст, то 23:59 иначе ближайшее время
         }
+        Logging.d(tag, sendTime1)
         return sendTime1
     }
 
