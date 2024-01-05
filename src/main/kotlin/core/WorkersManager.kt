@@ -1,5 +1,6 @@
 package core
 
+import data.fileProcessing.BirthdayRepository
 import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
 import kotlinx.coroutines.*
@@ -11,6 +12,7 @@ class WorkersManager(private val bot: Bot) {
     private val scopesList: MutableMap<String, Job> = mutableMapOf()
     private var reportsList: MutableMap<String, ReportWorkerParam> = mutableMapOf()
     private var remindersList: MutableMap<String, ReminderWorkerParam> = mutableMapOf()
+    private var birthdayList: MutableMap<String, BirthdayWorkerParam> = mutableMapOf()
     private var activeWorkersList: MutableMap<String, ActiveWorkerParam> = mutableMapOf()
 
     suspend fun start() {
@@ -31,6 +33,17 @@ class WorkersManager(private val bot: Bot) {
                 ActiveWorkerParam(
                     workerId = it.value.workerParam.workerId,
                     workerType = WorkerType.REMINDER,
+                    workerState = WorkerState.CREATE,
+                    workerIsActive = it.value.workerParam.workerIsActive
+                ) // если активен, добавляем в список воркеров
+        }
+
+        birthdayList = BirthdayRepository().get() ?: mutableMapOf() // загружаем список напоминаний о ДР
+        birthdayList.forEach {
+            if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
+                ActiveWorkerParam(
+                    workerId = it.value.workerParam.workerId,
+                    workerType = WorkerType.BIRTHDAY,
                     workerState = WorkerState.CREATE,
                     workerIsActive = it.value.workerParam.workerIsActive
                 ) // если активен, добавляем в список воркеров
@@ -60,6 +73,9 @@ class WorkersManager(private val bot: Bot) {
                     }
                     WorkerType.REMINDER -> {
                         WorkerScope(bot = bot).processReminder(remindersList[workerParam.workerId] ?: ReminderWorkerParam())
+                    }
+                    WorkerType.BIRTHDAY -> {
+                        WorkerScope(bot = bot).processBirthday(birthdayList[workerParam.workerId] ?: BirthdayWorkerParam())
                     }
                 }
             }
@@ -114,6 +130,16 @@ class WorkersManager(private val bot: Bot) {
                 )
                 if (workerState == WorkerState.DELETE) remindersList.remove(workerData.workerParam.workerId) else
                     remindersList[workerData.workerParam.workerId] = workerData
+            }
+            is BirthdayWorkerParam -> {
+                activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(
+                    workerId = workerData.workerParam.workerId,
+                    workerType = WorkerType.BIRTHDAY,
+                    workerState = workerState,
+                    workerIsActive = workerData.workerParam.workerIsActive
+                )
+                if (workerState == WorkerState.DELETE) birthdayList.remove(workerData.workerParam.workerId) else
+                    birthdayList[workerData.workerParam.workerId] = workerData
             }
         }
         processWorkers()

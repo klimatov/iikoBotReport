@@ -1,9 +1,12 @@
 package core
 
 import data.repository.BotRepositoryImpl
+import data.repository.GetFromIikoApiRepositoryImpl
 import data.repository.ReportRepositoryImpl
+import domain.models.BirthdayParam
 import domain.models.ReminderParam
 import domain.models.ReportParam
+import domain.usecases.MakeBirthdayPostUseCase
 import domain.usecases.MakeReminderPostUseCase
 import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
@@ -24,6 +27,10 @@ class WorkerScope(bot: Bot) {
         ReportRepositoryImpl
     }
 
+    private val getFromIikoApiRepository by lazy {
+        GetFromIikoApiRepositoryImpl()
+    }
+
     private val botRepository by lazy {
         BotRepositoryImpl(bot = bot)
     }
@@ -34,6 +41,10 @@ class WorkerScope(bot: Bot) {
 
     private val makeReminderPostUseCase by lazy {
         MakeReminderPostUseCase(botRepository = botRepository)
+    }
+
+    private val makeBirthdayPostUseCase by lazy {
+        MakeBirthdayPostUseCase(getFromIikoApiRepository = getFromIikoApiRepository, botRepository = botRepository)
     }
 
     private var lastSendDate: String = "01.01.2000"
@@ -54,6 +65,12 @@ class WorkerScope(bot: Bot) {
         anyWorkerParam = reminderWorkerParam
         workerType = WorkerType.REMINDER
         process(reminderWorkerParam.workerParam)
+    }
+
+    suspend fun processBirthday(birthdayWorkerParam: BirthdayWorkerParam) {
+        anyWorkerParam = birthdayWorkerParam
+        workerType = WorkerType.BIRTHDAY
+        process(birthdayWorkerParam.workerParam)
     }
 
     private suspend fun process(workerParam: WorkerParam) {
@@ -102,6 +119,10 @@ class WorkerScope(bot: Bot) {
 
             WorkerType.REMINDER -> {
                 makeReminderPostUseCase.execute(mapReminderToDomain(reminderWorkerParam = anyWorkerParam as ReminderWorkerParam))
+            }
+
+            WorkerType.BIRTHDAY -> {
+                makeBirthdayPostUseCase.execute(mapBirthdayToDomain(birthdayWorkerParam = anyWorkerParam as BirthdayWorkerParam))
             }
         }
     }
@@ -199,6 +220,15 @@ class WorkerScope(bot: Bot) {
             nameInHeader = reminderWorkerParam.workerParam.nameInHeader,
             workerName = reminderWorkerParam.workerParam.workerName,
             reminderText = reminderWorkerParam.reminderText
+        )
+    }
+
+    private fun mapBirthdayToDomain(birthdayWorkerParam: BirthdayWorkerParam): BirthdayParam {
+        return BirthdayParam(
+            sendChatId = birthdayWorkerParam.workerParam.sendChatId,
+            nameInHeader = birthdayWorkerParam.workerParam.nameInHeader,
+            workerName = birthdayWorkerParam.workerParam.workerName,
+            birthdayText = birthdayWorkerParam.birthdayText
         )
     }
 

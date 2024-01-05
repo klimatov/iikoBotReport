@@ -10,7 +10,7 @@ data class ActiveWorkerParam(
 enum class WorkerType{
     REPORT,
     REMINDER,
-//    BIRTHDAY
+    BIRTHDAY
 }
 
 enum class WorkerState{

@@ -1,5 +1,6 @@
 package domain.usecases
 
+import domain.models.BirthdayParam
 import domain.models.MessageParam
 import domain.models.ReminderParam
 import java.text.DecimalFormat
@@ -13,6 +14,15 @@ class FormatText {
 
         if (reminderParam.nameInHeader) resultMessage += reminderParam.workerName + "\n"
         resultMessage += reminderParam.reminderText
+
+        return resultMessage
+    }
+
+    fun birthday(birthdayParam: BirthdayParam): String {
+        var resultMessage = ""
+
+        if (birthdayParam.nameInHeader) resultMessage += birthdayParam.workerName + "\n"
+        resultMessage += birthdayParam.birthdayText
 
         return resultMessage
     }
