@@ -1,6 +1,7 @@
 package webServer
 
 import MyTest
+import data.fileProcessing.BirthdayRepository
 import data.fileProcessing.NotesRepository
 import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
@@ -47,6 +48,7 @@ fun Application.configureRouting() {
                     body {
                         val reportsList = ReportsRepository().get()
                         val remindersList = RemindersRepository().get()
+                        val birthdayList = BirthdayRepository().get()
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
@@ -102,6 +104,39 @@ fun Application.configureRouting() {
                                     +"Создать новое напоминание"
                                 }
                             }
+
+
+
+
+                            label(classes = "label") {
+                                +"Список напоминаний о ДР:"
+                            }
+                            birthdayList.keys.forEach {
+                                p(classes = "field") {
+                                    a(href = "/edit-birthday?workerId=$it", classes = "text-input") {
+                                        style = "text-decoration: none;"
+                                        title = it
+                                        +"${birthdayList[it]?.workerParam?.workerName}"
+                                        if (birthdayList[it]?.workerParam?.workerIsActive != true) {
+                                            span {
+                                                style = "color:red;"
+                                                +" (не активен)"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            p(classes = "field") {
+                                a(href = "edit-birthday", classes = "text-input") {
+                                    style = "text-decoration: none;"
+                                    +"Создать новое напоминание о ДР"
+                                }
+                            }
+
+
+
+
 
                             label(classes = "label") {
                                 +"Настройки:"

@@ -44,6 +44,7 @@ fun main() {
         configureRouting()
         configureEditWorker(workersManager)
         configureEditReminder(workersManager)
+        configureEditBirthday(workersManager)
         configureEditNameIdBundle()
     }.start(wait = true)
 
