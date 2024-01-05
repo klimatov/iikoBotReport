@@ -1,5 +1,6 @@
 package webServer
 
+import MyTest
 import data.fileProcessing.NotesRepository
 import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
@@ -133,6 +134,14 @@ fun Application.configureRouting() {
                                 }
                             }
 
+                            p(classes = "field") {
+                                input(type = InputType.submit, classes = "button") {
+                                    name = "testButton"
+                                    value = "Тест"
+                                }
+                            }
+
+
                         }
                     }
                 }
@@ -152,6 +161,14 @@ fun Application.configureRouting() {
                     )
                     NotesRepository().set(notes)
                 }
+                if (receiveParam.containsKey("testButton")) {                                   // - SAVE !!!
+                    Logging.i(
+                        tag,
+                        "User $userName [$userIP] pressed button TEST !!!"
+                    )
+                    MyTest().test()
+                }
+
                 call.respondRedirect("/")
             }
         }
