@@ -2,7 +2,6 @@ package domain.usecases
 
 import domain.models.ReminderParam
 import domain.repository.BotRepository
-import utils.Logging
 
 class SendReminderMessage(private val botRepository: BotRepository) {
     private val tag = this::class.java.simpleName

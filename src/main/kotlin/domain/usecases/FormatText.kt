@@ -1,10 +1,10 @@
 package domain.usecases
 
-import domain.models.BirthdayParam
-import domain.models.MessageParam
-import domain.models.ReminderParam
+import domain.models.*
 import java.text.DecimalFormat
-import kotlin.math.roundToInt
+import java.time.LocalDate
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class FormatText {
     private val tag = this::class.java.simpleName
@@ -18,11 +18,12 @@ class FormatText {
         return resultMessage
     }
 
-    fun birthday(birthdayParam: BirthdayParam): String {
-        var resultMessage = ""
-
-        if (birthdayParam.nameInHeader) resultMessage += birthdayParam.workerName + "\n"
-        resultMessage += birthdayParam.birthdayText
+    fun birthday(birthdayParam: BirthdayParam, employee: EmployeeModel): String {
+        var resultMessage = decodingTemplates(
+            birthdayParam.birthdayText,
+            employee
+        )
+        if (birthdayParam.nameInHeader) resultMessage = birthdayParam.workerName + "\n" + resultMessage
 
         return resultMessage
     }
@@ -75,5 +76,68 @@ class FormatText {
             result = DecimalFormat("###,###,###,###,###").format(number.toDouble()).replace(",", " ")
         }
         return result
+    }
+
+    private fun makeBirthdayValues(
+        rawSourceDT: String,
+        todayDate: LocalDate = LocalDate.now()
+    ): BirthdayValues {
+        val sourceDate = ZonedDateTime.parse(rawSourceDT).toLocalDate()
+        val birthdayDate = LocalDate.of(todayDate.year, sourceDate.month, sourceDate.dayOfMonth)
+
+        return BirthdayValues(
+            bdYear = sourceDate.year.toString(),
+            bdMonth = birthdayDate.monthValue.toString().padStart(2, '0'),
+            bdMonthWord = when (birthdayDate.monthValue) {
+                1 -> "января"
+                2 -> "февраля"
+                3 -> "марта"
+                4 -> "апреля"
+                5 -> "мая"
+                6 -> "июня"
+                7 -> "июля"
+                8 -> "августа"
+                9 -> "сентября"
+                10 -> "октября"
+                11 -> "ноября"
+                12 -> "декабря"
+                else -> ""
+            },
+            bdDay = birthdayDate.dayOfMonth.toString(),
+            bdDate = birthdayDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+            newAge = (todayDate.year - sourceDate.year).toInt(),
+            ageYearWord = ageYearWord(todayDate.year - sourceDate.year)
+        )
+    }
+
+    private fun ageYearWord(age: Int): String {
+        return age.let {
+            if (it % 100 in 11..14) {
+                "лет"
+            } else {
+                when ((it % 10).toInt()) {
+                    1 -> "год"
+                    2, 3, 4 -> "года"
+                    else -> "лет"//0, 5, 6, 7, 8, 9
+                }
+            }
+        }
+    }
+
+    private fun decodingTemplates(rawMessage: String, employee: EmployeeModel): String {
+        val employeeBirthdayValues = makeBirthdayValues(employee.birthday)
+        val regex = "\\[/?.*?\\]".toRegex()
+        return rawMessage.replace(regex) {
+            when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "FIRSTNAME" -> employee.firstName
+                "LASTNAME" -> employee.lastName
+                "BDDAY" -> employeeBirthdayValues.bdDay
+                "BDMONTHWORD" -> employeeBirthdayValues.bdMonthWord
+                "AGE" -> employeeBirthdayValues.newAge.toString()
+                "AGEYEARWORD" -> employeeBirthdayValues.ageYearWord
+                else -> it.value
+            }
+        }
+
     }
 }
