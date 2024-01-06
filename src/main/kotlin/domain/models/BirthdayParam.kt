@@ -5,5 +5,5 @@ class BirthdayParam (
     val workerName: String = "", // название поздравления
     val nameInHeader: Boolean = false, // Выводить название отчета в заголовке сообщения
     val birthdayText: String = "", // текст сообщения о дне рождения
-    val sendBeforeDays: Int = 0, // за сколько дней до ДР начать оповещать
+    val sendBeforeDays: Long = 30, // за сколько дней до ДР начать оповещать
 )
