@@ -9,16 +9,16 @@ import domain.models.ReportParam
 import domain.usecases.MakeBirthdayPostUseCase
 import domain.usecases.MakeReminderPostUseCase
 import domain.usecases.MakeReportPostUseCase
-import kotlinx.coroutines.*
 import kotlinx.coroutines.NonCancellable.isActive
+import kotlinx.coroutines.delay
 import models.*
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 import utils.Logging
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class WorkerScope(bot: Bot) {
     private val tag = this::class.java.simpleName
@@ -228,7 +228,8 @@ class WorkerScope(bot: Bot) {
             sendChatId = birthdayWorkerParam.workerParam.sendChatId,
             nameInHeader = birthdayWorkerParam.workerParam.nameInHeader,
             workerName = birthdayWorkerParam.workerParam.workerName,
-            birthdayText = birthdayWorkerParam.birthdayText
+            birthdayText = birthdayWorkerParam.birthdayText,
+            sendBeforeDays = birthdayWorkerParam.sendBeforeDays
         )
     }
 

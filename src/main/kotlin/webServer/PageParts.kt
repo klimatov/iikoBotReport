@@ -130,6 +130,20 @@ fun FORM.sendPeriodField(sendPeriod: Int) {
     }
 }
 
+fun FORM.sendBeforeDays(sendBeforeDays: Long) {
+    p(classes = "field half") {
+        id = "sendBeforeDays"
+        label(classes = "label") {
+            +"За сколько дней до ДР начать оповещать"
+        }
+        input(type = InputType.number, name = "sendBeforeDays", classes = "text-input") {
+            min = "0"
+            max = "365"
+            value = sendBeforeDays.toString()
+        }
+    }
+}
+
 fun FORM.sendTimeField(sendTime: List<String>) {
     p(classes = "field half") {
         id = "sendTime"

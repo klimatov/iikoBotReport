@@ -4,22 +4,22 @@ import core.WorkersManager
 import data.fileProcessing.BirthdayRepository
 import data.fileProcessing.NameIdBundleRepository
 import io.ktor.http.*
-import io.ktor.server.html.*
-import kotlinx.html.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
-import io.ktor.server.response.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import kotlinx.html.*
 import models.BirthdayWorkerParam
 import models.WorkerParam
 import models.WorkerState
-import java.util.*
 import utils.Logging
 import java.io.File
+import java.util.*
 
 fun Application.configureEditBirthday(workersManager: WorkersManager) {
     val tag = "configureEditBirthday"
@@ -40,15 +40,35 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         workerId = newWorkerId, // ok
                         workerName = "Напоминание о ДР -${newWorkerId.take(8)}", // ok
                         sendChatId = listOf(), // ok
-                        sendWhenType = 1,
-                        sendPeriod = 5,
+                        sendWhenType = 0, //0 - ежедневно
                         sendTime = listOf("10:00"),
-                        sendWeekDay = listOf(),
-                        sendMonthDay = listOf(),
-                        nameInHeader = true,
+                        nameInHeader = false,
                         sendDateTimeList = listOf()
                     ),
-                    birthdayText = "" // текст напоминания
+                    birthdayText = "[firstName] [lastName] скоро празднует день рождения \uD83C\uDF89 " +
+                            "[bdDay] [bdMonthWord] исполняется [age] [ageYearWord]!!!\uD83E\uDD73\n" +
+                            "\n" +
+                            "Шаблоны замены:\n" +
+                            "[BIRTHDAY] - Дата ДР\n" +
+                            "[BDDATE] - Дата ДР в этом году\n" +
+                            "[BDDAY] - День ДР\n" +
+                            "[BDMONTH] - Месяц ДР цифрой\n" +
+                            "[BDMONTHWORD] - Месяц ДР словом\n" +
+                            "[BDYEAR] - Год рождения\n" +
+                            "[AGE] - Возраст (сколько исполняется)\n" +
+                            "[AGEYEARWORD] - Слово лет/год/года\n" +
+                            "[NAME] - Имя целиком (с кодом)\n" +
+                            "[FIRSTNAME] - Имя\n" +
+                            "[MIDDLENAME] - Отчество\n" +
+                            "[LASTNAME] - Фамилия\n" +
+                            "[PHONE] - Телефон\n" +
+                            "[ADDRESS] - Адрес сотрудника\n" +
+                            "[HIREDATE] - Дата трудоустройства\n" +
+                            "[MAINROLECODE] - Занятость основная\n" +
+                            "[ROLECODES] - Занятости все (списком)\n" +
+                            "[SNILS] - СНИЛС\n" +
+                            "[TAXPAYERIDNUMBER] - ИНН", // текст напоминания
+                    sendBeforeDays = 0 // за сколько дней до ДР начать оповещать
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (birthdayList.containsKey(workerId) == true) editBirthdayParam = birthdayList[workerId]!!
@@ -77,19 +97,9 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
 
                             sendChatIdField(editBirthdayParam.workerParam.sendChatId, nameIdBundleList)
 
-                            sendWhenTypeField(editBirthdayParam.workerParam.sendWhenType, workerTypeName = "напоминание о ДР")
-
-                            sendPeriodField(editBirthdayParam.workerParam.sendPeriod)
-
                             sendTimeField(editBirthdayParam.workerParam.sendTime)
 
-                            sendWeekDayField(editBirthdayParam.workerParam.sendWeekDay)
-
-                            sendMonthDay(editBirthdayParam.workerParam.sendMonthDay)
-
-
-                            sendDateField(editBirthdayParam.workerParam.sendDateTimeList)
-//                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+                            sendBeforeDays(editBirthdayParam.sendBeforeDays)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -126,16 +136,17 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                     workerParam = WorkerParam(workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                         workerName = receiveParam["workerName"]?.joinToString() ?: "",
                         sendChatId = receiveParam["sendChatId"]?.map { it.toLong() } ?: listOf(),
-                        sendWhenType = receiveParam["sendWhenType"]?.joinToString()?.toInt() ?: 0,
-                        sendPeriod = receiveParam["sendPeriod"]?.joinToString()?.toInt() ?: 1,
+                        sendWhenType = 0,
+                        sendPeriod = 1,
                         sendTime = listOf(receiveParam["sendTime"]?.joinToString() ?: ""),
-                        sendWeekDay = receiveParam["sendWeekDay"]?.map { it.toInt() } ?: listOf(1),
-                        sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
+                        sendWeekDay = listOf(1),
+                        sendMonthDay = listOf(1),
                         nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
-                        sendDateTimeList = (receiveParam["sendDateTime"]?.filter { it != "2000-01-01T00:00"} ?: listOf()),
+                        sendDateTimeList = (listOf()),
                     ),
-                    birthdayText = receiveParam["birthdayText"]?.joinToString() ?: ""
+                    birthdayText = receiveParam["birthdayText"]?.joinToString() ?: "",
+                    sendBeforeDays = receiveParam["sendBeforeDays"]?.joinToString()?.toLong() ?: 0
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
