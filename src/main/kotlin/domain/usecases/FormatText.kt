@@ -129,15 +129,51 @@ class FormatText {
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
-                "FIRSTNAME" -> employee.firstName
-                "LASTNAME" -> employee.lastName
                 "BDDAY" -> employeeBirthdayValues.bdDay
                 "BDMONTHWORD" -> employeeBirthdayValues.bdMonthWord
                 "AGE" -> employeeBirthdayValues.newAge.toString()
                 "AGEYEARWORD" -> employeeBirthdayValues.ageYearWord
+                "BDYEAR" -> employeeBirthdayValues.bdYear
+                "BDMONTH" -> employeeBirthdayValues.bdMonth
+                "BDDATE" -> employeeBirthdayValues.bdDate
+                "NAME" -> employee.name
+                "ID" -> employee.id
+                "FIRSTNAME" -> employee.firstName
+                "MIDDLENAME" -> employee.middleName
+                "LASTNAME" -> employee.lastName
+                "PHONE" -> employee.phone
+                "BIRTHDAY" -> convertDate(employee.birthday)
+                "ADDRESS" -> employee.address
+                "HIREDATE" -> convertDate(employee.hireDate)
+                "LOGIN" -> employee.login
+                "CELLPHONE" -> employee.cellPhone
+                "NOTE" -> employee.note
+                "CARDNUMBER" -> employee.cardNumber
+                "CLIENT" -> employee.client
+                "CODE" -> employee.code
+                "DELETED" -> employee.deleted
+                "DEPARTMENTCODES" -> employee.departmentCodes
+                "EMPLOYEE" -> employee.employee
+                "MAINROLECODE" -> employee.mainRoleCode
+                "MAINROLEID" -> employee.mainRoleId
+                "PREFERREDDEPARTMENTCODE" -> employee.preferredDepartmentCode
+                "RESPONSIBILITYDEPARTMENTCODES" -> employee.responsibilityDepartmentCodes
+                "SNILS" -> employee.snils
+                "SUPPLIER" -> employee.supplier
+                "TAXPAYERIDNUMBER" -> employee.taxpayerIdNumber
+                "ROLECODES" -> employee.roleCodes.joinToString() //mutableListOf(),
+                "ROLESIDS" -> employee.rolesIds.joinToString() //mutableListOf()
                 else -> it.value
             }
         }
 
     }
+    private fun convertDate(rawDate: String): String = if (rawDate != "") {
+        try {
+            ZonedDateTime.parse(rawDate).toLocalDate()
+                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+        } catch (e: Exception) {
+            ""
+        }
+    } else ""
 }
