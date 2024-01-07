@@ -1,11 +1,7 @@
 package webServer
 
 import MyTest
-import data.fileProcessing.BirthdayRepository
-import data.fileProcessing.NotesRepository
-import data.fileProcessing.RemindersRepository
-import data.fileProcessing.ReportsRepository
-import io.ktor.server.routing.*
+import data.fileProcessing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,6 +10,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.html.*
 import utils.Logging
@@ -49,6 +46,7 @@ fun Application.configureRouting() {
                         val reportsList = ReportsRepository().get()
                         val remindersList = RemindersRepository().get()
                         val birthdayList = BirthdayRepository().get()
+                        val reviewsList = ReviewsRepository().get()
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
@@ -106,8 +104,6 @@ fun Application.configureRouting() {
                             }
 
 
-
-
                             label(classes = "label") {
                                 +"Список напоминаний о ДР:"
                             }
@@ -135,7 +131,30 @@ fun Application.configureRouting() {
                             }
 
 
-
+                            label(classes = "label") {
+                                +"Список отчетов об отзывах:"
+                            }
+                            reviewsList.keys.forEach {
+                                p(classes = "field") {
+                                    a(href = "/edit-reviews?workerId=$it", classes = "text-input") {
+                                        style = "text-decoration: none;"
+                                        title = it
+                                        +"${reviewsList[it]?.workerParam?.workerName}"
+                                        if (reviewsList[it]?.workerParam?.workerIsActive != true) {
+                                            span {
+                                                style = "color:red;"
+                                                +" (не активен)"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            p(classes = "field") {
+                                a(href = "edit-reviews", classes = "text-input") {
+                                    style = "text-decoration: none;"
+                                    +"Создать новый отчет об отзывах"
+                                }
+                            }
 
 
                             label(classes = "label") {
