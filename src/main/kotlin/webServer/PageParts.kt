@@ -144,6 +144,20 @@ fun FORM.sendBeforeDays(sendBeforeDays: Long) {
     }
 }
 
+fun FORM.updateFrequency(sendPeriod: Int) {
+    p(classes = "field half") {
+        id = "updateFrequency"
+        label(classes = "label") {
+            +"Частота запросов к серверу отзывов (в минутах)"
+        }
+        input(type = InputType.number, name = "updateFrequency", classes = "text-input") {
+            min = "5"
+            max = "1440"
+            value = sendPeriod.toString()
+        }
+    }
+}
+
 fun FORM.sendTimeField(sendTime: List<String>) {
     p(classes = "field half") {
         id = "sendTime"

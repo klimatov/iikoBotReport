@@ -45,6 +45,7 @@ fun main() {
         configureEditWorker(workersManager)
         configureEditReminder(workersManager)
         configureEditBirthday(workersManager)
+        configureEditReviews(workersManager)
         configureEditNameIdBundle()
     }.start(wait = true)
 
