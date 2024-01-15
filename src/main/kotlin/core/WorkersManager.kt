@@ -3,6 +3,7 @@ package core
 import data.fileProcessing.BirthdayRepository
 import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
+import data.fileProcessing.ReviewsRepository
 import kotlinx.coroutines.*
 import models.*
 import utils.Logging
@@ -13,6 +14,7 @@ class WorkersManager(private val bot: Bot) {
     private var reportsList: MutableMap<String, ReportWorkerParam> = mutableMapOf()
     private var remindersList: MutableMap<String, ReminderWorkerParam> = mutableMapOf()
     private var birthdayList: MutableMap<String, BirthdayWorkerParam> = mutableMapOf()
+    private var reviewsList: MutableMap<String, ReviewsWorkerParam> = mutableMapOf()
     private var activeWorkersList: MutableMap<String, ActiveWorkerParam> = mutableMapOf()
 
     suspend fun start() {
@@ -49,6 +51,17 @@ class WorkersManager(private val bot: Bot) {
                 ) // если активен, добавляем в список воркеров
         }
 
+        reviewsList = ReviewsRepository().get() ?: mutableMapOf() // загружаем список напоминаний о ДР
+        reviewsList.forEach {
+            if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
+                ActiveWorkerParam(
+                    workerId = it.value.workerParam.workerId,
+                    workerType = WorkerType.REVIEWS,
+                    workerState = WorkerState.CREATE,
+                    workerIsActive = it.value.workerParam.workerIsActive
+                ) // если активен, добавляем в список воркеров
+        }
+
         processWorkers()
     }
 
@@ -76,6 +89,9 @@ class WorkersManager(private val bot: Bot) {
                     }
                     WorkerType.BIRTHDAY -> {
                         WorkerScope(bot = bot).processBirthday(birthdayList[workerParam.workerId] ?: BirthdayWorkerParam())
+                    }
+                    WorkerType.REVIEWS -> {
+                        WorkerScope(bot = bot).processReviews(reviewsList[workerParam.workerId] ?: ReviewsWorkerParam())
                     }
                 }
             }
@@ -140,6 +156,16 @@ class WorkersManager(private val bot: Bot) {
                 )
                 if (workerState == WorkerState.DELETE) birthdayList.remove(workerData.workerParam.workerId) else
                     birthdayList[workerData.workerParam.workerId] = workerData
+            }
+            is ReviewsWorkerParam -> {
+                activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(
+                    workerId = workerData.workerParam.workerId,
+                    workerType = WorkerType.REVIEWS,
+                    workerState = workerState,
+                    workerIsActive = workerData.workerParam.workerIsActive
+                )
+                if (workerState == WorkerState.DELETE) reviewsList.remove(workerData.workerParam.workerId) else
+                    reviewsList[workerData.workerParam.workerId] = workerData
             }
         }
         processWorkers()

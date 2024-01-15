@@ -47,6 +47,10 @@ class WorkerScope(bot: Bot) {
         MakeBirthdayPostUseCase(getFromIikoApiRepository = getFromIikoApiRepository, botRepository = botRepository)
     }
 
+    private val makeReviewsPostUseCase by lazy {
+        MakeReviewsPostUseCase(getFromLPApiRepository = getFromLPApiRepository, botRepository = botRepository)
+    }
+
     private var lastSendDate: String = "01.01.2000"
     private var firstStart: Boolean = true
 
@@ -71,6 +75,12 @@ class WorkerScope(bot: Bot) {
         anyWorkerParam = birthdayWorkerParam
         workerType = WorkerType.BIRTHDAY
         process(birthdayWorkerParam.workerParam)
+    }
+
+    suspend fun processReviews(reviewsWorkerParam: ReviewsWorkerParam) {
+        anyWorkerParam = reviewsWorkerParam
+        workerType = WorkerType.REVIEWS
+        process(reviewsWorkerParam.workerParam)
     }
 
     private suspend fun process(workerParam: WorkerParam) {
@@ -123,6 +133,9 @@ class WorkerScope(bot: Bot) {
 
             WorkerType.BIRTHDAY -> {
                 makeBirthdayPostUseCase.execute(mapBirthdayToDomain(birthdayWorkerParam = anyWorkerParam as BirthdayWorkerParam))
+            }
+            WorkerType.REVIEWS -> {
+                makeReviewsPostUseCase.execute(mapReviewsToDomain(reviewsWorkerParam = anyWorkerParam as ReviewsWorkerParam))
             }
         }
     }
