@@ -2,7 +2,7 @@ package domain.usecases
 
 import domain.models.MessageParam
 import domain.models.ReportParam
-import domain.models.RequestParam
+import domain.models.ReportRequestParam
 import domain.models.ReportResult
 import domain.repository.BotRepository
 import domain.repository.ReportRepository
@@ -43,7 +43,7 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
         } else Logging.i(tag, "Данные не изменились...")
     }
 
-    private fun mapToRequestParam(reportParam: ReportParam): RequestParam {
+    private fun mapToRequestParam(reportParam: ReportParam): ReportRequestParam {
 
         val reportPeriod = reportParam.reportPeriod // период данных для формирования отчета из iiko
         val correctionNight = if (LocalDateTime.now().hour <= 3) 1 else 0 // с 0 до 3 часов используем вчерашнюю дату
@@ -67,7 +67,7 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
                 .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) // 0 - сегодня, n - количество дней
         }
 
-        return RequestParam(
+        return ReportRequestParam(
             reportId = reportParam.reportId,
             dateFrom = dateFrom,
             dateTo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))

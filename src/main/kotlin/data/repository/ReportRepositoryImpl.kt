@@ -4,7 +4,7 @@ import SecurityData.LOGIN_PASSWORD
 import SecurityData.LOGIN_USER
 import SecurityData.SERVER_IP
 import SecurityData.SERVER_PORT
-import domain.models.RequestParam
+import domain.models.ReportRequestParam
 import domain.repository.ReportRepository
 import org.jsoup.Connection
 import org.jsoup.Jsoup
@@ -27,7 +27,7 @@ object ReportRepositoryImpl : ReportRepository {
         }
     }
 
-    override fun get(requestParam: RequestParam): Document? {
+    override fun get(reportRequestParam: ReportRequestParam): Document? {
         try {
             if (checkCookies()) {
                 val doc =
@@ -37,11 +37,11 @@ object ReportRepositoryImpl : ReportRepository {
                         .referrer(server)
                         .data(
                             "dateFrom",
-                            requestParam.dateFrom,
+                            reportRequestParam.dateFrom,
                             "dateTo",
-                            requestParam.dateTo,
+                            reportRequestParam.dateTo,
                             "presetId",
-                            requestParam.reportId
+                            reportRequestParam.reportId
                         )
                         .get()
                 if ((doc.connection().response().url().path == path) && (doc.connection().response()

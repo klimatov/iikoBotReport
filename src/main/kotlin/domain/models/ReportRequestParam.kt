@@ -1,6 +1,6 @@
 package domain.models
 
-class RequestParam(
+class ReportRequestParam(
     val reportId: String,
     val dateFrom: String,
     val dateTo: String,

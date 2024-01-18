@@ -2,13 +2,17 @@ package core
 
 import data.repository.BotRepositoryImpl
 import data.repository.GetFromIikoApiRepositoryImpl
+import data.repository.GetFromLPApiRepositoryImpl
 import data.repository.ReportRepositoryImpl
 import domain.models.BirthdayParam
 import domain.models.ReminderParam
 import domain.models.ReportParam
+import domain.models.ReviewsParam
+import domain.repository.GetFromLPApiRepository
 import domain.usecases.MakeBirthdayPostUseCase
 import domain.usecases.MakeReminderPostUseCase
 import domain.usecases.MakeReportPostUseCase
+import domain.usecases.MakeReviewsPostUseCase
 import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
 import models.*
@@ -29,6 +33,10 @@ class WorkerScope(bot: Bot) {
 
     private val getFromIikoApiRepository by lazy {
         GetFromIikoApiRepositoryImpl()
+    }
+
+    private val getFromLPApiRepository by lazy {
+        GetFromLPApiRepositoryImpl
     }
 
     private val botRepository by lazy {
@@ -243,6 +251,15 @@ class WorkerScope(bot: Bot) {
             workerName = birthdayWorkerParam.workerParam.workerName,
             birthdayText = birthdayWorkerParam.birthdayText,
             sendBeforeDays = birthdayWorkerParam.sendBeforeDays
+        )
+    }
+
+    private fun mapReviewsToDomain(reviewsWorkerParam: ReviewsWorkerParam): ReviewsParam {
+        return ReviewsParam(
+            sendChatId = reviewsWorkerParam.workerParam.sendChatId,
+            nameInHeader = reviewsWorkerParam.workerParam.nameInHeader,
+            workerName = reviewsWorkerParam.workerParam.workerName,
+            reviewsText = reviewsWorkerParam.reviewsText,
         )
     }
 

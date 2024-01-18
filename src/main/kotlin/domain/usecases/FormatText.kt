@@ -1,5 +1,7 @@
 package domain.usecases
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import domain.models.*
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -19,11 +21,21 @@ class FormatText {
     }
 
     fun birthday(birthdayParam: BirthdayParam, employee: EmployeeModel): String {
-        var resultMessage = decodingTemplates(
+        var resultMessage = decodingBirthdayTemplates(
             birthdayParam.birthdayText,
             employee
         )
         if (birthdayParam.nameInHeader) resultMessage = birthdayParam.workerName + "\n" + resultMessage
+
+        return resultMessage
+    }
+
+    fun review(reviewsParam: ReviewsParam, review: Reviews): String {
+        var resultMessage = decodingReviewsTemplates(
+            reviewsParam.reviewsText,
+            review
+        )
+        if (reviewsParam.nameInHeader) resultMessage = reviewsParam.workerName + "\n" + resultMessage
 
         return resultMessage
     }
@@ -124,7 +136,39 @@ class FormatText {
         }
     }
 
-    private fun decodingTemplates(rawMessage: String, employee: EmployeeModel): String {
+    private fun decodingReviewsTemplates(rawMessage: String, review: Reviews): String {
+        val regex = "\\[/?.*?\\]".toRegex()
+        return rawMessage.replace(regex) {
+            when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "ID" -> review.id.toString()
+                "TYPE" -> review.type.toString()
+                "STATE" -> review.state.toString()
+                "TEXT" -> review.text.toString()
+                "RATING" -> review.rating.toString()
+                "CLIENT" -> review.client.toString()
+                "CREATEDTIMESTAMP" -> review.createdTimestamp.toString()
+                "PROCESSED" -> review.processed.toString()
+                "TRANSACTION" -> review.transaction.toString()
+                "OUTLET" -> review.outlet.toString()
+                "ORDER" -> review.order.toString()
+                "TR_ID" -> review.transaction?.id.toString()
+                "TR_TYPE" -> review.transaction?.type.toString()
+                "TR_STATE" -> review.transaction?.state.toString()
+                "TR_SUM" -> review.transaction?.sum.toString()
+                "TR_CLIENT" -> review.transaction?.client.toString()
+                "TR_PURCHASEAMOUNT" -> review.transaction?.purchaseAmount.toString()
+                "TR_VALIDATEDTIMESTAMP" -> review.transaction?.validatedTimestamp.toString()
+                "TR_OUTLET" -> review.transaction?.outlet.toString()
+                "TR_VALIDATOR" -> review.transaction?.validator.toString()
+                "TR_COUPON" -> review.transaction?.coupon.toString()
+                "TR_VALIDATIONID" -> review.transaction?.validationID.toString()
+                else -> it.value
+            }
+        }
+    }
+
+
+    private fun decodingBirthdayTemplates(rawMessage: String, employee: EmployeeModel): String {
         val employeeBirthdayValues = makeBirthdayValues(employee.birthday)
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
@@ -166,8 +210,8 @@ class FormatText {
                 else -> it.value
             }
         }
-
     }
+
     private fun convertDate(rawDate: String): String = if (rawDate != "") {
         try {
             ZonedDateTime.parse(rawDate).toLocalDate()

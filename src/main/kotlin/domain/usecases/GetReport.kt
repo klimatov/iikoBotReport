@@ -1,6 +1,6 @@
 package domain.usecases
 
-import domain.models.RequestParam
+import domain.models.ReportRequestParam
 import domain.models.ReportResult
 import domain.repository.ReportRepository
 import org.jsoup.Jsoup
@@ -9,9 +9,9 @@ import org.jsoup.parser.Parser
 
 class GetReport(private val reportRepository: ReportRepository) {
     private val tag = this::class.java.simpleName
-    fun execute(requestParam: RequestParam): ReportResult {
+    fun execute(reportRequestParam: ReportRequestParam): ReportResult {
         val doc = dotToDash(
-            doc = reportRepository.get(requestParam)
+            doc = reportRepository.get(reportRequestParam)
         )
         // парсим заголовки таблицы с id
         val columns = mutableMapOf<String, String>()

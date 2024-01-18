@@ -3,8 +3,10 @@ val kotlin_version: String by project
 val logback_version: String by project
 
 plugins {
+    kotlin("plugin.serialization") version "1.9.20"
     application
-    kotlin("jvm") version "1.8.22"
+//    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.20"
     id("io.ktor.plugin") version "2.3.2"
 }
 
@@ -40,6 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-server-caching-headers:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
