@@ -19,6 +19,7 @@ object GetFromLPApiRepositoryImpl: GetFromLPApiRepository {
     private var loginCookies: MutableMap<String, String> = mutableMapOf()
     private val reviewPath = "/IPLPartner/api/reviews"
     private val bootDataPath = "/IPLPartner/api/boot_data"
+    private val clientPath = "/IPLPartner/api/clients/"
 
     init {
         try {
@@ -107,6 +108,42 @@ object GetFromLPApiRepositoryImpl: GetFromLPApiRepository {
             Logging.e(tag, e.stackTraceToString())
             return null
         }
+    }
+
+    override fun getClientData(clientId: Int): String? {
+        try {
+            if (checkCookies()) {
+                val doc =
+                    Jsoup.connect("$server$clientPath$clientId")
+                        .cookies(loginCookies)
+                        .header("Content-Type", "application/json")
+                        .header("Accept", "application/json")
+                        .followRedirects(true)
+                        .ignoreHttpErrors(true)
+                        .ignoreContentType(true)
+                        .userAgent(
+                            "Mozilla/5.0 AppleWebKit/537.36 (KHTML," +
+                                    " like Gecko) Chrome/45.0.2454.4 Safari/537.36"
+                        )
+                        .method(Connection.Method.GET)
+                        //.requestBody(jsonBody)
+                        .maxBodySize(1_000_000 * 30) // 30 mb ~
+                        .timeout(0) // infinite timeout
+                        .execute()
+                if (doc.statusCode() == 200) return doc.body().toString()
+                else {
+                    Logging.e(tag, "Получить данные не удалось, возвращаем null")
+                    return null
+                }
+            } else {
+                Logging.e(tag, "Получить данные не удалось, возвращаем null")
+                return null
+            }
+        } catch (e: Exception) {
+            Logging.e(tag, e.toString())
+            return null
+        }
+
     }
 
     private fun checkCookies(): Boolean {

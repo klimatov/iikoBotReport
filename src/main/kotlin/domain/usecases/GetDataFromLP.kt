@@ -2,10 +2,7 @@ package domain.usecases
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import domain.models.BootDataModel
-import domain.models.Reviews
-import domain.models.ReviewsModel
-import domain.models.ReviewsRequestParam
+import domain.models.*
 import domain.repository.GetFromLPApiRepository
 import utils.Logging
 
@@ -40,6 +37,21 @@ class GetDataFromLP(private val getFromLPApiRepository: GetFromLPApiRepository) 
         } catch (e: Exception) {
             Logging.e(tag, e.toString())
             return emptyList()
+        }
+    }
+
+    fun getClientData(clientId: Int): Client? {
+        try {
+            val serializedData = getFromLPApiRepository.getClientData(clientId)
+            val type = object : TypeToken<ClientModel>() {}.type
+            val deSerializedData = GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+                .fromJson<ClientModel>(serializedData, type)
+            return deSerializedData.clientData?.client ?: ClientModel().clientData?.client
+        } catch (e: Exception) {
+            Logging.e(tag, e.toString())
+            return ClientModel().clientData?.client
         }
     }
 }
