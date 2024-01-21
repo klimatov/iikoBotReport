@@ -1,9 +1,6 @@
 package domain.usecases
 
-import domain.models.BootDataModel
-import domain.models.EmployeeModel
-import domain.models.ReviewsParam
-import domain.models.ReviewsRequestParam
+import domain.models.*
 import domain.repository.BotRepository
 import domain.repository.GetFromLPApiRepository
 import utils.Logging
@@ -17,6 +14,8 @@ class MakeReviewsPostUseCase(
     private val tag = this::class.java.simpleName
     private val getDataFromLP = GetDataFromLP(getFromLPApiRepository)
     private var bootData = BootDataModel()
+    private var clientsList: MutableList<Client> = mutableListOf()
+    private var shownReviews: MutableMap<Int, String> = mutableMapOf()
 
     suspend fun execute(reviewsParam: ReviewsParam) {
         // пробуем получить учетные данные с сервера
@@ -28,10 +27,28 @@ class MakeReviewsPostUseCase(
         val reviewsRequestParam = mapToReviewsRequestParam(reviewsParam)
         val reviewsList = getDataFromLP.getReviewsList(reviewsRequestParam)
 
-        //TODO: фильтр уже отправленных отзывов
+        // фильтр уже отправленных отзывов
+        val sentReviewsList = reviewsList.filter { !shownReviews.containsKey(it.id) }
+
+        // получаем данные клиентов для отзывов
+        sentReviewsList.forEach{review ->
+            if (review.client != null) {
+                val tempClient = getDataFromLP.getClientData(review.client!!)
+                if (tempClient != null) clientsList.add(tempClient)
+            }
+        }
+
+        sentReviewsList.forEach{review ->
+            review.id?.let { shownReviews[it] = review.createdTimestamp.toString() }
+        }
 
         val sendResult =
-            SendReviewsMessage(botRepository = botRepository).execute(reviewsParam, reviewsList)
+            SendReviewsMessage(botRepository = botRepository).execute(
+                reviewsParam = reviewsParam,
+                reviewsList = sentReviewsList,
+                clientsList = clientsList,
+                outlets = bootData.user?.partner?.outlets?: emptyList()
+            )
         Logging.i(
             tag,
             "Отзывы ${reviewsParam.workerName} ${if (sendResult) "отправлено в чат" else "отправить в чат НЕ УДАЛОСЬ"}..."
@@ -43,7 +60,7 @@ class MakeReviewsPostUseCase(
         return ReviewsRequestParam(
             clientID = null,
             employees = null,
-            length = 5, // ok
+            length = 1, // ok
             offset = 0, // ok
             orderTypes = null,
             outlets = null,
