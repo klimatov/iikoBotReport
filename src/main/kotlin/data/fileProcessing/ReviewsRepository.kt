@@ -21,4 +21,20 @@ class ReviewsRepository {
             FileOperations().write("reviews.cfg", serializedData)
         }
     }
+
+/*    fun getShownList(): MutableMap<Int, String> {
+        val serializedData = FileOperations().read("shownreviews.cfg")
+        val type = object : TypeToken<MutableMap<Int, String>>() {}.type
+        var shownReviews =
+            Gson().fromJson<MutableMap<Int, String>>(serializedData, type)
+        if (shownReviews == null) shownReviews = mutableMapOf()
+        return shownReviews
+    }
+
+    fun setShownList(shownReviews: MutableMap<Int, String>?) {
+        if (shownReviews != null) {
+            val serializedData = Gson().toJson(shownReviews)
+            FileOperations().write("shownreviews.cfg", serializedData)
+        }
+    }*/
 }

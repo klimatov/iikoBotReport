@@ -51,7 +51,7 @@ class WorkersManager(private val bot: Bot) {
                 ) // если активен, добавляем в список воркеров
         }
 
-        reviewsList = ReviewsRepository().get() ?: mutableMapOf() // загружаем список напоминаний о ДР
+        reviewsList = ReviewsRepository().get() ?: mutableMapOf() // загружаем список отчетов об отзывах
         reviewsList.forEach {
             if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
                 ActiveWorkerParam(

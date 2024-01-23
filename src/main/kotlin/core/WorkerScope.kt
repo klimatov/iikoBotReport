@@ -260,6 +260,7 @@ class WorkerScope(bot: Bot) {
             nameInHeader = reviewsWorkerParam.workerParam.nameInHeader,
             workerName = reviewsWorkerParam.workerParam.workerName,
             reviewsText = reviewsWorkerParam.reviewsText,
+            workerId = reviewsWorkerParam.workerParam.workerId
         )
     }
 
