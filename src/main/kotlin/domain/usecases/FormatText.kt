@@ -3,6 +3,7 @@ package domain.usecases
 import domain.models.*
 import java.text.DecimalFormat
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -28,12 +29,13 @@ class FormatText {
         return resultMessage
     }
 
-    fun review(reviewsParam: ReviewsParam, review: Reviews, client: Client, outlets: List<Outlets>): String {
+    fun review(reviewsParam: ReviewsParam, review: Reviews, client: Client, userData: User): String {
         var resultMessage = decodingReviewsTemplates(
             reviewsParam.reviewsText,
             review,
             client,
-            outlets.find { it.id == review.outlet }
+            userData.partner?.outlets?.find { it.id == review.outlet },
+            userData.timeZone ?: "Asia/Krasnoyarsk"
         )
         if (reviewsParam.nameInHeader) resultMessage = reviewsParam.workerName + "\n" + resultMessage
 
@@ -136,7 +138,13 @@ class FormatText {
         }
     }
 
-    private fun decodingReviewsTemplates(rawMessage: String, review: Reviews, client: Client, outlets: Outlets?): String {
+    private fun decodingReviewsTemplates(
+        rawMessage: String,
+        review: Reviews,
+        client: Client,
+        outlets: Outlets?,
+        timeZone: String
+    ): String {
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
@@ -146,7 +154,7 @@ class FormatText {
                 "TEXT" -> review.text.toString()
                 "RATING" -> review.rating.toString()
                 //"CLIENT" -> review.client.toString()
-                "CREATEDTIMESTAMP" -> convertDateTime(review.createdTimestamp?:"")
+                "CREATEDTIMESTAMP" -> convertDateTime(review.createdTimestamp ?: "", timeZone)
                 //"PROCESSED" -> review.processed.toString()
                 "OUTLET" -> outlets?.name?.name.toString()//review.outlet.toString()
                 "ORDER" -> review.order.toString()
@@ -166,10 +174,10 @@ class FormatText {
                 "BALANCE" -> client.balance.toString()
                 "EMAIL" -> client.email.toString()
                 "PHONE" -> client.phone.toString()
-                "DATEOFBIRTH" -> convertDate(client.dateOfBirth?:"")
-                "LASTVISITEDTIME" -> convertDateTime(client.lastVisitedTime?:"")
-                "FIRSTNAME" -> client.firstName?:""
-                "FULLNAME" -> client.fullName?:""
+                "DATEOFBIRTH" -> convertDate(client.dateOfBirth ?: "")
+                "LASTVISITEDTIME" -> convertDateTime(client.lastVisitedTime ?: "", timeZone)
+                "FIRSTNAME" -> client.firstName ?: ""
+                "FULLNAME" -> client.fullName ?: ""
                 "VISITS" -> client.visits.toString()
                 "MONEYSPENT" -> client.moneySpent.toString()
                 //"LINK" -> "https://partner.loyaltyplant.com/IPLPartner/#/reviews/${review.id.toString()}/info?processed=all&withComment=true"
@@ -235,10 +243,13 @@ class FormatText {
         }
     } else ""
 
-    private fun convertDateTime(rawDate: String): String = if (rawDate != "") {
+    private fun convertDateTime(rawDate: String, timeZone: String): String = if (rawDate != "") {
         try {
-            ZonedDateTime.parse(rawDate).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:SS"))
+            ZonedDateTime
+                .parse(rawDate)
+                .withZoneSameInstant(ZoneId.of(timeZone))
+                .toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"))
         } catch (e: Exception) {
             ""
         }

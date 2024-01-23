@@ -10,7 +10,8 @@ class SendReviewsMessage(private val botRepository: BotRepository) {
         reviewsParam: ReviewsParam,
         reviewsList: List<Reviews>,
         clientsList: MutableList<Client>,
-        outlets: List<Outlets>
+//        outlets: List<Outlets>,
+        userData: User
     ): Boolean {
         var resultFlag = true
         reviewsList.forEach { review ->
@@ -18,7 +19,7 @@ class SendReviewsMessage(private val botRepository: BotRepository) {
                 reviewsParam = reviewsParam,
                 review = review,
                 client = clientsList.find { it.id == review.client } ?: Client(),
-                outlets = outlets
+                userData = userData
             )
             if ((messageText.isNotEmpty()) && (reviewsParam.sendChatId.isNotEmpty())) {
                 reviewsParam.sendChatId.forEach {

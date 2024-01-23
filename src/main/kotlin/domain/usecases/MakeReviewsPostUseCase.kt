@@ -3,7 +3,6 @@ package domain.usecases
 import domain.models.*
 import domain.repository.BotRepository
 import domain.repository.GetFromLPApiRepository
-import models.ReviewsDataParam
 import models.ShownReviews
 import utils.Logging
 import java.time.LocalDate
@@ -65,7 +64,8 @@ class MakeReviewsPostUseCase(
                 reviewsParam = reviewsParam,
                 reviewsList = sentReviewsList,
                 clientsList = clientsList,
-                outlets = bootData.user?.partner?.outlets ?: emptyList()
+                userData = bootData.user?: User()
+//                outlets = bootData.user?.partner?.outlets ?: emptyList()
             )
         Logging.i(
             tag,
