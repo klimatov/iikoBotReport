@@ -3,7 +3,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-workers.cfg
 
 ### IntelliJ IDEA ###
 .idea/workspace.xml
@@ -48,6 +47,5 @@ bin/
 /src/test/
 /gradle/
 /notes.txt
-/reminders.cfg
 /nameidbundle.cfg
 

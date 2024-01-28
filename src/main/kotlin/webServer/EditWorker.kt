@@ -1,26 +1,26 @@
 package webServer
 
 import core.WorkersManager
+import data.ReportsRepository
 import data.fileProcessing.NameIdBundleRepository
-import data.fileProcessing.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
-import io.ktor.server.html.*
-import kotlinx.html.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
-import io.ktor.server.response.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import kotlinx.html.*
 import models.ReportWorkerParam
 import models.WorkerParam
 import models.WorkerState
-import java.util.*
 import utils.Logging
 import java.io.File
+import java.util.*
 
 fun Application.configureEditWorker(workersManager: WorkersManager) {
     val tag = "configureEditWorker"
@@ -330,7 +330,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerParam.workerName} - ${htmlWorkerParam.workerParam.workerId}"
                     )
                     workerList?.remove(htmlWorkerParam.workerParam.workerId)
-                    ReportsRepository().set(workerList)
+                    ReportsRepository().delete(htmlWorkerParam.workerParam.workerId)
 //                    reportManager.changeWorkersConfig()
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
