@@ -56,7 +56,7 @@ object ReviewsWorkersDB : Table("reviews_workers") {
         try {
             transaction {
                 addLogger(StdOutSqlLogger)
-                ReviewsWorkersDB.insert {
+                ReviewsWorkersDB.upsert {
                     it[reviewsText] = reviewsWorkersDTO.reviewsText
                     it[workerId] = reviewsWorkersDTO.workerId
                     it[workerName] = reviewsWorkersDTO.workerName

@@ -1,6 +1,8 @@
 package data.database.reviewsWorkers
 
 import kotlinx.serialization.Serializable
+import models.ReviewsWorkerParam
+import models.WorkerParam
 
 @Serializable
 data class ReviewsWorkersDTO(
@@ -16,4 +18,36 @@ data class ReviewsWorkersDTO(
     val nameInHeader: Boolean,
     val workerIsActive: Boolean,
     val sendDateTimeList: List<String>
+)
+
+fun ReviewsWorkerParam.mapToReviewsWorkersDTO(): ReviewsWorkersDTO = ReviewsWorkersDTO(
+    reviewsText = reviewsText,
+    workerId = workerParam.workerId,
+    workerName = workerParam.workerName,
+    sendChatId = workerParam.sendChatId,
+    sendWhenType = workerParam.sendWhenType,
+    sendPeriod = workerParam.sendPeriod,
+    sendTime = workerParam.sendTime,
+    sendWeekDay = workerParam.sendWeekDay,
+    sendMonthDay = workerParam.sendMonthDay,
+    nameInHeader = workerParam.nameInHeader,
+    workerIsActive = workerParam.workerIsActive,
+    sendDateTimeList = workerParam.sendDateTimeList
+)
+
+fun ReviewsWorkersDTO.mapToReviewsWorkerParam(): ReviewsWorkerParam = ReviewsWorkerParam(
+    reviewsText = reviewsText,
+    workerParam = WorkerParam(
+        workerId = workerId,
+        workerName = workerName,
+        sendChatId = sendChatId,
+        sendWhenType = sendWhenType,
+        sendPeriod = sendPeriod,
+        sendTime = sendTime,
+        sendWeekDay = sendWeekDay,
+        sendMonthDay = sendMonthDay,
+        nameInHeader = nameInHeader,
+        workerIsActive = workerIsActive,
+        sendDateTimeList = sendDateTimeList
+    )
 )
