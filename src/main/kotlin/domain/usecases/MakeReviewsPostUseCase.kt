@@ -78,7 +78,7 @@ class MakeReviewsPostUseCase(
         return ReviewsRequestParam(
             clientID = null,
             employees = null,
-            length = 5, // ok
+            length = 2, // ok
             offset = 0, // ok
             orderTypes = null,
             outlets = null,

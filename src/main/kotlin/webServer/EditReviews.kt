@@ -2,7 +2,7 @@ package webServer
 
 import core.WorkersManager
 import data.fileProcessing.NameIdBundleRepository
-import data.fileProcessing.ReviewsRepository
+import data.ReviewsRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

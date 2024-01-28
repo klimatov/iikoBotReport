@@ -1,7 +1,8 @@
-package data.fileProcessing
+package data
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import data.fileProcessing.FileOperations
 import models.ReviewsWorkerParam
 
 class ReviewsRepository {
