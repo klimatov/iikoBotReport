@@ -1,3 +1,6 @@
+import SecurityData.POSTGRES_PASSWORD
+import SecurityData.POSTGRES_URL
+import SecurityData.POSTGRES_USER
 import SecurityData.WEB_HOST
 import SecurityData.WEB_PORT
 import core.Bot
@@ -12,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.jetbrains.exposed.sql.Database
 import webServer.*
 
 val job = SupervisorJob()
@@ -19,6 +23,12 @@ private val bot by lazy { Bot(job) }
 private val workersManager by lazy(LazyThreadSafetyMode.NONE) { WorkersManager(bot) }
 
 fun main() {
+    Database.connect(
+        url = POSTGRES_URL,
+        driver = "org.postgresql.Driver",
+        user = POSTGRES_USER,
+        password = POSTGRES_PASSWORD
+    )
     CoroutineScope(Dispatchers.Default + job).launch {
         bot.start()
         workersManager.start()
