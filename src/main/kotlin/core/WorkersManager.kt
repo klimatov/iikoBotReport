@@ -1,9 +1,9 @@
 package core
 
-import data.fileProcessing.BirthdayRepository
+import data.BirthdayRepository
+import data.ReviewsRepository
 import data.fileProcessing.RemindersRepository
 import data.fileProcessing.ReportsRepository
-import data.ReviewsRepository
 import kotlinx.coroutines.*
 import models.*
 import utils.Logging

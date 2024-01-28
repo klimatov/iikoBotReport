@@ -17,6 +17,12 @@ class ReviewsRepository {
         }
     }
 
+    fun delete(workerId: String) {
+        ReviewsWorkersDB.deleteByWorkerId(workerId)
+    }
+
+    // TODO: методы для апдейта отдельных воркеров и т.п.
+
     /*    fun getShownList(): MutableMap<Int, String> {
             val serializedData = FileOperations().read("shownreviews.cfg")
             val type = object : TypeToken<MutableMap<Int, String>>() {}.type

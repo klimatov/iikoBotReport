@@ -24,34 +24,6 @@ object ReviewsWorkersDB : Table("reviews_workers") {
     private val sendDateTimeList = ReviewsWorkersDB.json<Array<String>>("send_date_time_list", Json.Default)
     override val primaryKey = PrimaryKey(workerId)
 
-    fun createTable(createdTable: Table): Boolean {
-        try {
-            transaction {
-                addLogger(StdOutSqlLogger)
-                SchemaUtils.createMissingTablesAndColumns(createdTable)
-            }
-            return true
-        } catch (e: Exception) {
-            Logging.e(tag, e.toString())
-            return false
-        }
-    }
-
-    fun listTables(): List<String> {
-        try {
-            var listTables: List<String> = listOf()
-            transaction {
-                addLogger(StdOutSqlLogger)
-                listTables = SchemaUtils.listTables()
-            }
-            return listTables
-
-        } catch (e: Exception) {
-            Logging.e(tag, e.toString())
-            return listOf()
-        }
-    }
-
     fun insert(reviewsWorkersDTO: ReviewsWorkersDTO): Boolean {
         try {
             transaction {

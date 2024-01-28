@@ -5,6 +5,7 @@ import SecurityData.WEB_HOST
 import SecurityData.WEB_PORT
 import core.Bot
 import core.WorkersManager
+import data.DatabaseRepository
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -29,6 +30,7 @@ fun main() {
         user = POSTGRES_USER,
         password = POSTGRES_PASSWORD
     )
+    DatabaseRepository().checkAndCreateTables()
     CoroutineScope(Dispatchers.Default + job).launch {
         bot.start()
         workersManager.start()

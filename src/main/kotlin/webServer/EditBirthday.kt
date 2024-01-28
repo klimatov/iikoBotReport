@@ -1,7 +1,7 @@
 package webServer
 
 import core.WorkersManager
-import data.fileProcessing.BirthdayRepository
+import data.BirthdayRepository
 import data.fileProcessing.NameIdBundleRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -155,7 +155,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlBirthdayParam.workerParam.workerName} - ${htmlBirthdayParam.workerParam.workerId}"
                     )
                     birthdayList.remove(htmlBirthdayParam.workerParam.workerId)
-                    BirthdayRepository().set(birthdayList)
+                    BirthdayRepository().delete(htmlBirthdayParam.workerParam.workerId)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
                         workerData = htmlBirthdayParam

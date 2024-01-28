@@ -1,8 +1,8 @@
 package webServer
 
 import core.WorkersManager
-import data.fileProcessing.NameIdBundleRepository
 import data.ReviewsRepository
+import data.fileProcessing.NameIdBundleRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -128,7 +128,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlReviewsParam.workerParam.workerName} - ${htmlReviewsParam.workerParam.workerId}"
                     )
                     reviewsList.remove(htmlReviewsParam.workerParam.workerId)
-                    ReviewsRepository().set(reviewsList)
+                    ReviewsRepository().delete(htmlReviewsParam.workerParam.workerId)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
                         workerData = htmlReviewsParam
