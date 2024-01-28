@@ -2,7 +2,7 @@ package core
 
 import data.BirthdayRepository
 import data.ReviewsRepository
-import data.fileProcessing.RemindersRepository
+import data.RemindersRepository
 import data.fileProcessing.ReportsRepository
 import kotlinx.coroutines.*
 import models.*

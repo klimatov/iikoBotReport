@@ -1,25 +1,25 @@
 package webServer
 
 import core.WorkersManager
+import data.RemindersRepository
 import data.fileProcessing.NameIdBundleRepository
-import data.fileProcessing.RemindersRepository
 import io.ktor.http.*
-import io.ktor.server.html.*
-import kotlinx.html.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
-import io.ktor.server.response.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import kotlinx.html.*
 import models.ReminderWorkerParam
 import models.WorkerParam
 import models.WorkerState
-import java.util.*
 import utils.Logging
 import java.io.File
+import java.util.*
 
 fun Application.configureEditReminder(workersManager: WorkersManager) {
     val tag = "configureEditReminder"
@@ -144,7 +144,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlReminderParam.workerParam.workerName} - ${htmlReminderParam.workerParam.workerId}"
                     )
                     reminderList.remove(htmlReminderParam.workerParam.workerId)
-                    RemindersRepository().set(reminderList)
+                    RemindersRepository().delete(htmlReminderParam.workerParam.workerId)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
                         workerData = htmlReminderParam

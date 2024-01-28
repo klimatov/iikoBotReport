@@ -2,6 +2,7 @@ package data
 
 import data.database.DatabaseManage
 import data.database.birthdayWorkers.BirthdayWorkersDB
+import data.database.remindersWorkers.RemindersWorkersDB
 import data.database.reviewsWorkers.ReviewsWorkersDB
 
 class DatabaseRepository {
@@ -10,5 +11,6 @@ class DatabaseRepository {
         val databaseManage = DatabaseManage()
         databaseManage.createTable(ReviewsWorkersDB)
         databaseManage.createTable(BirthdayWorkersDB)
+        databaseManage.createTable(RemindersWorkersDB)
     }
 }
