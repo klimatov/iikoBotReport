@@ -4,7 +4,6 @@ import data.database.reviewsWorkers.ReviewsWorkersDB
 import data.database.reviewsWorkers.mapToReviewsWorkerParam
 import data.database.reviewsWorkers.mapToReviewsWorkersDTO
 import models.ReviewsWorkerParam
-import utils.Logging
 
 class ReviewsRepository {
     private val tag = this::class.java.simpleName
@@ -13,11 +12,8 @@ class ReviewsRepository {
     }
 
     fun set(workerList: MutableMap<String, ReviewsWorkerParam>?) {
-        if (workerList != null) {
-            workerList.forEach { (_, reviewsWorkerParam) ->
-                Logging.d(tag, "reviewsWorkerParam: $reviewsWorkerParam")
-                ReviewsWorkersDB.insert(reviewsWorkerParam.mapToReviewsWorkersDTO())
-            }
+        workerList?.forEach { (_, reviewsWorkerParam) ->
+            ReviewsWorkersDB.insert(reviewsWorkerParam.mapToReviewsWorkersDTO())
         }
     }
 
