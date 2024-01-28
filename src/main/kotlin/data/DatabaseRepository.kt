@@ -2,6 +2,7 @@ package data
 
 import data.database.DatabaseManage
 import data.database.birthdayWorkers.BirthdayWorkersDB
+import data.database.nameIdBundle.NameIdBundleDB
 import data.database.remindersWorkers.RemindersWorkersDB
 import data.database.reportsWorkers.ReportsWorkersDB
 import data.database.reviewsWorkers.ReviewsWorkersDB
@@ -14,5 +15,6 @@ class DatabaseRepository {
         databaseManage.createTable(BirthdayWorkersDB)
         databaseManage.createTable(RemindersWorkersDB)
         databaseManage.createTable(ReportsWorkersDB)
+        databaseManage.createTable(NameIdBundleDB)
     }
 }

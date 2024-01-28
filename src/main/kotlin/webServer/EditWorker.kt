@@ -2,7 +2,7 @@ package webServer
 
 import core.WorkersManager
 import data.ReportsRepository
-import data.fileProcessing.NameIdBundleRepository
+import data.NameIdBundleRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -16,6 +16,8 @@ class RemindersRepository {
             RemindersWorkersDB.insert(reminderWorkerParam.mapToRemindersWorkersDTO())
         }
     }
+
+
     fun delete(workerId: String) {
         RemindersWorkersDB.deleteByWorkerId(workerId)
     }

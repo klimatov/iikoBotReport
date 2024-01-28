@@ -1,6 +1,6 @@
 package webServer
 
-import data.fileProcessing.NameIdBundleRepository
+import data.NameIdBundleRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -13,7 +13,6 @@ import io.ktor.server.routing.*
 import io.ktor.util.*
 import kotlinx.html.*
 import models.BundleParam
-import models.IdAvailability
 import utils.Logging
 import java.io.File
 
@@ -109,12 +108,12 @@ fun Application.configureEditNameIdBundle() {
                             botUserId = botUserId,
                             name = receiveParam["name$botUserId"] ?: "",
                             telegramId = receiveParam["tgid$botUserId"]?.toLongOrNull() ?: 0,
-                            available = IdAvailability.NOT_CHECKED
+                            available = true
                         )
                     )
                 }
 
-                NameIdBundleRepository.set(bundleParamList)
+                NameIdBundleRepository.updateAll(bundleParamList)
 
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
@@ -130,7 +129,7 @@ private fun UL.newBundle(
         botUserId = 0,
         name = "",
         telegramId = 0,
-        available = IdAvailability.NOT_CHECKED
+        available = true
     )
 ) {
     li(classes = "li") {
