@@ -17,7 +17,6 @@ class RemindersRepository {
         }
     }
 
-
     fun delete(workerId: String) {
         RemindersWorkersDB.deleteByWorkerId(workerId)
     }
