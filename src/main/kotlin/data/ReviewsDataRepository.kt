@@ -11,10 +11,14 @@ object ReviewsDataRepository {
         return ReviewsDataDB.getAll().map { it.mapToReviewsDataParam() }.toList()
     }
 
-    fun set(reviewsDataParam: List<ReviewsDataParam>) {
-        reviewsDataParam.forEach { reviewsData ->
+    fun set(reviewsDataParamList: List<ReviewsDataParam>) {
+        reviewsDataParamList.forEach { reviewsData ->
             ReviewsDataDB.insert(reviewsData.mapToReviewsDataDTO())
         }
+    }
+
+    fun setByWorkerId(reviewsDataParam: ReviewsDataParam) {
+            ReviewsDataDB.insert(reviewsDataParam.mapToReviewsDataDTO())
     }
 
     fun delete(workerId: String) {

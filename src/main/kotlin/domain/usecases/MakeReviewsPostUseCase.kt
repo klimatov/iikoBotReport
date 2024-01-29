@@ -1,13 +1,14 @@
 package domain.usecases
 
+import data.ReviewsDataRepository
 import domain.models.*
 import domain.repository.BotRepository
 import domain.repository.GetFromLPApiRepository
+import models.ReviewsDataParam
 import models.ShownReviews
 import utils.Logging
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class MakeReviewsPostUseCase(
     getFromLPApiRepository: GetFromLPApiRepository,
@@ -17,9 +18,16 @@ class MakeReviewsPostUseCase(
     private val getDataFromLP = GetDataFromLP(getFromLPApiRepository)
     private var bootData = BootDataModel()
     private var clientsList: MutableList<Client> = mutableListOf()
-    private var shownReviewsList: LinkedList<ShownReviews> = LinkedList<ShownReviews>()
+    private var shownReviewsList: MutableList<ShownReviews> = mutableListOf()
 
     suspend fun execute(reviewsParam: ReviewsParam) {
+        // если список показанных отзывов пустой, то подгружаем из базы
+        if (shownReviewsList.isEmpty())
+            ReviewsDataRepository.getByWorkerId(reviewsParam.workerId)?.shownReviews?.let {
+                shownReviewsList = it
+            }
+
+
         // пробуем получить учетные данные с сервера
         val tempBootData = getDataFromLP.getBootData()
         // если все ок, то обновляем учетные данные
@@ -47,24 +55,34 @@ class MakeReviewsPostUseCase(
         // добавляем в список отправленных
         sentReviewsList.forEach { review ->
             review.id?.let {
-                shownReviewsList.addFirst(
+                shownReviewsList.add(
                     ShownReviews(it, review.createdTimestamp.toString())
                 )
                 // ограничиваем список отправленных
-                if (shownReviewsList.size > 100) shownReviewsList.removeLast()
+//                if (shownReviewsList.size > 100) shownReviewsList.removeLast()
+
+                //TODO: удаление старых отзывов по дате
             }
         }
 
-        Logging.d(tag, "New: $reviewsList")
-        Logging.d(tag, "SentNow: $sentReviewsList")
-        Logging.d(tag, "Shown: $shownReviewsList")
+        // если отправляли отзывы, то обновляем данные отправленных в БД
+        if (sentReviewsList.isNotEmpty()) ReviewsDataRepository.setByWorkerId(
+            ReviewsDataParam(
+                workerId = reviewsParam.workerId,
+                shownReviews = shownReviewsList.toMutableList()
+            )
+        )
+
+//        Logging.d(tag, "New: $reviewsList")
+//        Logging.d(tag, "SentNow: $sentReviewsList")
+//        Logging.d(tag, "Shown: $shownReviewsList")
 
         val sendResult =
             SendReviewsMessage(botRepository = botRepository).execute(
                 reviewsParam = reviewsParam,
                 reviewsList = sentReviewsList,
                 clientsList = clientsList,
-                userData = bootData.user?: User()
+                userData = bootData.user ?: User()
 //                outlets = bootData.user?.partner?.outlets ?: emptyList()
             )
         Logging.i(
@@ -78,7 +96,7 @@ class MakeReviewsPostUseCase(
         return ReviewsRequestParam(
             clientID = null,
             employees = null,
-            length = 2, // ok
+            length = 5, // ok
             offset = 0, // ok
             orderTypes = null,
             outlets = null,
