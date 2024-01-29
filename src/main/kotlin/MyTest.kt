@@ -1,17 +1,21 @@
-import data.repository.GetFromIikoApiRepositoryImpl
-import data.repository.GetFromLPApiRepositoryImpl
-import data.repository.ReportRepositoryImpl
-import domain.models.ReviewsRequestParam
-import domain.repository.GetFromLPApiRepository
-import domain.usecases.GetDataFromLP
-import domain.usecases.GetEmployeesData
+import data.repository.GetFromTwoGisApiRepositoryImpl
+import domain.usecases.GetDataFromTwoGIS
 
 class MyTest {
     fun test() {
 
-        println(
-            GetDataFromLP(GetFromLPApiRepositoryImpl).getClientData(39131146)
-        )
+        val firmMira = "70000001030737926"
+        val firmYarTwentyFive = "70000001023172949"
+        val firmYarTwentyThree = "70000001025624980"
+        val res = GetDataFromTwoGIS(GetFromTwoGisApiRepositoryImpl).getReviewsList(firmMira)
+
+        res.forEach {
+            println("${it.user?.name} [${it.dateCreated}]: ${it.text}")
+        }
+
+//            GetDataFromLP(GetFromLPApiRepositoryImpl).getClientData(39131146)
+
+
 
 //        val result = GetFromLPApiRepositoryImpl.getReviewList(ReviewsRequestParam(
 //            periodFrom = "2024-01-15T17:00:00.000Z",
