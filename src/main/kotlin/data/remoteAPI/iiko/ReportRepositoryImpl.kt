@@ -1,4 +1,4 @@
-package data.repository
+package data.remoteAPI.iiko
 
 import SecurityData.LOGIN_PASSWORD
 import SecurityData.LOGIN_USER

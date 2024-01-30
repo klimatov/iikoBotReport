@@ -1,4 +1,4 @@
-package data.repository
+package data.remoteAPI.loyaltyPlant
 
 import SecurityData.LP_LOGIN_PASSWORD
 import SecurityData.LP_LOGIN_USER

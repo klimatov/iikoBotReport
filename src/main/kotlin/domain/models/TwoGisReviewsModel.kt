@@ -1,55 +1,88 @@
 package domain.models
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import data.remoteAPI.twoGis.ReviewsGIS
 
-data class TwoGisReviewsModel(
-    @Expose @SerializedName("reviews") var reviews: List<ReviewsGIS> = listOf()
-)
-data class ReviewsGIS(
-    @Expose @SerializedName("id") var id: String? = null,
-    @Expose @SerializedName("region_id") var regionId: Int? = null,
-    @Expose @SerializedName("text") var text: String? = null,
-    @Expose @SerializedName("rating") var rating: Int? = null,
-    @Expose @SerializedName("provider") var provider: String? = null,
-    @Expose @SerializedName("source") var source: String? = null,
-    @Expose @SerializedName("is_hidden") var isHidden: Boolean? = null,
-    @Expose @SerializedName("hiding_type") var hidingType: String? = null,
-    @Expose @SerializedName("hiding_reason") var hidingReason: String? = null,
-    @Expose @SerializedName("url") var url: String? = null,
-    @Expose @SerializedName("likes_count") var likesCount: Int? = null,
-    @Expose @SerializedName("comments_count") var commentsCount: Int? = null,
-    @Expose @SerializedName("date_created") var dateCreated: String? = null,
-    @Expose @SerializedName("date_edited") var dateEdited: String? = null,
-    @Expose @SerializedName("object") var objectGIS: ObjectGIS? = ObjectGIS(),
-    @Expose @SerializedName("user") var user: UserGIS? = UserGIS(),
-    @Expose @SerializedName("official_answer") var officialAnswer: OfficialAnswer? = OfficialAnswer(),
-//    @Expose @SerializedName("photos") var photos: List<String> = listOf(),
-    @Expose @SerializedName("on_moderation") var onModeration: Boolean? = null,
-    @Expose @SerializedName("is_rated") var isRated: Boolean? = null,
-    @Expose @SerializedName("is_verified") var isVerified: Boolean? = null
+data class TwoGisReviewsBundle(
+    val twoGisCompanyData: TwoGisCompanyData,
+    val twoGisReviewList: List<TwoGisReview> = emptyList()
 )
 
-data class ObjectGIS(
-    @Expose @SerializedName("id") var id: String? = null,
-    @Expose @SerializedName("type") var type: String? = null
+data class TwoGisCompanyData(
+    val id: String,
+    val name: String? = null,
 )
 
-data class UserGIS(
-    @Expose @SerializedName("id") var id: String? = null,
-    @Expose @SerializedName("reviews_count") var reviewsCount: Int? = null,
-    @Expose @SerializedName("first_name") var firstName: String? = null,
-    @Expose @SerializedName("last_name") var lastName: String? = null,
-    @Expose @SerializedName("name") var name: String? = null,
-    @Expose @SerializedName("provider") var provider: String? = null,
-    @Expose @SerializedName("url") var url: String? = null,
-    @Expose @SerializedName("public_id") var publicId: String? = null
+enum class TwoGisCompanyEnum(val twoGisCompanyData: TwoGisCompanyData) {
+    MIRA(
+        TwoGisCompanyData(
+        id = "70000001030737926",
+        name = "Купец&Ко на пр Мира"
+        )
+    ),
+    YN25(TwoGisCompanyData(
+        id = "70000001023172949",
+        name = "Купец&Ко на Ярыгинской Набережной 25"
+    )),
+    YN23(TwoGisCompanyData(
+        id = "70000001025624980",
+        name = "Купец&Ко на Ярыгинской Набережной 23"
+    ))
+}
+
+data class TwoGisReview(
+    var objectId: String? = null,
+    val id: String? = null,
+    val regionId: Int? = null,
+    val text: String? = null,
+    val rating: Int? = null,
+    val provider: String? = null,
+    val source: String? = null,
+    val isHidden: Boolean? = null,
+    val hidingType: String? = null,
+    val hidingReason: String? = null,
+    val url: String? = null,
+    val likesCount: Int? = null,
+    val commentsCount: Int? = null,
+    val dateCreated: String? = null,
+    val dateEdited: String? = null,
+    val onModeration: Boolean? = null,
+    val isRated: Boolean? = null,
+    val isVerified: Boolean? = null,
+    val userGISid: String? = null,
+    val userGISreviewsCount: Int? = null,
+    val userGISfirstName: String? = null,
+    val userGISlastName: String? = null,
+    val userGISname: String? = null,
+    val userGISprovider: String? = null,
+    val userGISurl: String? = null,
+    val userGISpublicId: String? = null
 )
 
-data class OfficialAnswer(
-    @Expose @SerializedName("id") var id: String? = null,
-    @Expose @SerializedName("org_name") var orgName: String? = null,
-    @Expose @SerializedName("text") var text: String? = null,
-    @Expose @SerializedName("date_created") var dateCreated: String? = null,
+fun ReviewsGIS.mapToTwoGisReview(): TwoGisReview = TwoGisReview(
+    objectId = objectGIS?.id,
+    id = id,
+    regionId = regionId,
+    text = text,
+    rating = rating,
+    provider = provider,
+    source = source,
+    isHidden = isHidden,
+    hidingType = hidingType,
+    hidingReason = hidingReason,
+    url = url,
+    likesCount = likesCount,
+    commentsCount = commentsCount,
+    dateCreated = dateCreated,
+    dateEdited = dateEdited,
+    onModeration = onModeration,
+    isRated = isRated,
+    isVerified = isVerified,
+    userGISid = user?.id,
+    userGISreviewsCount = user?.reviewsCount,
+    userGISfirstName = user?.firstName,
+    userGISlastName = user?.lastName,
+    userGISname = user?.name,
+    userGISprovider = user?.provider,
+    userGISurl = user?.url,
+    userGISpublicId = user?.publicId,
 )
-

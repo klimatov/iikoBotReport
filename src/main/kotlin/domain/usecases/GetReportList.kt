@@ -1,6 +1,6 @@
 package domain.usecases
 
-import data.repository.ReportRepositoryImpl
+import data.remoteAPI.iiko.ReportRepositoryImpl
 
 class GetReportList {
     private val tag = this::class.java.simpleName

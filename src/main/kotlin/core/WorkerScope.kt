@@ -1,14 +1,13 @@
 package core
 
-import data.repository.BotRepositoryImpl
-import data.repository.GetFromIikoApiRepositoryImpl
-import data.repository.GetFromLPApiRepositoryImpl
-import data.repository.ReportRepositoryImpl
+import data.remoteAPI.BotRepositoryImpl
+import data.remoteAPI.iiko.GetFromIikoApiRepositoryImpl
+import data.remoteAPI.loyaltyPlant.GetFromLPApiRepositoryImpl
+import data.remoteAPI.iiko.ReportRepositoryImpl
 import domain.models.BirthdayParam
 import domain.models.ReminderParam
 import domain.models.ReportParam
 import domain.models.ReviewsParam
-import domain.repository.GetFromLPApiRepository
 import domain.usecases.MakeBirthdayPostUseCase
 import domain.usecases.MakeReminderPostUseCase
 import domain.usecases.MakeReportPostUseCase

@@ -1,4 +1,4 @@
-package data.repository
+package data.remoteAPI
 
 import core.Bot
 import dev.inmo.tgbotapi.extensions.api.send.sendTextMessage

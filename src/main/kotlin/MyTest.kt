@@ -1,4 +1,4 @@
-import data.repository.GetFromTwoGisApiRepositoryImpl
+import data.remoteAPI.twoGis.GetFromTwoGisApiRepositoryImpl
 import domain.usecases.GetDataFromTwoGIS
 
 class MyTest {
@@ -10,7 +10,7 @@ class MyTest {
         val res = GetDataFromTwoGIS(GetFromTwoGisApiRepositoryImpl).getReviewsList(firmMira)
 
         res.forEach {
-            println("${it.user?.name} [${it.dateCreated}]: ${it.text}")
+            println("[${it.dateCreated}] ${it.userGISname}: ${it.text}")
         }
 
 //            GetDataFromLP(GetFromLPApiRepositoryImpl).getClientData(39131146)

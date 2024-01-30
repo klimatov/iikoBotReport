@@ -1,4 +1,4 @@
-package data.repository
+package data.remoteAPI.iiko
 
 import SecurityData.LOGIN_PASSWORD
 import SecurityData.LOGIN_USER
@@ -6,9 +6,9 @@ import SecurityData.SERVER_IP
 import SecurityData.SERVER_PORT
 import domain.repository.GetFromIikoApiRepository
 import korlibs.crypto.sha1
-import org.jsoup.Jsoup
 import org.jsoup.Connection
 import org.jsoup.HttpStatusException
+import org.jsoup.Jsoup
 import utils.Logging
 
 class GetFromIikoApiRepositoryImpl : GetFromIikoApiRepository {
