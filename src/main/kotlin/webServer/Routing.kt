@@ -1,11 +1,8 @@
 package webServer
 
 import MyTest
-import data.BirthdayRepository
-import data.RemindersRepository
-import data.ReportsRepository
-import data.ReviewsRepository
-import data.fileProcessing.*
+import data.*
+import data.fileProcessing.NotesRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -51,6 +48,7 @@ fun Application.configureRouting() {
                         val remindersList = RemindersRepository().get()
                         val birthdayList = BirthdayRepository().get()
                         val reviewsList = ReviewsRepository().get()
+                        val twoGisReviewsList = TwoGisRepository().get()
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
@@ -136,7 +134,7 @@ fun Application.configureRouting() {
 
 
                             label(classes = "label") {
-                                +"Список отчетов об отзывах:"
+                                +"Список отчетов об отзывах из приложения:"
                             }
                             reviewsList.keys.forEach {
                                 p(classes = "field") {
@@ -156,7 +154,34 @@ fun Application.configureRouting() {
                             p(classes = "field") {
                                 a(href = "edit-reviews", classes = "text-input") {
                                     style = "text-decoration: none;"
-                                    +"Создать новый отчет об отзывах"
+                                    +"Создать новый отчет об отзывах из приложения"
+                                }
+                            }
+
+
+
+                            label(classes = "label") {
+                                +"Список отчетов об отзывах из 2GIS:"
+                            }
+                            twoGisReviewsList.keys.forEach {
+                                p(classes = "field") {
+                                    a(href = "/edit-twogis?workerId=$it", classes = "text-input") {
+                                        style = "text-decoration: none;"
+                                        title = it
+                                        +"${twoGisReviewsList[it]?.workerParam?.workerName}"
+                                        if (twoGisReviewsList[it]?.workerParam?.workerIsActive != true) {
+                                            span {
+                                                style = "color:red;"
+                                                +" (не активен)"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            p(classes = "field") {
+                                a(href = "edit-twogis", classes = "text-input") {
+                                    style = "text-decoration: none;"
+                                    +"Создать новый отчет об отзывах из 2GIS"
                                 }
                             }
 
