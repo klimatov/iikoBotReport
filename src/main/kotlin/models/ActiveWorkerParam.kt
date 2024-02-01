@@ -11,7 +11,8 @@ enum class WorkerType{
     REPORT,
     REMINDER,
     BIRTHDAY,
-    REVIEWS
+    REVIEWS,
+    TWOGIS
 }
 
 enum class WorkerState{

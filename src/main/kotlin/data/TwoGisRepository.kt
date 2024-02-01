@@ -1,22 +1,24 @@
 package data
 
+import data.database.twoGisWorkers.TwoGisWorkersDB
+import data.database.twoGisWorkers.mapToTwoGisWorkerParam
+import data.database.twoGisWorkers.mapToTwoGisWorkersDTO
 import models.TwoGisWorkerParam
 
 class TwoGisRepository {
     private val tag = this::class.java.simpleName
     fun get(): MutableMap<String, TwoGisWorkerParam> {
-//        return ReviewsWorkersDB.getAll().associate { it.workerId to it.mapToReviewsWorkerParam() }.toMutableMap()
-        return mutableMapOf()
+        return TwoGisWorkersDB.getAll().associate { it.workerId to it.mapToTwoGisWorkerParam() }.toMutableMap()
     }
 
     fun set(workerList: MutableMap<String, TwoGisWorkerParam>?) {
-//        workerList?.forEach { (_, reviewsWorkerParam) ->
-//            ReviewsWorkersDB.insert(reviewsWorkerParam.mapToReviewsWorkersDTO())
-//        }
+        workerList?.forEach { (_, twoGisWorkerParam) ->
+            TwoGisWorkersDB.insert(twoGisWorkerParam.mapToTwoGisWorkersDTO())
+        }
     }
 
     fun delete(workerId: String) {
-//        ReviewsWorkersDB.deleteByWorkerId(workerId)
+        TwoGisWorkersDB.deleteByWorkerId(workerId)
     }
 
     // TODO: методы для апдейта отдельных воркеров и т.п.

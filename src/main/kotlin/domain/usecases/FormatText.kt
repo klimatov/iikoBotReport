@@ -42,6 +42,16 @@ class FormatText {
         return resultMessage
     }
 
+    fun twoGisReview(twoGisParam: TwoGisParam, twoGisReview: TwoGisReview): String {
+        var resultMessage = decodingTwoGisTemplates(
+            twoGisParam.twoGisText,
+            twoGisReview
+        )
+        if (twoGisParam.nameInHeader) resultMessage = twoGisParam.workerName + "\n" + resultMessage
+
+        return resultMessage
+    }
+
     fun report(messageParam: MessageParam): String {
         var tableMsg = messageParam.reportResult.table
         var resultMessage = ""
@@ -134,6 +144,45 @@ class FormatText {
                     2, 3, 4 -> "года"
                     else -> "лет"//0, 5, 6, 7, 8, 9
                 }
+            }
+        }
+    }
+
+    private fun decodingTwoGisTemplates(
+        rawMessage: String,
+        twoGisReview: TwoGisReview
+    ): String {
+        val regex = "\\[/?.*?\\]".toRegex()
+        return rawMessage.replace(regex) {
+            when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "OUTLET" -> TwoGisCompanyEnum.values().first{ it.twoGisCompanyData.id == twoGisReview.objectId}.twoGisCompanyData.name.toString()
+                "OBJECTID" -> twoGisReview.objectId.toString()
+                "ID" -> twoGisReview.id.toString()
+//                "REGIONID" -> twoGisReview.regionId.toString()
+                "TEXT" -> twoGisReview.text.toString()
+                "RATING" -> twoGisReview.rating.toString()
+                "PROVIDER" -> twoGisReview.provider.toString()
+//                "SOURCE" -> twoGisReview.source.toString()
+                "ISHIDDEN" -> twoGisReview.isHidden.toString()
+//                "HIDINGTYPE" -> twoGisReview.hidingType.toString()
+//                "HIDINGREASON" -> twoGisReview.hidingReason.toString()
+//                "URL" -> twoGisReview.url.toString()
+                "LIKESCOUNT" -> twoGisReview.likesCount.toString()
+                "COMMENTSCOUNT" -> twoGisReview.commentsCount.toString()
+                "DATECREATED" -> twoGisReview.dateCreated.toString()
+                "DATEEDITED" -> twoGisReview.dateEdited.toString()
+                "ONMODERATION" -> twoGisReview.onModeration.toString()
+//                "ISRATED" -> twoGisReview.isRated.toString()
+//                "ISVERIFIED" -> twoGisReview.isVerified.toString()
+                "USERID" -> twoGisReview.userGISid.toString()
+                "USERREVIEWSCOUNT" -> twoGisReview.userGISreviewsCount.toString()
+                "USERFIRSTNAME" -> twoGisReview.userGISfirstName.toString()
+                "USERLASTNAME" -> twoGisReview.userGISlastName.toString()
+                "USERNAME" -> twoGisReview.userGISname.toString()
+                "USERPROVIDER" -> twoGisReview.userGISprovider.toString()
+                "USERURL" -> twoGisReview.userGISurl.toString()
+                "USERPUBLICID" -> twoGisReview.userGISpublicId.toString()
+                else -> it.value
             }
         }
     }

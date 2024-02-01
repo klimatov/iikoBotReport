@@ -1,9 +1,9 @@
 package core
 
 import data.BirthdayRepository
-import data.ReviewsRepository
 import data.RemindersRepository
 import data.ReportsRepository
+import data.ReviewsRepository
 import kotlinx.coroutines.*
 import models.*
 import utils.Logging
@@ -15,6 +15,7 @@ class WorkersManager(private val bot: Bot) {
     private var remindersList: MutableMap<String, ReminderWorkerParam> = mutableMapOf()
     private var birthdayList: MutableMap<String, BirthdayWorkerParam> = mutableMapOf()
     private var reviewsList: MutableMap<String, ReviewsWorkerParam> = mutableMapOf()
+    private var twoGisReviewsList: MutableMap<String, TwoGisWorkerParam> = mutableMapOf()
     private var activeWorkersList: MutableMap<String, ActiveWorkerParam> = mutableMapOf()
 
     suspend fun start() {
@@ -93,6 +94,9 @@ class WorkersManager(private val bot: Bot) {
                     WorkerType.REVIEWS -> {
                         WorkerScope(bot = bot).processReviews(reviewsList[workerParam.workerId] ?: ReviewsWorkerParam())
                     }
+                    WorkerType.TWOGIS -> {
+                        WorkerScope(bot = bot).processTwoGis(twoGisReviewsList[workerParam.workerId] ?: TwoGisWorkerParam())
+                    }
                 }
             }
             scope.start()
@@ -146,6 +150,16 @@ class WorkersManager(private val bot: Bot) {
                 )
                 if (workerState == WorkerState.DELETE) remindersList.remove(workerData.workerParam.workerId) else
                     remindersList[workerData.workerParam.workerId] = workerData
+            }
+            is TwoGisWorkerParam -> {
+                activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(
+                    workerId = workerData.workerParam.workerId,
+                    workerType = WorkerType.TWOGIS,
+                    workerState = workerState,
+                    workerIsActive = workerData.workerParam.workerIsActive
+                )
+                if (workerState == WorkerState.DELETE) twoGisReviewsList.remove(workerData.workerParam.workerId) else
+                    twoGisReviewsList[workerData.workerParam.workerId] = workerData
             }
             is BirthdayWorkerParam -> {
                 activeWorkersList[workerData.workerParam.workerId] = ActiveWorkerParam(

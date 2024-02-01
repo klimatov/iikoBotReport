@@ -46,42 +46,29 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                     ),
                     twoGisText = "\uD83D\uDCAC[TEXT]\n" +
                             "\n" +
-                            "\uD83D\uDDD2\uFE0FНовый отзыв с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [FULLNAME] в [CREATEDTIMESTAMP].\n" +
+                            "\uD83D\uDDD2\uFE0FНовый отзыв на портале [PROVIDER] с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [USERNAME] в [DATECREATED].\n" +
                             "\n" +
-                            "Гость [FIRSTNAME] (ID: [CL_ID]) был у нас [VISITS] раз \uD83D\uDEB6\u200D♂\uFE0F и потратил в сумме [MONEYSPENT] рублей\uD83D\uDCB0. У него накоплено [BALANCE] баллов. Ему [AGE] и он родился [DATEOFBIRTH].\n" +
-                            "Отзыв привязан к транзакции № [TR_ID] на сумму [TR_SUM] рублей.\n" +
-                            "e-mail: [EMAIL]\n" +
-                            "Телефон: [PHONE]\n" +
+                            "Пользователь [USERNAME] (ID: [USERID]) ранее оставил [USERREVIEWSCOUNT] отзывов.\n" +
                             "\n" +
-                            "Шаблоны замены:\n" +
-                            "[ID] - ID отзыва\n" +
+                            "\n" +
+                            "[OUTLET] - Бар на который оставлен отзыв\n" +
+                            "[OBJECTID] – ID бара в системе 2GIS\n" +
+                            "[ID] – ID отзыва\n" +
                             "[TEXT] - Текст отзыва\n" +
                             "[RATING] - Оценка\n" +
-                            "[CREATEDTIMESTAMP] - Дата отзыва\n" +
-                            "[OUTLET] - Бар на который оставлен отзыв\n" +
-                            "[ORDER] - Номер заказа (???)\n" +
-                            "[CL_ID] - ID клиента\n" +
-                            "[AGE] - Возраст клиента\n" +
-                            "[BALANCE] - Количество накопленных баллов\n" +
-                            "[EMAIL] - Электронный адрес клиента\n" +
-                            "[PHONE] - Телефон клиента\n" +
-                            "[DATEOFBIRTH] - Дата рождения клиента\n" +
-                            "[LASTVISITEDTIME] - Дата последнего посещения (???)\n" +
-                            "[FIRSTNAME] - Имя клиента\n" +
-                            "[FULLNAME] - Полное имя клиента\n" +
-                            "[VISITS] - Количество посещений\n" +
-                            "[MONEYSPENT] - Потрачено клиентом за все время\n" +
-                            "[TR_ID] - Номер транзакции\n" +
-                            "[TR_TYPE] - Тип транзакции\n" +
-                            "[TR_STATE] - Состояние транзакции\n" +
-                            "[TR_SUM] - Сумма транзакции\n" +
-                            "[TR_CLIENT] - ID клиента в транзакции\n" +
-                            "[TR_PURCHASEAMOUNT] - Сумма покупки\n" +
-                            "[TR_VALIDATEDTIMESTAMP] - Дата транзакции\n" +
-                            "[TR_OUTLET] - Бар в котором проведена транзакция\n" +
-                            "[TR_VALIDATOR] - Валидатор транзакции\n" +
-                            "[TR_COUPON] - Купон транзакции\n" +
-                            "[TR_VALIDATIONID] - ID проверки транзакции", // текст отчета об отзыве
+                            "[DATECREATED] - Дата создания отзыва\n" +
+                            "[DATEEDITED] – Дата редактирования отзыва\n" +
+                            "[PROVIDER] - Источник\n" +
+                            "[ISHIDDEN] – Скрыт ли отзыв\n" +
+                            "[LIKESCOUNT] – Количество лайков\n" +
+                            "[COMMENTSCOUNT] – Количество комментариев\n" +
+                            "[ONMODERATION] – На модерации?\n" +
+                            "[USERID] – ID пользователя\n" +
+                            "[USERREVIEWSCOUNT] – Количество отзывов пользователя\n" +
+                            "[USERFIRSTNAME] – Имя пользователя\n" +
+                            "[USERLASTNAME] – Фамилия пользователя\n" +
+                            "[USERNAME] – Полное имя пользователя\n" +
+                            "[USERPUBLICID] – Публичный ID пользователя", // текст отчета об отзыве
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (twoGisReviewsList.containsKey(workerId) == true) editTwoGisParam = twoGisReviewsList[workerId]!!

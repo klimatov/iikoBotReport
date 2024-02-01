@@ -2,16 +2,11 @@ package core
 
 import data.remoteAPI.BotRepositoryImpl
 import data.remoteAPI.iiko.GetFromIikoApiRepositoryImpl
-import data.remoteAPI.loyaltyPlant.GetFromLPApiRepositoryImpl
 import data.remoteAPI.iiko.ReportRepositoryImpl
-import domain.models.BirthdayParam
-import domain.models.ReminderParam
-import domain.models.ReportParam
-import domain.models.ReviewsParam
-import domain.usecases.MakeBirthdayPostUseCase
-import domain.usecases.MakeReminderPostUseCase
-import domain.usecases.MakeReportPostUseCase
-import domain.usecases.MakeReviewsPostUseCase
+import data.remoteAPI.loyaltyPlant.GetFromLPApiRepositoryImpl
+import data.remoteAPI.twoGis.GetFromTwoGisApiRepositoryImpl
+import domain.models.*
+import domain.usecases.*
 import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
 import models.*
@@ -38,6 +33,10 @@ class WorkerScope(bot: Bot) {
         GetFromLPApiRepositoryImpl
     }
 
+    private val getFromTwoGisApiRepository by lazy {
+        GetFromTwoGisApiRepositoryImpl
+    }
+
     private val botRepository by lazy {
         BotRepositoryImpl(bot = bot)
     }
@@ -56,6 +55,10 @@ class WorkerScope(bot: Bot) {
 
     private val makeReviewsPostUseCase by lazy {
         MakeReviewsPostUseCase(getFromLPApiRepository = getFromLPApiRepository, botRepository = botRepository)
+    }
+
+    private val makeTwoGisPostUseCase by lazy {
+        MakeTwoGisPostUseCase(getFromTwoGisApiRepository = getFromTwoGisApiRepository, botRepository = botRepository)
     }
 
     private var lastSendDate: String = "01.01.2000"
@@ -88,6 +91,12 @@ class WorkerScope(bot: Bot) {
         anyWorkerParam = reviewsWorkerParam
         workerType = WorkerType.REVIEWS
         process(reviewsWorkerParam.workerParam)
+    }
+
+    suspend fun processTwoGis(twoGisWorkerParam: TwoGisWorkerParam) {
+        anyWorkerParam = twoGisWorkerParam
+        workerType = WorkerType.TWOGIS
+        process(twoGisWorkerParam.workerParam)
     }
 
     private suspend fun process(workerParam: WorkerParam) {
@@ -143,6 +152,9 @@ class WorkerScope(bot: Bot) {
             }
             WorkerType.REVIEWS -> {
                 makeReviewsPostUseCase.execute(mapReviewsToDomain(reviewsWorkerParam = anyWorkerParam as ReviewsWorkerParam))
+            }
+            WorkerType.TWOGIS -> {
+                makeTwoGisPostUseCase.execute(mapTwoGisToDomain(twoGisWorkerParam = anyWorkerParam as TwoGisWorkerParam))
             }
         }
     }
@@ -260,6 +272,15 @@ class WorkerScope(bot: Bot) {
             workerName = reviewsWorkerParam.workerParam.workerName,
             reviewsText = reviewsWorkerParam.reviewsText,
             workerId = reviewsWorkerParam.workerParam.workerId
+        )
+    }
+    private fun mapTwoGisToDomain(twoGisWorkerParam: TwoGisWorkerParam): TwoGisParam {
+        return TwoGisParam(
+            sendChatId = twoGisWorkerParam.workerParam.sendChatId,
+            nameInHeader = twoGisWorkerParam.workerParam.nameInHeader,
+            workerName = twoGisWorkerParam.workerParam.workerName,
+            twoGisText = twoGisWorkerParam.twoGisText,
+            workerId = twoGisWorkerParam.workerParam.workerId
         )
     }
 

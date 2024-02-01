@@ -7,6 +7,8 @@ import data.database.remindersWorkers.RemindersWorkersDB
 import data.database.reportsWorkers.ReportsWorkersDB
 import data.database.reviewsData.ReviewsDataDB
 import data.database.reviewsWorkers.ReviewsWorkersDB
+import data.database.twoGisData.TwoGisDataDB
+import data.database.twoGisWorkers.TwoGisWorkersDB
 
 class DatabaseRepository {
     private val tag = this::class.java.simpleName
@@ -18,5 +20,7 @@ class DatabaseRepository {
         databaseManage.createTable(ReportsWorkersDB)
         databaseManage.createTable(NameIdBundleDB)
         databaseManage.createTable(ReviewsDataDB)
+        databaseManage.createTable(TwoGisWorkersDB)
+        databaseManage.createTable(TwoGisDataDB)
     }
 }
