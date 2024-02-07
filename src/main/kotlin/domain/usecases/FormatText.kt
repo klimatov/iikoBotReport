@@ -155,7 +155,10 @@ class FormatText {
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
-                "OUTLET" -> TwoGisCompanyEnum.values().first{ it.twoGisCompanyData.id == twoGisReview.objectId}.twoGisCompanyData.name.toString()
+                "STARS" -> toStarsString(twoGisReview.rating)
+                "OUTLET" -> TwoGisCompanyEnum.values()
+                    .first { it.twoGisCompanyData.id == twoGisReview.objectId }.twoGisCompanyData.name.toString()
+
                 "OBJECTID" -> twoGisReview.objectId.toString()
                 "ID" -> twoGisReview.id.toString()
 //                "REGIONID" -> twoGisReview.regionId.toString()
@@ -169,8 +172,8 @@ class FormatText {
 //                "URL" -> twoGisReview.url.toString()
                 "LIKESCOUNT" -> twoGisReview.likesCount.toString()
                 "COMMENTSCOUNT" -> twoGisReview.commentsCount.toString()
-                "DATECREATED" -> twoGisReview.dateCreated.toString()
-                "DATEEDITED" -> twoGisReview.dateEdited.toString()
+                "DATECREATED" -> convertDateTime(twoGisReview.dateCreated.toString())
+                "DATEEDITED" -> convertDateTime(twoGisReview.dateEdited.toString())
                 "ONMODERATION" -> twoGisReview.onModeration.toString()
 //                "ISRATED" -> twoGisReview.isRated.toString()
 //                "ISVERIFIED" -> twoGisReview.isVerified.toString()
@@ -197,13 +200,14 @@ class FormatText {
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "STARS" -> toStarsString(review.rating)
                 "ID" -> review.id.toString()
                 //"TYPE" -> review.type.toString()
                 //"STATE" -> review.state.toString()
                 "TEXT" -> review.text.toString()
                 "RATING" -> review.rating.toString()
                 //"CLIENT" -> review.client.toString()
-                "CREATEDTIMESTAMP" -> convertDateTime(review.createdTimestamp ?: "", timeZone)
+                "CREATEDTIMESTAMP" -> convertDateTimeWithZone(review.createdTimestamp ?: "", timeZone)
                 //"PROCESSED" -> review.processed.toString()
                 "OUTLET" -> outlets?.name?.name.toString()//review.outlet.toString()
                 "ORDER" -> review.order.toString()
@@ -224,7 +228,7 @@ class FormatText {
                 "EMAIL" -> client.email.toString()
                 "PHONE" -> client.phone.toString()
                 "DATEOFBIRTH" -> convertDate(client.dateOfBirth ?: "")
-                "LASTVISITEDTIME" -> convertDateTime(client.lastVisitedTime ?: "", timeZone)
+                "LASTVISITEDTIME" -> convertDateTimeWithZone(client.lastVisitedTime ?: "", timeZone)
                 "FIRSTNAME" -> client.firstName ?: ""
                 "FULLNAME" -> client.fullName ?: ""
                 "VISITS" -> client.visits.toString()
@@ -292,7 +296,7 @@ class FormatText {
         }
     } else ""
 
-    private fun convertDateTime(rawDate: String, timeZone: String): String = if (rawDate != "") {
+    private fun convertDateTimeWithZone(rawDate: String, timeZone: String): String = if (rawDate != "") {
         try {
             ZonedDateTime
                 .parse(rawDate)
@@ -303,5 +307,18 @@ class FormatText {
             ""
         }
     } else ""
+
+    private fun convertDateTime(rawDate: String): String = if (rawDate != "") {
+        try {
+            ZonedDateTime
+                .parse(rawDate)
+                .toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"))
+        } catch (e: Exception) {
+            ""
+        }
+    } else ""
+
+    private fun toStarsString(rating: Int?): String = rating?.let { "⭐".repeat(it) } ?: ""
 
 }
