@@ -44,31 +44,30 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                         sendWhenType = 1, //1 - периодически
                         nameInHeader = false
                     ),
-                    twoGisText = "\uD83D\uDCAC[TEXT]\n" +
+                    twoGisText = "[STARS] \uD83D\uDCAC[TEXT]\n" +
                             "\n" +
-                            "\uD83D\uDDD2\uFE0FНовый отзыв на портале [PROVIDER] с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [USERNAME] в [DATECREATED].\n" +
+                            "\uD83D\uDDD2\uFE0FНовый отзыв на портале [PROVIDER] с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [NAME] в [DATECREATED].\n" +
                             "\n" +
-                            "Пользователь [USERNAME] (ID: [USERID]) ранее оставил [USERREVIEWSCOUNT] отзывов.\n" +
+                            "Пользователь [NAME] (ID: [USERID]) ранее оставил [USERREVIEWSCOUNT] отзывов.\n" +
                             "\n" +
                             "\n" +
                             "[OUTLET] - Бар на который оставлен отзыв\n" +
                             "[OBJECTID] – ID бара в системе 2GIS\n" +
                             "[ID] – ID отзыва\n" +
                             "[TEXT] - Текст отзыва\n" +
-                            "[RATING] - Оценка\n" +
+                            "[RATING] – Оценка\n" +
+                            "[STARS] – Оценка в виде звезд\n" +
                             "[DATECREATED] - Дата создания отзыва\n" +
-                            "[DATEEDITED] – Дата редактирования отзыва\n" +
                             "[PROVIDER] - Источник\n" +
                             "[ISHIDDEN] – Скрыт ли отзыв\n" +
                             "[LIKESCOUNT] – Количество лайков\n" +
                             "[COMMENTSCOUNT] – Количество комментариев\n" +
-                            "[ONMODERATION] – На модерации?\n" +
                             "[USERID] – ID пользователя\n" +
                             "[USERREVIEWSCOUNT] – Количество отзывов пользователя\n" +
-                            "[USERFIRSTNAME] – Имя пользователя\n" +
-                            "[USERLASTNAME] – Фамилия пользователя\n" +
-                            "[USERNAME] – Полное имя пользователя\n" +
-                            "[USERPUBLICID] – Публичный ID пользователя", // текст отчета об отзыве
+                            "[FIRSTNAME] – Имя пользователя\n" +
+                            "[LASTNAME] – Фамилия пользователя\n" +
+                            "[NAME] – Полное имя пользователя\n" +
+                            "[USERPUBLICID] – Публичный ID пользователя\n", // текст отчета об отзыве
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (twoGisReviewsList.containsKey(workerId) == true) editTwoGisParam = twoGisReviewsList[workerId]!!

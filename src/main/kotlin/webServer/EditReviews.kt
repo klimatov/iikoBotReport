@@ -44,9 +44,9 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                         sendWhenType = 1, //1 - периодически
                         nameInHeader = false
                     ),
-                    reviewsText = "\uD83D\uDCAC[TEXT]\n" +
+                    reviewsText = "[STARS] \uD83D\uDCAC[TEXT]\n" +
                             "\n" +
-                            "\uD83D\uDDD2\uFE0FНовый отзыв с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [FULLNAME] в [CREATEDTIMESTAMP].\n" +
+                            "\uD83D\uDDD2\uFE0FНовый отзыв с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [FULLNAME] в [DATECREATED].\n" +
                             "\n" +
                             "Гость [FIRSTNAME] (ID: [CL_ID]) был у нас [VISITS] раз \uD83D\uDEB6\u200D♂\uFE0F и потратил в сумме [MONEYSPENT] рублей\uD83D\uDCB0. У него накоплено [BALANCE] баллов. Ему [AGE] и он родился [DATEOFBIRTH].\n" +
                             "Отзыв привязан к транзакции № [TR_ID] на сумму [TR_SUM] рублей.\n" +
@@ -56,8 +56,9 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                             "Шаблоны замены:\n" +
                             "[ID] - ID отзыва\n" +
                             "[TEXT] - Текст отзыва\n" +
-                            "[RATING] - Оценка\n" +
-                            "[CREATEDTIMESTAMP] - Дата отзыва\n" +
+                            "[RATING] – Оценка\n" +
+                            "[STARS] – Оценка в виде звезд\n" +
+                            "[DATECREATED] - Дата отзыва\n" +
                             "[OUTLET] - Бар на который оставлен отзыв\n" +
                             "[ORDER] - Номер заказа (???)\n" +
                             "[CL_ID] - ID клиента\n" +
@@ -81,7 +82,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                             "[TR_OUTLET] - Бар в котором проведена транзакция\n" +
                             "[TR_VALIDATOR] - Валидатор транзакции\n" +
                             "[TR_COUPON] - Купон транзакции\n" +
-                            "[TR_VALIDATIONID] - ID проверки транзакции", // текст отчета об отзыве
+                            "[TR_VALIDATIONID] - ID проверки транзакции\n", // текст отчета об отзыве
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reviewsList.containsKey(workerId) == true) editReviewsParam = reviewsList[workerId]!!
