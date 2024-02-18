@@ -88,7 +88,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
                 TwoGisWorkersDB.selectAll().toList().map {
                     TwoGisWorkersDTO(
                         twoGisText = it[twoGisText],
-                        sendIfRating = it[sendIfRating]?.toList()?: listOf(),
+                        sendIfRating = it[sendIfRating]?.toList()?: listOf(1,2,3,4,5),
                         workerId = it[workerId],
                         workerName = it[workerName],
                         sendChatId = it[sendChatId].toList(),
@@ -116,7 +116,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
                 val result = TwoGisWorkersDB.selectAll().where { TwoGisWorkersDB.workerId.eq(workerId) }.single()
                 TwoGisWorkersDTO(
                     twoGisText = result[twoGisText],
-                    sendIfRating = result[sendIfRating]?.toList()?: listOf(),
+                    sendIfRating = result[sendIfRating]?.toList()?: listOf(1,2,3,4,5),
                     workerId = workerId,
                     workerName = result[workerName],
                     sendChatId = result[sendChatId].toList(),

@@ -17,7 +17,11 @@ class SendTwoGisMessage(private val botRepository: BotRepository) {
                 twoGisParam = twoGisParam,
                 twoGisReview = review
             )
-            if ((messageText.isNotEmpty()) && (twoGisParam.sendChatId.isNotEmpty())) {
+            if (
+                (messageText.isNotEmpty())
+                && (twoGisParam.sendChatId.isNotEmpty())
+                && (twoGisParam.sendIfRating.contains(review.rating)) // проверяем настройку показа по звездам
+                ) {
                 twoGisParam.sendChatId.forEach {
                     if (!botRepository.sendMessageToChat(text = messageText, sendChatId = it)) {
                         resultFlag = false

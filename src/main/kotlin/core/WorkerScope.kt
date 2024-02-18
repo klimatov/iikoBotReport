@@ -280,7 +280,8 @@ class WorkerScope(bot: Bot) {
             nameInHeader = twoGisWorkerParam.workerParam.nameInHeader,
             workerName = twoGisWorkerParam.workerParam.workerName,
             twoGisText = twoGisWorkerParam.twoGisText,
-            workerId = twoGisWorkerParam.workerParam.workerId
+            workerId = twoGisWorkerParam.workerParam.workerId,
+            sendIfRating = twoGisWorkerParam.sendIfRating
         )
     }
 
