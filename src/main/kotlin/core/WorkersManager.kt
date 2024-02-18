@@ -1,9 +1,6 @@
 package core
 
-import data.BirthdayRepository
-import data.RemindersRepository
-import data.ReportsRepository
-import data.ReviewsRepository
+import data.*
 import kotlinx.coroutines.*
 import models.*
 import utils.Logging
@@ -11,11 +8,13 @@ import utils.Logging
 class WorkersManager(private val bot: Bot) {
     private val tag = this::class.java.simpleName
     private val scopesList: MutableMap<String, Job> = mutableMapOf()
+
     private var reportsList: MutableMap<String, ReportWorkerParam> = mutableMapOf()
     private var remindersList: MutableMap<String, ReminderWorkerParam> = mutableMapOf()
     private var birthdayList: MutableMap<String, BirthdayWorkerParam> = mutableMapOf()
     private var reviewsList: MutableMap<String, ReviewsWorkerParam> = mutableMapOf()
     private var twoGisReviewsList: MutableMap<String, TwoGisWorkerParam> = mutableMapOf()
+
     private var activeWorkersList: MutableMap<String, ActiveWorkerParam> = mutableMapOf()
 
     suspend fun start() {
@@ -58,6 +57,17 @@ class WorkersManager(private val bot: Bot) {
                 ActiveWorkerParam(
                     workerId = it.value.workerParam.workerId,
                     workerType = WorkerType.REVIEWS,
+                    workerState = WorkerState.CREATE,
+                    workerIsActive = it.value.workerParam.workerIsActive
+                ) // если активен, добавляем в список воркеров
+        }
+
+        twoGisReviewsList = TwoGisRepository().get() ?: mutableMapOf() // загружаем список отчетов 2gis
+        twoGisReviewsList.forEach {
+            if (it.value.workerParam.workerIsActive) activeWorkersList[it.value.workerParam.workerId] =
+                ActiveWorkerParam(
+                    workerId = it.value.workerParam.workerId,
+                    workerType = WorkerType.TWOGIS,
                     workerState = WorkerState.CREATE,
                     workerIsActive = it.value.workerParam.workerIsActive
                 ) // если активен, добавляем в список воркеров
