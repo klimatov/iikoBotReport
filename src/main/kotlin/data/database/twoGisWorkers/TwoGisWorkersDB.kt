@@ -11,6 +11,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
     private val tag = this::class.java.simpleName
 
     private val twoGisText = TwoGisWorkersDB.text("twogis_text")
+        private val sendIfRating = TwoGisWorkersDB.json<IntArray>("send_if_rating", Json.Default).nullable()
     private val workerId = TwoGisWorkersDB.varchar("worker_id", 40)
     private val workerName = TwoGisWorkersDB.varchar("worker_name", 255)
     private val sendChatId = TwoGisWorkersDB.json<LongArray>("send_chat_id", Json.Default)
@@ -30,6 +31,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
                 addLogger(StdOutSqlLogger)
                 TwoGisWorkersDB.upsert {
                     it[twoGisText] = twoGisWorkersDTO.twoGisText
+                    it[sendIfRating] = twoGisWorkersDTO.sendIfRating.toIntArray()
                     it[workerId] = twoGisWorkersDTO.workerId
                     it[workerName] = twoGisWorkersDTO.workerName
                     it[sendChatId] = twoGisWorkersDTO.sendChatId.toLongArray()
@@ -57,6 +59,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
                 addLogger(StdOutSqlLogger)
                 TwoGisWorkersDB.update({ workerId eq twoGisWorkersDTO.workerId }) {
                     it[twoGisText] = twoGisWorkersDTO.twoGisText
+                    it[sendIfRating] = twoGisWorkersDTO.sendIfRating.toIntArray()
 //                    it[workerId] = twoGisWorkersDTO.workerId
                     it[workerName] = twoGisWorkersDTO.workerName
                     it[sendChatId] = twoGisWorkersDTO.sendChatId.toLongArray()
@@ -85,6 +88,7 @@ object TwoGisWorkersDB : Table("twogis_workers") {
                 TwoGisWorkersDB.selectAll().toList().map {
                     TwoGisWorkersDTO(
                         twoGisText = it[twoGisText],
+                        sendIfRating = it[sendIfRating]?.toList()?: listOf(),
                         workerId = it[workerId],
                         workerName = it[workerName],
                         sendChatId = it[sendChatId].toList(),
@@ -109,9 +113,10 @@ object TwoGisWorkersDB : Table("twogis_workers") {
         return try {
             transaction {
                 addLogger(StdOutSqlLogger)
-                val result = TwoGisWorkersDB.select { TwoGisWorkersDB.workerId.eq(workerId) }.single()
+                val result = TwoGisWorkersDB.selectAll().where { TwoGisWorkersDB.workerId.eq(workerId) }.single()
                 TwoGisWorkersDTO(
                     twoGisText = result[twoGisText],
+                    sendIfRating = result[sendIfRating]?.toList()?: listOf(),
                     workerId = workerId,
                     workerName = result[workerName],
                     sendChatId = result[sendChatId].toList(),

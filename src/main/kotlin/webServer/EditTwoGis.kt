@@ -44,6 +44,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                         sendWhenType = 1, //1 - периодически
                         nameInHeader = false
                     ),
+                    sendIfRating = listOf(1, 2, 3, 4, 5), // количество звезд для отправки отзыва
                     twoGisText = "[STARS] \uD83D\uDCAC[TEXT]\n" +
                             "\n" +
                             "\uD83D\uDDD2\uFE0FНовый отзыв на портале [PROVIDER] с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [NAME] в [DATECREATED].\n" +
@@ -90,13 +91,23 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                     body {
                         postForm(classes = "form") {
 
-                            workerIdField(editTwoGisParam.workerParam.workerId, editTwoGisParam.workerParam.workerIsActive, workerTypeName = "Отчет об отзывах 2GIS")
+                            workerIdField(
+                                editTwoGisParam.workerParam.workerId,
+                                editTwoGisParam.workerParam.workerIsActive,
+                                workerTypeName = "Отчет об отзывах 2GIS"
+                            )
 
-                            workerNameField(editTwoGisParam.workerParam.workerName, editTwoGisParam.workerParam.nameInHeader, workerTypeName = "отчета об отзывах 2GIS")
+                            workerNameField(
+                                editTwoGisParam.workerParam.workerName,
+                                editTwoGisParam.workerParam.nameInHeader,
+                                workerTypeName = "отчета об отзывах 2GIS"
+                            )
 
                             sendChatIdField(editTwoGisParam.workerParam.sendChatId, nameIdBundleList)
 
                             updateFrequency(editTwoGisParam.workerParam.sendPeriod)
+
+                            sendIfRatingField(editTwoGisParam.sendIfRating)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -130,7 +141,8 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                 val userIP = call.request.origin.remoteHost
                 val userName = call.principal<UserIdPrincipal>()?.name
                 val htmlReviewsParam = TwoGisWorkerParam(
-                    workerParam = WorkerParam(workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
+                    workerParam = WorkerParam(
+                        workerId = receiveParam["workerId"]?.joinToString() ?: "", // ok
                         workerName = receiveParam["workerName"]?.joinToString() ?: "",
                         sendChatId = receiveParam["sendChatId"]?.map { it.toLong() } ?: listOf(),
                         sendWhenType = 1,
@@ -143,6 +155,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                         sendDateTimeList = (listOf()),
                     ),
                     twoGisText = receiveParam["twoGisText"]?.joinToString() ?: "",
+                    sendIfRating = receiveParam["sendIfRating"]?.map { it.toInt() } ?: listOf(1, 2, 3, 4, 5),
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

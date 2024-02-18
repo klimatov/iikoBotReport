@@ -17,11 +17,13 @@ data class TwoGisWorkersDTO(
     val sendMonthDay: List<Int>,
     val nameInHeader: Boolean,
     val workerIsActive: Boolean,
-    val sendDateTimeList: List<String>
+    val sendDateTimeList: List<String>,
+    val sendIfRating: List<Int>
 )
 
 fun TwoGisWorkerParam.mapToTwoGisWorkersDTO(): TwoGisWorkersDTO = TwoGisWorkersDTO(
     twoGisText = twoGisText,
+    sendIfRating = sendIfRating,
     workerId = workerParam.workerId,
     workerName = workerParam.workerName,
     sendChatId = workerParam.sendChatId,
@@ -32,11 +34,12 @@ fun TwoGisWorkerParam.mapToTwoGisWorkersDTO(): TwoGisWorkersDTO = TwoGisWorkersD
     sendMonthDay = workerParam.sendMonthDay,
     nameInHeader = workerParam.nameInHeader,
     workerIsActive = workerParam.workerIsActive,
-    sendDateTimeList = workerParam.sendDateTimeList
+    sendDateTimeList = workerParam.sendDateTimeList,
 )
 
 fun TwoGisWorkersDTO.mapToTwoGisWorkerParam(): TwoGisWorkerParam = TwoGisWorkerParam(
     twoGisText = twoGisText,
+    sendIfRating = sendIfRating,
     workerParam = WorkerParam(
         workerId = workerId,
         workerName = workerName,

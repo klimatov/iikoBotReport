@@ -158,6 +158,42 @@ fun FORM.updateFrequency(sendPeriod: Int) {
     }
 }
 
+fun FORM.sendIfRatingField(sendIfRating: List<Int>) {
+    div(classes = "field half") {
+        id = "sendIfRating"
+        label(classes = "label") {
+            +"Отправляем если поставлена оценка"
+        }
+        ul(classes = "checkboxes") {
+            val ratingVariants = listOf(
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+            )
+
+            for (rating in 1..5) {
+                li(classes = "checkbox") {
+                    input(
+                        type = InputType.checkBox,
+                        classes = "checkbox-input",
+                        name = "sendIfRating"
+                    ) {
+                        value = rating.toString()
+                        id = "sendIfRating-${rating}"
+                        checked = sendIfRating.toString().contains(value)
+                    }
+                    label(classes = "checkbox-label") {
+                        onClick = "setCheckbox('sendIfRating-${rating}')"
+                        +ratingVariants[rating - 1]
+                    }
+                }
+            }
+        }
+    }
+}
+
 fun FORM.sendTimeField(sendTime: List<String>) {
     p(classes = "field half") {
         id = "sendTime"
@@ -207,7 +243,6 @@ fun FORM.sendWeekDayField(sendWeekDay: List<Int>) {
         }
     }
 }
-
 
 fun FORM.sendMonthDay(sendMonthDay: List<Int>) {
     div(classes = "field") {
