@@ -17,11 +17,13 @@ data class ReviewsWorkersDTO(
     val sendMonthDay: List<Int>,
     val nameInHeader: Boolean,
     val workerIsActive: Boolean,
-    val sendDateTimeList: List<String>
+    val sendDateTimeList: List<String>,
+    val sendIfRating: List<Int>,
 )
 
 fun ReviewsWorkerParam.mapToReviewsWorkersDTO(): ReviewsWorkersDTO = ReviewsWorkersDTO(
     reviewsText = reviewsText,
+    sendIfRating = sendIfRating,
     workerId = workerParam.workerId,
     workerName = workerParam.workerName,
     sendChatId = workerParam.sendChatId,
@@ -32,11 +34,12 @@ fun ReviewsWorkerParam.mapToReviewsWorkersDTO(): ReviewsWorkersDTO = ReviewsWork
     sendMonthDay = workerParam.sendMonthDay,
     nameInHeader = workerParam.nameInHeader,
     workerIsActive = workerParam.workerIsActive,
-    sendDateTimeList = workerParam.sendDateTimeList
+    sendDateTimeList = workerParam.sendDateTimeList,
 )
 
 fun ReviewsWorkersDTO.mapToReviewsWorkerParam(): ReviewsWorkerParam = ReviewsWorkerParam(
     reviewsText = reviewsText,
+    sendIfRating = sendIfRating,
     workerParam = WorkerParam(
         workerId = workerId,
         workerName = workerName,

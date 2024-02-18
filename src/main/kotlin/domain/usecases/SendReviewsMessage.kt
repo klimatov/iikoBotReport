@@ -1,6 +1,9 @@
 package domain.usecases
 
-import domain.models.*
+import domain.models.Client
+import domain.models.Reviews
+import domain.models.ReviewsParam
+import domain.models.User
 import domain.repository.BotRepository
 
 class SendReviewsMessage(private val botRepository: BotRepository) {
@@ -21,7 +24,11 @@ class SendReviewsMessage(private val botRepository: BotRepository) {
                 client = clientsList.find { it.id == review.client } ?: Client(),
                 userData = userData
             )
-            if ((messageText.isNotEmpty()) && (reviewsParam.sendChatId.isNotEmpty())) {
+            if (
+                (messageText.isNotEmpty())
+                && (reviewsParam.sendChatId.isNotEmpty())
+                && (reviewsParam.sendIfRating.contains(review.rating)) // проверяем настройку показа по звездам
+                ) {
                 reviewsParam.sendChatId.forEach {
                     if (!botRepository.sendMessageToChat(text = messageText, sendChatId = it)) {
                         resultFlag = false

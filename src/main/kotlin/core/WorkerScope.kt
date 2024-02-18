@@ -271,7 +271,8 @@ class WorkerScope(bot: Bot) {
             nameInHeader = reviewsWorkerParam.workerParam.nameInHeader,
             workerName = reviewsWorkerParam.workerParam.workerName,
             reviewsText = reviewsWorkerParam.reviewsText,
-            workerId = reviewsWorkerParam.workerParam.workerId
+            workerId = reviewsWorkerParam.workerParam.workerId,
+            sendIfRating = reviewsWorkerParam.sendIfRating
         )
     }
     private fun mapTwoGisToDomain(twoGisWorkerParam: TwoGisWorkerParam): TwoGisParam {

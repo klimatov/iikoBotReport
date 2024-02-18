@@ -2,5 +2,6 @@ package models
 
 data class ReviewsWorkerParam(
     val reviewsText: String = "", // текст сообщения о новом отзыве (с шаблонами)
-    val workerParam: WorkerParam = WorkerParam()
+    val sendIfRating: List<Int> = listOf(1,2,3,4,5), // количество звезд для отправки отзыва
+    val workerParam: WorkerParam = WorkerParam(),
 )

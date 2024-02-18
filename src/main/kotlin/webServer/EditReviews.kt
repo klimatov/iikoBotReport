@@ -44,6 +44,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                         sendWhenType = 1, //1 - периодически
                         nameInHeader = false
                     ),
+                    sendIfRating = listOf(1, 2, 3, 4, 5), // количество звезд для отправки отзыва
                     reviewsText = "[STARS] \uD83D\uDCAC[TEXT]\n" +
                             "\n" +
                             "\uD83D\uDDD2\uFE0FНовый отзыв с оценкой [RATING]⭐ о баре \uD83C\uDF78\"[OUTLET]\" оставил [FULLNAME] в [DATECREATED].\n" +
@@ -113,6 +114,8 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
 
                             updateFrequency(editReviewsParam.workerParam.sendPeriod)
 
+                            sendIfRatingField(editReviewsParam.sendIfRating)
+
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
                                 label(classes = "label") {
@@ -158,6 +161,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                         sendDateTimeList = (listOf()),
                     ),
                     reviewsText = receiveParam["reviewsText"]?.joinToString() ?: "",
+                    sendIfRating = receiveParam["sendIfRating"]?.map { it.toInt() } ?: listOf(1, 2, 3, 4, 5),
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

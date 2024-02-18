@@ -11,6 +11,7 @@ object ReviewsWorkersDB : Table("reviews_workers") {
     private val tag = this::class.java.simpleName
 
     private val reviewsText = ReviewsWorkersDB.text("reviews_text")
+    private val sendIfRating = ReviewsWorkersDB.json<IntArray>("send_if_rating", Json.Default).nullable()
     private val workerId = ReviewsWorkersDB.varchar("worker_id", 40)
     private val workerName = ReviewsWorkersDB.varchar("worker_name", 255)
     private val sendChatId = ReviewsWorkersDB.json<LongArray>("send_chat_id", Json.Default)
@@ -30,6 +31,7 @@ object ReviewsWorkersDB : Table("reviews_workers") {
                 addLogger(StdOutSqlLogger)
                 ReviewsWorkersDB.upsert {
                     it[reviewsText] = reviewsWorkersDTO.reviewsText
+                    it[sendIfRating] = reviewsWorkersDTO.sendIfRating.toIntArray()
                     it[workerId] = reviewsWorkersDTO.workerId
                     it[workerName] = reviewsWorkersDTO.workerName
                     it[sendChatId] = reviewsWorkersDTO.sendChatId.toLongArray()
@@ -57,6 +59,7 @@ object ReviewsWorkersDB : Table("reviews_workers") {
                 addLogger(StdOutSqlLogger)
                 ReviewsWorkersDB.update({ workerId eq reviewsWorkersDTO.workerId }) {
                     it[reviewsText] = reviewsWorkersDTO.reviewsText
+                    it[sendIfRating] = reviewsWorkersDTO.sendIfRating.toIntArray()
 //                    it[workerId] = reviewsWorkersDTO.workerId
                     it[workerName] = reviewsWorkersDTO.workerName
                     it[sendChatId] = reviewsWorkersDTO.sendChatId.toLongArray()
@@ -85,6 +88,7 @@ object ReviewsWorkersDB : Table("reviews_workers") {
                 ReviewsWorkersDB.selectAll().toList().map {
                     ReviewsWorkersDTO(
                         reviewsText = it[reviewsText],
+                        sendIfRating = it[sendIfRating]?.toList()?: listOf(1,2,3,4,5),
                         workerId = it[workerId],
                         workerName = it[workerName],
                         sendChatId = it[sendChatId].toList(),
@@ -109,9 +113,10 @@ object ReviewsWorkersDB : Table("reviews_workers") {
         return try {
             transaction {
                 addLogger(StdOutSqlLogger)
-                val result = ReviewsWorkersDB.select { ReviewsWorkersDB.workerId.eq(workerId) }.single()
+                val result = ReviewsWorkersDB.selectAll().where { ReviewsWorkersDB.workerId.eq(workerId) }.single()
                 ReviewsWorkersDTO(
                     reviewsText = result[reviewsText],
+                    sendIfRating = result[sendIfRating]?.toList()?: listOf(1,2,3,4,5),
                     workerId = workerId,
                     workerName = result[workerName],
                     sendChatId = result[sendChatId].toList(),

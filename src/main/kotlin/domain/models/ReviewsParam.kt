@@ -5,5 +5,6 @@ class ReviewsParam(
     val workerName: String = "", // название отзыва
     val nameInHeader: Boolean = false, // Выводить название отчета в заголовке сообщения
     val reviewsText: String = "", // текст сообщения о новом отзыве (с шаблонами)
-    val workerId: String
+    val workerId: String,
+    val sendIfRating: List<Int> = listOf(1,2,3,4,5), // количество звезд для отправки отзыва
 )
