@@ -217,12 +217,12 @@ fun Application.configureRouting() {
                                 }
                             }
 
-                            p(classes = "field") {
-                                input(type = InputType.submit, classes = "button") {
-                                    name = "testButton"
-                                    value = "Тест"
-                                }
-                            }
+//                            p(classes = "field") {
+//                                input(type = InputType.submit, classes = "button") {
+//                                    name = "testButton"
+//                                    value = "Тест"
+//                                }
+//                            }
 
 
                         }
