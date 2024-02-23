@@ -124,3 +124,17 @@ function addDateTimeField(iconClickElement){
 
     document.getElementById('sendDateTimePlus').before(new_element);
 }
+
+function hideBlock(listHeader) {
+    var listStyle = listHeader.nextSibling.style;
+
+    if (listStyle.display == '') {
+        listStyle.display = 'none';
+        listHeader.className = 'label list collapsed'; // >
+
+    } else {
+        listStyle.display = '';
+        listHeader.className = 'label list expand'; // V
+
+    }
+}

@@ -52,25 +52,28 @@ fun Application.configureRouting() {
                         val notes = NotesRepository().get()
                         postForm(classes = "form") {
 
-                            label(classes = "label") {
-                                +"Список отчетов:"
+                            label(classes = "label list collapsed") {
+                                onClick = "hideBlock(this)"
+                                +"Список отчетов (${reportsList.count()}):"
                             }
-                            reportsList.keys.forEach {
-                                p(classes = "field") {
-                                    a(href = "/edit-worker?workerId=$it", classes = "text-input") {
-                                        style = "text-decoration: none;"
-                                        title = it
-                                        +"${reportsList[it]?.workerParam?.workerName}"
-                                        if (reportsList[it]?.workerParam?.workerIsActive != true) {
-                                            span {
-                                                style = "color:red;"
-                                                +" (не активен)"
+                            span(classes = "field list") {
+                                style = "display: none;"
+                                reportsList.keys.forEach {
+                                    p(classes = "field") {
+                                        a(href = "/edit-worker?workerId=$it", classes = "text-input") {
+                                            style = "text-decoration: none;"
+                                            title = it
+                                            +"${reportsList[it]?.workerParam?.workerName}"
+                                            if (reportsList[it]?.workerParam?.workerIsActive != true) {
+                                                span {
+                                                    style = "color:red;"
+                                                    +" (не активен)"
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-
                             p(classes = "field") {
                                 a(href = "edit-worker", classes = "text-input") {
                                     style = "text-decoration: none;"
@@ -78,26 +81,28 @@ fun Application.configureRouting() {
                                 }
                             }
 
-
-                            label(classes = "label") {
-                                +"Список напоминаний:"
+                            label(classes = "label list collapsed") {
+                                onClick = "hideBlock(this)"
+                                +"Список напоминаний (${remindersList.count()}):"
                             }
-                            remindersList.keys.forEach {
-                                p(classes = "field") {
-                                    a(href = "/edit-reminder?workerId=$it", classes = "text-input") {
-                                        style = "text-decoration: none;"
-                                        title = it
-                                        +"${remindersList[it]?.workerParam?.workerName}"
-                                        if (remindersList[it]?.workerParam?.workerIsActive != true) {
-                                            span {
-                                                style = "color:red;"
-                                                +" (не активен)"
+                            span(classes = "field list") {
+                                style = "display: none;"
+                                remindersList.keys.forEach {
+                                    p(classes = "field") {
+                                        a(href = "/edit-reminder?workerId=$it", classes = "text-input") {
+                                            style = "text-decoration: none;"
+                                            title = it
+                                            +"${remindersList[it]?.workerParam?.workerName}"
+                                            if (remindersList[it]?.workerParam?.workerIsActive != true) {
+                                                span {
+                                                    style = "color:red;"
+                                                    +" (не активен)"
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-
                             p(classes = "field") {
                                 a(href = "edit-reminder", classes = "text-input") {
                                     style = "text-decoration: none;"
@@ -105,26 +110,28 @@ fun Application.configureRouting() {
                                 }
                             }
 
-
-                            label(classes = "label") {
-                                +"Список напоминаний о ДР:"
+                            label(classes = "label list collapsed") {
+                                onClick = "hideBlock(this)"
+                                +"Список напоминаний о ДР (${birthdayList.count()}):"
                             }
-                            birthdayList.keys.forEach {
-                                p(classes = "field") {
-                                    a(href = "/edit-birthday?workerId=$it", classes = "text-input") {
-                                        style = "text-decoration: none;"
-                                        title = it
-                                        +"${birthdayList[it]?.workerParam?.workerName}"
-                                        if (birthdayList[it]?.workerParam?.workerIsActive != true) {
-                                            span {
-                                                style = "color:red;"
-                                                +" (не активен)"
+                            span(classes = "field list") {
+                                style = "display: none;"
+                                birthdayList.keys.forEach {
+                                    p(classes = "field") {
+                                        a(href = "/edit-birthday?workerId=$it", classes = "text-input") {
+                                            style = "text-decoration: none;"
+                                            title = it
+                                            +"${birthdayList[it]?.workerParam?.workerName}"
+                                            if (birthdayList[it]?.workerParam?.workerIsActive != true) {
+                                                span {
+                                                    style = "color:red;"
+                                                    +" (не активен)"
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-
                             p(classes = "field") {
                                 a(href = "edit-birthday", classes = "text-input") {
                                     style = "text-decoration: none;"
@@ -132,20 +139,23 @@ fun Application.configureRouting() {
                                 }
                             }
 
-
-                            label(classes = "label") {
-                                +"Список отчетов об отзывах из приложения:"
+                            label(classes = "label list collapsed") {
+                                onClick = "hideBlock(this)"
+                                +"Список отчетов об отзывах из приложения (${reviewsList.count()}):"
                             }
-                            reviewsList.keys.forEach {
-                                p(classes = "field") {
-                                    a(href = "/edit-reviews?workerId=$it", classes = "text-input") {
-                                        style = "text-decoration: none;"
-                                        title = it
-                                        +"${reviewsList[it]?.workerParam?.workerName}"
-                                        if (reviewsList[it]?.workerParam?.workerIsActive != true) {
-                                            span {
-                                                style = "color:red;"
-                                                +" (не активен)"
+                            span(classes = "field list") {
+                                style = "display: none;"
+                                reviewsList.keys.forEach {
+                                    p(classes = "field") {
+                                        a(href = "/edit-reviews?workerId=$it", classes = "text-input") {
+                                            style = "text-decoration: none;"
+                                            title = it
+                                            +"${reviewsList[it]?.workerParam?.workerName}"
+                                            if (reviewsList[it]?.workerParam?.workerIsActive != true) {
+                                                span {
+                                                    style = "color:red;"
+                                                    +" (не активен)"
+                                                }
                                             }
                                         }
                                     }
@@ -158,21 +168,23 @@ fun Application.configureRouting() {
                                 }
                             }
 
-
-
-                            label(classes = "label") {
-                                +"Список отчетов об отзывах из 2GIS:"
+                            label(classes = "label list collapsed") {
+                                onClick = "hideBlock(this)"
+                                +"Список отчетов об отзывах из 2GIS (${twoGisReviewsList.count()}):"
                             }
-                            twoGisReviewsList.keys.forEach {
-                                p(classes = "field") {
-                                    a(href = "/edit-twogis?workerId=$it", classes = "text-input") {
-                                        style = "text-decoration: none;"
-                                        title = it
-                                        +"${twoGisReviewsList[it]?.workerParam?.workerName}"
-                                        if (twoGisReviewsList[it]?.workerParam?.workerIsActive != true) {
-                                            span {
-                                                style = "color:red;"
-                                                +" (не активен)"
+                            span(classes = "field list") {
+                                style = "display: none;"
+                                twoGisReviewsList.keys.forEach {
+                                    p(classes = "field") {
+                                        a(href = "/edit-twogis?workerId=$it", classes = "text-input") {
+                                            style = "text-decoration: none;"
+                                            title = it
+                                            +"${twoGisReviewsList[it]?.workerParam?.workerName}"
+                                            if (twoGisReviewsList[it]?.workerParam?.workerIsActive != true) {
+                                                span {
+                                                    style = "color:red;"
+                                                    +" (не активен)"
+                                                }
                                             }
                                         }
                                     }
@@ -189,7 +201,6 @@ fun Application.configureRouting() {
                             label(classes = "label") {
                                 +"Настройки:"
                             }
-
                             p(classes = "field") {
                                 a(href = "edit-name-id-bundle", classes = "text-input") {
                                     style = "text-decoration: none;"
@@ -209,7 +220,6 @@ fun Application.configureRouting() {
                                     +notes
                                 }
                             }
-
                             p(classes = "field") {
                                 input(type = InputType.submit, classes = "button") {
                                     name = "saveButton"
@@ -226,6 +236,8 @@ fun Application.configureRouting() {
 
 
                         }
+                        script(type = "text/javascript", src = "js/main.js") {}
+
                     }
                 }
             }

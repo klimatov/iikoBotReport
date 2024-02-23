@@ -30,7 +30,7 @@ body {
   display: block; /* свойство, которое определяет, как элемент должен быть показан в документе. block - Элемент показывается как блочный. Применение этого значения для встроенных элементов, например тега <span>, заставляет его вести подобно блокам — происходит перенос строк в начале и в конце содержимого.*/
 } /* убираем лишнее и устанавливаем основное */
 
-.form .label {
+.form .label, .form .label-collapse {
   font-weight: bold;
   color: white;
   padding-top: 0; /* Устанавливает значение поля от верхнего края содержимого элемента */
@@ -42,6 +42,7 @@ body {
 Положение элемента устанавливается относительно его исходного места. Добавление свойств left, top, right и bottom изменяет позицию элемента и сдвигает его в ту или иную сторону от первоначального расположения. */
   z-index: 100; /* Каждый элемент может находиться как ниже, так и выше других объектов веб-страницы, их размещением по z-оси и управляет z-index. Это свойство работает только для элементов, у которых значение position задано как absolute, fixed или relative. */
 } /* настраиваем заголовки */
+
 
 .required .form .label:after, .form .required .label:after {
   content: " *";
@@ -233,6 +234,37 @@ body {
 	background-size:25px;
 	background-color:#222222;
     cursor: pointer;
+}
+
+.label.list {
+  text-indent: 1.5em; /* Устанавливает величину отступа первой строки блока текста */
+  cursor: pointer; 
+  
+}
+.label.list.expand {
+  background:url('arrow.png') no-repeat right center ;
+	background-size:1.5em;     
+  background-position: left;
+}
+.label.list.collapsed {
+  background:url('arrow-collapsed.png') no-repeat right center ;
+	background-size:1.5em;     
+  background-position: left;
+}
+
+.field.list{
+  margin: 0 0 0 0;
+}
+
+label {
+  /* Убираем выделение с заголовков. (Убираем выделение при сворачивании и двойном клике) */
+ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+ -webkit-tap-highlight-color: transparent;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+  user-select: none;
 }
 
 .form .select::-ms-expand {
