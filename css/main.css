@@ -342,4 +342,19 @@ label {
       color: red;
   }
 
+  .text-input.refresh {
+    /* background:url('send.png') no-repeat right center ;   
+    background-size: 3em;
+    background-position: right 0.6em bottom 0;
+    background-color: #222222; */
+  }
+
+  .refresh{
+    height:2.6em;
+    filter: brightness(0) invert(1);
+    float: inline-end;
+    position: relative;
+    top: -0.7em;
+}
+
 

@@ -139,6 +139,13 @@ class WorkersManager(private val bot: Bot) {
         scopesList.remove(workerId)
     }
 
+    suspend fun sendNowWorkerMessage(workerId: String): Boolean {
+        if (scopesList.containsKey(workerId)) {
+            scopesList[workerId].let {  }
+            return true
+        } else return false
+    }
+
     suspend fun makeChangeWorker(workerState: WorkerState, workerData: Any) {
         when (workerData) {
             is ReportWorkerParam -> {

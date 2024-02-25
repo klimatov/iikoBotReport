@@ -70,6 +70,9 @@ fun Application.configureRouting() {
                                                     +" (не активен)"
                                                 }
                                             }
+                                            img(classes = "refresh", alt = "SEND NOW", src = "send.png") {
+                                                onClick = "sendNow(this)"
+                                            }
                                         }
                                     }
                                 }
@@ -237,7 +240,6 @@ fun Application.configureRouting() {
 
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-
                     }
                 }
             }

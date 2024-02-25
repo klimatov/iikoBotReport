@@ -131,10 +131,26 @@ function hideBlock(listHeader) {
     if (listStyle.display == '') {
         listStyle.display = 'none';
         listHeader.className = 'label list collapsed'; // >
-
     } else {
         listStyle.display = '';
         listHeader.className = 'label list expand'; // V
+    }
+}
 
+function sendNow(element){
+    var hrefElement = element.parentElement
+    var workerId = hrefElement.getAttribute('title')    
+    event.preventDefault();    
+
+    const Http = new XMLHttpRequest();
+    const url='/send-now?workerId=' + workerId;
+    Http.open("GET", url);
+    Http.send();
+    
+    Http.onreadystatechange = function() {
+        if (Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
+            console.log(Http.responseText);
+            alert(JSON.parse(Http.responseText).message);
+          }
     }
 }

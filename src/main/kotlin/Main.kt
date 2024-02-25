@@ -1,3 +1,4 @@
+
 import SecurityData.POSTGRES_PASSWORD
 import SecurityData.POSTGRES_URL
 import SecurityData.POSTGRES_USER
@@ -8,16 +9,20 @@ import core.WorkersManager
 import data.DatabaseRepository
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cachingheaders.*
+import io.ktor.server.plugins.contentnegotiation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
 import webServer.*
+
 
 val job = SupervisorJob()
 private val bot by lazy { Bot(job) }
@@ -52,6 +57,12 @@ fun main() {
                 }
             }
         }
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
+        }
         configureAuth()
         configureRouting()
         configureEditWorker(workersManager)
@@ -60,6 +71,7 @@ fun main() {
         configureEditReviews(workersManager)
         configureEditTwoGis(workersManager)
         configureEditNameIdBundle()
+        configureSendNow(workersManager)
     }.start(wait = true)
 
     while (true) {
