@@ -1,8 +1,8 @@
 package webServer
 
 import core.WorkersManager
-import data.RemindersRepository
 import data.NameIdBundleRepository
+import data.RemindersRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -48,7 +48,10 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         nameInHeader = true,
                         sendDateTimeList = listOf()
                     ),
-                    reminderText = "" // текст напоминания
+                    reminderText = "\n" +
+                            "\n" +
+                            "Шаблоны замены:\n" +
+                            "[RANDOM] - Генерирует случайный набор цифр и символов" // текст напоминания
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reminderList.containsKey(workerId) == true) editReminderParam = reminderList[workerId]!!
