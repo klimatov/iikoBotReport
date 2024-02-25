@@ -140,21 +140,21 @@ class WorkerScope(bot: Bot) {
     private suspend fun sendMessage() {
         when (workerType) {
             WorkerType.REPORT -> {
-                makeReportPostUseCase.execute(mapReportToDomain(workerParam = anyWorkerParam as ReportWorkerParam))
+                makeReportPostUseCase.execute((anyWorkerParam as ReportWorkerParam).mapToReportParam())
             }
 
             WorkerType.REMINDER -> {
-                makeReminderPostUseCase.execute(mapReminderToDomain(reminderWorkerParam = anyWorkerParam as ReminderWorkerParam))
+                makeReminderPostUseCase.execute((anyWorkerParam as ReminderWorkerParam).mapToReminderParam())
             }
 
             WorkerType.BIRTHDAY -> {
-                makeBirthdayPostUseCase.execute(mapBirthdayToDomain(birthdayWorkerParam = anyWorkerParam as BirthdayWorkerParam))
+                makeBirthdayPostUseCase.execute((anyWorkerParam as BirthdayWorkerParam).mapToBirthdayParam())
             }
             WorkerType.REVIEWS -> {
-                makeReviewsPostUseCase.execute(mapReviewsToDomain(reviewsWorkerParam = anyWorkerParam as ReviewsWorkerParam))
+                makeReviewsPostUseCase.execute((anyWorkerParam as ReviewsWorkerParam).mapToReviewsParam())
             }
             WorkerType.TWOGIS -> {
-                makeTwoGisPostUseCase.execute(mapTwoGisToDomain(twoGisWorkerParam = anyWorkerParam as TwoGisWorkerParam))
+                makeTwoGisPostUseCase.execute((anyWorkerParam as TwoGisWorkerParam).mapToTwoGisParam())
             }
         }
     }
@@ -244,61 +244,6 @@ class WorkerScope(bot: Bot) {
         }
         Logging.d(tag, sendTime1)
         return sendTime1
-    }
-
-    private fun mapReminderToDomain(reminderWorkerParam: ReminderWorkerParam): ReminderParam {
-        return ReminderParam(
-            sendChatId = reminderWorkerParam.workerParam.sendChatId,
-            nameInHeader = reminderWorkerParam.workerParam.nameInHeader,
-            workerName = reminderWorkerParam.workerParam.workerName,
-            reminderText = reminderWorkerParam.reminderText
-        )
-    }
-
-    private fun mapBirthdayToDomain(birthdayWorkerParam: BirthdayWorkerParam): BirthdayParam {
-        return BirthdayParam(
-            sendChatId = birthdayWorkerParam.workerParam.sendChatId,
-            nameInHeader = birthdayWorkerParam.workerParam.nameInHeader,
-            workerName = birthdayWorkerParam.workerParam.workerName,
-            birthdayText = birthdayWorkerParam.birthdayText,
-            sendBeforeDays = birthdayWorkerParam.sendBeforeDays
-        )
-    }
-
-    private fun mapReviewsToDomain(reviewsWorkerParam: ReviewsWorkerParam): ReviewsParam {
-        return ReviewsParam(
-            sendChatId = reviewsWorkerParam.workerParam.sendChatId,
-            nameInHeader = reviewsWorkerParam.workerParam.nameInHeader,
-            workerName = reviewsWorkerParam.workerParam.workerName,
-            reviewsText = reviewsWorkerParam.reviewsText,
-            workerId = reviewsWorkerParam.workerParam.workerId,
-            sendIfRating = reviewsWorkerParam.sendIfRating
-        )
-    }
-    private fun mapTwoGisToDomain(twoGisWorkerParam: TwoGisWorkerParam): TwoGisParam {
-        return TwoGisParam(
-            sendChatId = twoGisWorkerParam.workerParam.sendChatId,
-            nameInHeader = twoGisWorkerParam.workerParam.nameInHeader,
-            workerName = twoGisWorkerParam.workerParam.workerName,
-            twoGisText = twoGisWorkerParam.twoGisText,
-            workerId = twoGisWorkerParam.workerParam.workerId,
-            sendIfRating = twoGisWorkerParam.sendIfRating
-        )
-    }
-
-    private fun mapReportToDomain(workerParam: ReportWorkerParam): ReportParam {
-        return ReportParam(
-            reportId = workerParam.reportId,
-            reportPeriod = workerParam.reportPeriod,
-            sendChatId = workerParam.workerParam.sendChatId,
-            messageHeader = workerParam.messageHeader,
-            messageSuffix = workerParam.messageSuffix,
-            messageAmount = workerParam.messageAmount,
-            messageWordLimit = workerParam.messageWordLimit,
-            nameInHeader = workerParam.workerParam.nameInHeader,
-            workerIsActive = workerParam.workerParam.workerIsActive,
-            workerName = workerParam.workerParam.workerName
-        )
     }
 
     private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && year % 100 != 0 || year % 400 == 0

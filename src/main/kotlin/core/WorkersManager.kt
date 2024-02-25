@@ -1,6 +1,15 @@
 package core
 
 import data.*
+import data.remoteAPI.BotRepositoryImpl
+import data.remoteAPI.iiko.GetFromIikoApiRepositoryImpl
+import data.remoteAPI.iiko.ReportRepositoryImpl
+import domain.models.mapToBirthdayParam
+import domain.models.mapToReminderParam
+import domain.models.mapToReportParam
+import domain.usecases.MakeBirthdayPostUseCase
+import domain.usecases.MakeReminderPostUseCase
+import domain.usecases.MakeReportPostUseCase
 import kotlinx.coroutines.*
 import models.*
 import utils.Logging
@@ -140,10 +149,37 @@ class WorkersManager(private val bot: Bot) {
     }
 
     suspend fun sendNowWorkerMessage(workerId: String): Boolean {
-        if (scopesList.containsKey(workerId)) {
-            scopesList[workerId].let {  }
-            return true
-        } else return false
+//        if (scopesList.containsKey(workerId)) {
+//            scopesList[workerId].let {  }
+//            return true
+//        } else return false
+
+        when {
+            reportsList.containsKey(workerId) -> {
+                reportsList[workerId]?.let {
+                    MakeReportPostUseCase(ReportRepositoryImpl, BotRepositoryImpl(bot))
+                        .execute(it.mapToReportParam())
+                }
+                return true
+            }
+            remindersList.containsKey(workerId) -> {
+                remindersList[workerId]?.let {
+                    MakeReminderPostUseCase(BotRepositoryImpl(bot))
+                        .execute(it.mapToReminderParam())
+                }
+                return true
+            }
+            birthdayList.containsKey(workerId) -> {
+                birthdayList[workerId]?.let {
+                    MakeBirthdayPostUseCase(GetFromIikoApiRepositoryImpl(), BotRepositoryImpl(bot))
+                        .execute(it.mapToBirthdayParam())
+                }
+                return true
+            }
+            else -> return false
+        }
+
+
     }
 
     suspend fun makeChangeWorker(workerState: WorkerState, workerData: Any) {

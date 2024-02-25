@@ -1,5 +1,7 @@
 package domain.models
 
+import models.ReportWorkerParam
+
 class ReportParam(
     val reportId: String, // ID отчета в iiko
     val reportPeriod: Int, // период данных для формирования отчета из iiko
@@ -13,3 +15,16 @@ class ReportParam(
     val workerIsActive: Boolean = true, // Галка активности отчета
     val workerName: String = "", // название отчета
 )
+
+ fun ReportWorkerParam.mapToReportParam(): ReportParam = ReportParam(
+     reportId = reportId,
+     reportPeriod = reportPeriod,
+     sendChatId = workerParam.sendChatId,
+     messageHeader = messageHeader,
+     messageSuffix = messageSuffix,
+     messageAmount = messageAmount,
+     messageWordLimit = messageWordLimit,
+     nameInHeader = workerParam.nameInHeader,
+     workerIsActive = workerParam.workerIsActive,
+     workerName = workerParam.workerName
+ )

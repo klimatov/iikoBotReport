@@ -150,7 +150,7 @@ function sendNow(element){
     Http.onreadystatechange = function() {
         if (Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
             console.log(Http.responseText);
-            alert(JSON.parse(Http.responseText).message);
+            alert(JSON.parse(Http.responseText).message + ' (' + hrefElement.text + ')');
           }
     }
 }

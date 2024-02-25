@@ -1,5 +1,7 @@
 package domain.models
 
+import models.BirthdayWorkerParam
+
 class BirthdayParam(
     val sendChatId: List<Long> = listOf(), // список ID чатов/юзеров куда будет отправляться отчет
     val workerName: String = "", // название поздравления
@@ -16,4 +18,12 @@ data class BirthdayValues(
     val bdDate: String = "",
     var newAge: Int = 0,
     val ageYearWord: String = ""
+)
+
+fun BirthdayWorkerParam.mapToBirthdayParam(): BirthdayParam = BirthdayParam(
+    sendChatId = workerParam.sendChatId,
+    nameInHeader = workerParam.nameInHeader,
+    workerName = workerParam.workerName,
+    birthdayText = birthdayText,
+    sendBeforeDays = sendBeforeDays
 )

@@ -1,7 +1,6 @@
 package webServer
 
 import core.WorkersManager
-import data.ReportsRepository
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
@@ -22,16 +21,12 @@ fun Application.configureSendNow(workersManager: WorkersManager) {
             get("/send-now") {
                 val workerId = call.parameters["workerId"] ?: ""
                 Logging.d(tag, "Json: $workerId")
-                val workerList = ReportsRepository().get()
-                val workerName = workerList[workerId]?.workerParam?.workerName
-                val response = if (workerName == null)
-                    Response("FALSE", "Такой отчет/напоминание не существует")
-                else {
-                    if (workersManager.sendNowWorkerMessage(workerId))
-                        Response("OK", "Отчет/напоминание с именем '$workerName' отправлен")
-                    else
-                        Response("FALSE", "Отправить отчет/напоминание с именем '$workerName' не удалось")
-                }
+
+                val response = if (workersManager.sendNowWorkerMessage(workerId))
+                    Response("OK", "Отчет/напоминание отправлен")
+                else
+                    Response("FALSE", "Отправить отчет/напоминание не удалось")
+
                 call.respond(response)
             }
         }
