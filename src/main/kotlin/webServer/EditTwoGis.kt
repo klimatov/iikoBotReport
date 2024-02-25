@@ -52,6 +52,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                             "Пользователь [NAME] (ID: [USERID]) ранее оставил [USERREVIEWSCOUNT] отзывов.\n" +
                             "\n" +
                             "\n" +
+                            "Шаблоны замены:\n" +
                             "[OUTLET] - Бар на который оставлен отзыв\n" +
                             "[OBJECTID] – ID бара в системе 2GIS\n" +
                             "[ID] – ID отзыва\n" +

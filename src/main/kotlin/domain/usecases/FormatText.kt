@@ -14,7 +14,7 @@ class FormatText {
         var resultMessage = ""
 
         if (reminderParam.nameInHeader) resultMessage += reminderParam.workerName + "\n"
-        resultMessage += reminderParam.reminderText
+        resultMessage += decodingReminderTemplates(reminderParam.reminderText)
 
         return resultMessage
     }
@@ -146,6 +146,20 @@ class FormatText {
                 }
             }
         }
+    }
+
+    private fun decodingReminderTemplates(
+        rawMessage: String
+    ): String {
+        val regex = "\\[/?.*?\\]".toRegex()
+        val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        return rawMessage.replace(regex) {
+            when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "RANDOM" -> List(6) { charPool.random() }.joinToString("")
+                else -> it.value
+            }
+        }
+
     }
 
     private fun decodingTwoGisTemplates(
