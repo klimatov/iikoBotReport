@@ -352,7 +352,7 @@ label {
   .refresh{
     height:2.6em;
     filter: brightness(0) invert(1);
-    float: inline-end;
+    float: right;
     position: relative;
     top: -0.7em;
 }
