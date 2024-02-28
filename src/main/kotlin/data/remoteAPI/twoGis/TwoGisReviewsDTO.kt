@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class TwoGisReviewsDTO(
     @Expose @SerializedName("reviews") var reviews: List<ReviewsGIS> = listOf()
 )
+
 data class ReviewsGIS(
     @Expose @SerializedName("id") var id: String? = null,
     @Expose @SerializedName("region_id") var regionId: Int? = null,
@@ -24,10 +25,23 @@ data class ReviewsGIS(
     @Expose @SerializedName("object") var objectGIS: ObjectGIS? = ObjectGIS(),
     @Expose @SerializedName("user") var user: UserGIS? = UserGIS(),
     @Expose @SerializedName("official_answer") var officialAnswer: OfficialAnswer? = OfficialAnswer(),
-//    @Expose @SerializedName("photos") var photos: List<String> = listOf(),
+    @Expose @SerializedName("photos") var photos: List<Photos> = listOf(),
     @Expose @SerializedName("on_moderation") var onModeration: Boolean? = null,
     @Expose @SerializedName("is_rated") var isRated: Boolean? = null,
     @Expose @SerializedName("is_verified") var isVerified: Boolean? = null
+)
+data class Photos(
+    @Expose @SerializedName("id") var id: String? = null,
+    @Expose @SerializedName("date_created") var dateCreated: String? = null,
+    @Expose @SerializedName("preview_urls") var previewUrls: PreviewUrls? = PreviewUrls(),
+    @Expose @SerializedName("visibility_status") var visibilityStatus: String? = null
+)
+data class PreviewUrls(
+//    @SerializedName("1920x") var 1920x : String? = null,
+//    @SerializedName("320x") var 320x  : String? = null,
+//    @SerializedName("640x") var 640x  : String? = null,
+//    @SerializedName("64x64") var 64x64 : String? = null,
+    @Expose @SerializedName("url") var url: String? = null
 )
 
 data class ObjectGIS(

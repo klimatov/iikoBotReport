@@ -13,20 +13,22 @@ data class TwoGisCompanyData(
 )
 
 enum class TwoGisCompanyEnum(val twoGisCompanyData: TwoGisCompanyData) {
-    MIRA(
+    /*MIRA(
         TwoGisCompanyData(
         id = "70000001030737926",
         name = "Купец&Ко на пр Мира"
         )
+    ),*/
+    YN25(
+        TwoGisCompanyData(
+            id = "70000001023172949",
+            name = "Купец&Ко на Ярыгинской Набережной 25"
+        )
     ),
-    YN25(TwoGisCompanyData(
-        id = "70000001023172949",
-        name = "Купец&Ко на Ярыгинской Набережной 25"
-    )),
-    YN23(TwoGisCompanyData(
+    /*YN23(TwoGisCompanyData(
         id = "70000001025624980",
         name = "Купец&Ко на Ярыгинской Набережной 23"
-    ))
+    ))*/
 }
 
 data class TwoGisReview(
@@ -55,7 +57,8 @@ data class TwoGisReview(
     val userGISname: String? = null,
     val userGISprovider: String? = null,
     val userGISurl: String? = null,
-    val userGISpublicId: String? = null
+    val userGISpublicId: String? = null,
+    val photos: List<String> = listOf(),
 )
 
 fun ReviewsGIS.mapToTwoGisReview(): TwoGisReview = TwoGisReview(
@@ -85,4 +88,5 @@ fun ReviewsGIS.mapToTwoGisReview(): TwoGisReview = TwoGisReview(
     userGISprovider = user?.provider,
     userGISurl = user?.url,
     userGISpublicId = user?.publicId,
+    photos = photos.mapNotNull { photo -> photo.previewUrls?.url }.toList(),
 )
