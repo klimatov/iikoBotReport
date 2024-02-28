@@ -13,22 +13,24 @@ data class TwoGisCompanyData(
 )
 
 enum class TwoGisCompanyEnum(val twoGisCompanyData: TwoGisCompanyData) {
-    /*MIRA(
+    MIRA(
         TwoGisCompanyData(
-        id = "70000001030737926",
-        name = "Купец&Ко на пр Мира"
+            id = "70000001030737926",
+            name = "Купец&Ко на пр Мира"
         )
-    ),*/
+    ),
     YN25(
         TwoGisCompanyData(
             id = "70000001023172949",
             name = "Купец&Ко на Ярыгинской Набережной 25"
         )
     ),
-    /*YN23(TwoGisCompanyData(
-        id = "70000001025624980",
-        name = "Купец&Ко на Ярыгинской Набережной 23"
-    ))*/
+    YN23(
+        TwoGisCompanyData(
+            id = "70000001025624980",
+            name = "Купец&Ко на Ярыгинской Набережной 23"
+        )
+    )
 }
 
 data class TwoGisReview(

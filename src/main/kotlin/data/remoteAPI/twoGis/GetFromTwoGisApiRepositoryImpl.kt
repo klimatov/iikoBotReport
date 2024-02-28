@@ -11,7 +11,7 @@ import utils.Logging
 object GetFromTwoGisApiRepositoryImpl : GetFromTwoGisApiRepository {
     private val tag = this::class.java.simpleName
 
-    private val twoGisRequestMessagesLimit = 4
+    private val twoGisRequestMessagesLimit = 2
     private val twoGisRequestKey = "37c04fe6-a560-4549-b459-02309cf643ad"
     private val twoGisLinkHead = "https://public-api.reviews.2gis.com/2.0/branches/"
     private val twoGisLinkTail = "/reviews?key=$twoGisRequestKey&limit=$twoGisRequestMessagesLimit&sort_by=date_created"
