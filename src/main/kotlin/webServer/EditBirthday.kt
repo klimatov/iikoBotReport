@@ -46,9 +46,11 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         sendDateTimeList = listOf()
                     ),
                     birthdayText = "[firstName] [lastName] скоро празднует день рождения \uD83C\uDF89 " +
+                            " (осталось дней: [BDCOUNTER]) - " +
                             "[bdDay] [bdMonthWord] исполняется [age] [ageYearWord]!!!\uD83E\uDD73\n" +
                             "\n" +
                             "Шаблоны замены:\n" +
+                            "[BDCOUNTER] - сколько дней осталось до ДР\n" +
                             "[BIRTHDAY] - Дата ДР\n" +
                             "[BDDATE] - Дата ДР в этом году\n" +
                             "[BDDAY] - День ДР\n" +

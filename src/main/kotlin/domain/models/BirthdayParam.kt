@@ -17,7 +17,8 @@ data class BirthdayValues(
     val bdDay: String = "",
     val bdDate: String = "",
     var newAge: Int = 0,
-    val ageYearWord: String = ""
+    val ageYearWord: String = "",
+    val bdCounter: Int = 0,
 )
 
 fun BirthdayWorkerParam.mapToBirthdayParam(): BirthdayParam = BirthdayParam(

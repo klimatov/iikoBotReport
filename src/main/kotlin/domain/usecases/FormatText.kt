@@ -130,7 +130,8 @@ class FormatText {
             bdDay = birthdayDate.dayOfMonth.toString(),
             bdDate = birthdayDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             newAge = (todayDate.year - sourceDate.year).toInt(),
-            ageYearWord = ageYearWord(todayDate.year - sourceDate.year)
+            ageYearWord = ageYearWord(todayDate.year - sourceDate.year),
+            bdCounter = (birthdayDate.toEpochDay() - todayDate.toEpochDay()).toInt()
         )
     }
 
@@ -260,6 +261,7 @@ class FormatText {
         val regex = "\\[/?.*?\\]".toRegex()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
+                "BDCOUNTER" -> employeeBirthdayValues.bdCounter.toString()
                 "BDDAY" -> employeeBirthdayValues.bdDay
                 "BDMONTHWORD" -> employeeBirthdayValues.bdMonthWord
                 "AGE" -> employeeBirthdayValues.newAge.toString()
