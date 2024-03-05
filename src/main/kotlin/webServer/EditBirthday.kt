@@ -43,7 +43,9 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         sendWhenType = 0, //0 - ежедневно
                         sendTime = listOf("10:00"),
                         nameInHeader = false,
-                        sendDateTimeList = listOf()
+                        sendDateTimeList = listOf(),
+                        preliminarySendTime = "10:00",
+                        preliminarySendBeforeDays = 0,
                     ),
                     birthdayText = "[firstName] [lastName] скоро празднует день рождения \uD83C\uDF89 " +
                             " (осталось дней: [BDCOUNTER]) - " +
@@ -93,15 +95,27 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                     body {
                         postForm(classes = "form") {
 
-                            workerIdField(editBirthdayParam.workerParam.workerId, editBirthdayParam.workerParam.workerIsActive, workerTypeName = "Напоминание о ДР")
+                            workerIdField(
+                                editBirthdayParam.workerParam.workerId,
+                                editBirthdayParam.workerParam.workerIsActive,
+                                workerTypeName = "Напоминание о ДР"
+                            )
 
-                            workerNameField(editBirthdayParam.workerParam.workerName, editBirthdayParam.workerParam.nameInHeader, workerTypeName = "напоминания о ДР")
+                            workerNameField(
+                                editBirthdayParam.workerParam.workerName,
+                                editBirthdayParam.workerParam.nameInHeader,
+                                workerTypeName = "напоминания о ДР"
+                            )
 
                             sendChatIdField(editBirthdayParam.workerParam.sendChatId, nameIdBundleList)
 
                             sendTimeField(editBirthdayParam.workerParam.sendTime)
 
                             sendBeforeDays(editBirthdayParam.sendBeforeDays)
+
+                            preliminarySendTimeField(editBirthdayParam.workerParam.preliminarySendTime)
+
+                            preliminarySendBeforeDays(editBirthdayParam.workerParam.preliminarySendBeforeDays)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -146,9 +160,12 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
                         sendDateTimeList = (listOf()),
+                        preliminarySendBeforeDays = receiveParam["preliminarySendBeforeDays"]?.joinToString()?.toLong()
+                            ?: 0,
+                        preliminarySendTime = receiveParam["preliminarySendTime"]?.joinToString() ?: "10:00"
                     ),
                     birthdayText = receiveParam["birthdayText"]?.joinToString() ?: "",
-                    sendBeforeDays = receiveParam["sendBeforeDays"]?.joinToString()?.toLong() ?: 0
+                    sendBeforeDays = receiveParam["sendBeforeDays"]?.joinToString()?.toLong() ?: 0,
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

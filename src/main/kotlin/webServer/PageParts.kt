@@ -82,7 +82,7 @@ fun FORM.sendWhenTypeField(sendWhenType: Int, workerTypeName: String) {
     p(classes = "field half") {
         label(classes = "label") {
             +"Когда отправлять $workerTypeName"
-        //1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно, 4 - В указанные даты
+            //1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно, 4 - В указанные даты
         }
         select(classes = "select") {
             name = "sendWhenType"
@@ -330,7 +330,7 @@ private fun UL.sendDateFieldElement(sendDateTime: String) {
         p(classes = "one_line") {
             input(
                 type = InputType.dateTimeLocal,
-                classes = if ((LocalDateTime.parse(sendDateTime) < LocalDateTime.now())&&(sendDateTime != "2000-01-01T00:00")) {
+                classes = if ((LocalDateTime.parse(sendDateTime) < LocalDateTime.now()) && (sendDateTime != "2000-01-01T00:00")) {
                     "text-input time outdated"
                 } else {
                     "text-input time actual"
@@ -346,5 +346,31 @@ private fun UL.sendDateFieldElement(sendDateTime: String) {
             }
         }
         style { +"#sendDateTimeTemplate {display: none;}" }
+    }
+}
+
+fun FORM.preliminarySendTimeField(preliminarySendTime: String) {
+    p(classes = "field half") {
+        id = "preliminarySendTime"
+        label(classes = "label") {
+            +"Время предварительной разовой отправки"
+        }
+        input(type = InputType.time, name = "preliminarySendTime", classes = "text-input time") {
+            value = preliminarySendTime
+        }
+    }
+}
+
+fun FORM.preliminarySendBeforeDays(preliminarySendBeforeDays: Long) {
+    p(classes = "field half") {
+        id = "preliminarySendBeforeDays"
+        label(classes = "label") {
+            +"За сколько дней до события разово отправить"
+        }
+        input(type = InputType.number, name = "preliminarySendBeforeDays", classes = "text-input") {
+            min = "0"
+            max = "365"
+            value = preliminarySendBeforeDays.toString()
+        }
     }
 }

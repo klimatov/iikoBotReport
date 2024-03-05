@@ -23,6 +23,9 @@ object BirthdayWorkersDB : Table("birthdays_workers") {
     private val nameInHeader = BirthdayWorkersDB.bool("name_in_header")
     private val workerIsActive = BirthdayWorkersDB.bool("worker_is_active")
     private val sendDateTimeList = BirthdayWorkersDB.json<Array<String>>("send_date_time_list", Json.Default)
+    private val preliminarySendBeforeDays = BirthdayWorkersDB.long("preliminary_send_before_days").nullable()
+    private val preliminarySendTime = BirthdayWorkersDB.varchar("preliminary_send_time", 5).nullable()
+
     override val primaryKey = PrimaryKey(workerId)
 
     fun insert(birthdayWorkersDTO: BirthdayWorkersDTO): Boolean {
@@ -43,6 +46,8 @@ object BirthdayWorkersDB : Table("birthdays_workers") {
                     it[nameInHeader] = birthdayWorkersDTO.nameInHeader
                     it[workerIsActive] = birthdayWorkersDTO.workerIsActive
                     it[sendDateTimeList] = birthdayWorkersDTO.sendDateTimeList.toTypedArray()
+                    it[preliminarySendBeforeDays] = birthdayWorkersDTO.preliminarySendBeforeDays
+                    it[preliminarySendTime] = birthdayWorkersDTO.preliminarySendTime
                 }
             }
             return true
@@ -70,7 +75,9 @@ object BirthdayWorkersDB : Table("birthdays_workers") {
                         sendMonthDay = it[sendMonthDay].toList(),
                         nameInHeader = it[nameInHeader],
                         workerIsActive = it[workerIsActive],
-                        sendDateTimeList = it[sendDateTimeList].toList()
+                        sendDateTimeList = it[sendDateTimeList].toList(),
+                        preliminarySendBeforeDays = it[preliminarySendBeforeDays] ?: 0,
+                        preliminarySendTime = it[preliminarySendTime] ?: "10:00",
                     )
                 }
             }

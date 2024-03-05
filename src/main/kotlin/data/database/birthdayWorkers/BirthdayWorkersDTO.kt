@@ -18,7 +18,9 @@ data class BirthdayWorkersDTO(
     val sendMonthDay: List<Int>,
     val nameInHeader: Boolean,
     val workerIsActive: Boolean,
-    val sendDateTimeList: List<String>
+    val sendDateTimeList: List<String>,
+    val preliminarySendBeforeDays: Long,
+    val preliminarySendTime: String,
 )
 
 fun BirthdayWorkerParam.mapToBirthdayWorkersDTO(): BirthdayWorkersDTO = BirthdayWorkersDTO(
@@ -34,7 +36,9 @@ fun BirthdayWorkerParam.mapToBirthdayWorkersDTO(): BirthdayWorkersDTO = Birthday
     sendMonthDay = workerParam.sendMonthDay,
     nameInHeader = workerParam.nameInHeader,
     workerIsActive = workerParam.workerIsActive,
-    sendDateTimeList = workerParam.sendDateTimeList
+    sendDateTimeList = workerParam.sendDateTimeList,
+    preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays,
+    preliminarySendTime = workerParam.preliminarySendTime,
 )
 
 fun BirthdayWorkersDTO.mapToBirthdayWorkerParam(): BirthdayWorkerParam = BirthdayWorkerParam(
@@ -51,6 +55,8 @@ fun BirthdayWorkersDTO.mapToBirthdayWorkerParam(): BirthdayWorkerParam = Birthda
         sendMonthDay = sendMonthDay,
         nameInHeader = nameInHeader,
         workerIsActive = workerIsActive,
-        sendDateTimeList = sendDateTimeList
+        sendDateTimeList = sendDateTimeList,
+        preliminarySendBeforeDays = preliminarySendBeforeDays,
+        preliminarySendTime = preliminarySendTime,
     )
 )
