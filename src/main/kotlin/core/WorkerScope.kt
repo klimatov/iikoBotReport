@@ -61,10 +61,10 @@ class WorkerScope(bot: Bot) {
         MakeTwoGisPostUseCase(getFromTwoGisApiRepository = getFromTwoGisApiRepository, botRepository = botRepository)
     }
 
-    private var lastSendDate: String = "01.01.2000"
+    private var lastSendDate: LocalDate = LocalDate.parse("01.01.2000", DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     private var firstStart: Boolean = true
 
-    private var sendDateTimeMap: MutableMap<String, MutableList<String>> = mutableMapOf()
+    private var sendDateTimeMap: MutableMap<LocalDate, MutableList<String>> = mutableMapOf()
 
     private lateinit var workerType: WorkerType
     private lateinit var anyWorkerParam: Any
@@ -111,30 +111,30 @@ class WorkerScope(bot: Bot) {
 
     private fun firstStartInit(workerParam: WorkerParam) {
         val todayDT = LocalDateTime.now()
-        val todayDate = todayDT.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+        val todayDate = todayDT.toLocalDate()
 
-        Logging.d(tag, "datetime: ${workerParam.sendDateTimeList}")
+        Logging.d(tag, "[${workerParam.workerName}] datetime: ${workerParam.sendDateTimeList}")
         sendDateTimeMap = mutableMapOf()
         sendDateTimeMap = workerParam.sendDateTimeList
             .groupByTo(sendDateTimeMap, // группируем список даты-времени в мапу дата-список времени
                 keySelector = {
-                    LocalDateTime.parse(it).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                    LocalDateTime.parse(it).toLocalDate()
                 }, // ключ в формате даты
                 valueTransform = { it.substringAfter("T") }
             )
             .filter {// отфильтровываем прошедшие даты
-                LocalDate.parse(it.key, DateTimeFormatter.ofPattern("dd.MM.yyyy")) >= LocalDate.now()
+                it.key >= todayDate
             }
             .toMutableMap()
 
-        Logging.d(tag, "date filtered: $sendDateTimeMap")
+        Logging.d(tag, "[${workerParam.workerName}] date filtered: $sendDateTimeMap")
 
         if (sendDateTimeMap.containsKey(todayDate)) { // отфильтровываем прошедшее сегодня время
             sendDateTimeMap[todayDate] = sendDateTimeMap[todayDate]?.filter {
-                LocalTime.parse(it) >= LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")))
+                LocalTime.parse(it) >= todayDT.toLocalTime()
             }?.toMutableList() ?: mutableListOf()
         }
-        Logging.d(tag, "datetime filtered: $sendDateTimeMap")
+        Logging.d(tag, "[${workerParam.workerName}] datetime filtered: $sendDateTimeMap")
     }
 
     private suspend fun sendMessage() {
@@ -150,9 +150,11 @@ class WorkerScope(bot: Bot) {
             WorkerType.BIRTHDAY -> {
                 makeBirthdayPostUseCase.execute((anyWorkerParam as BirthdayWorkerParam).mapToBirthdayParam())
             }
+
             WorkerType.REVIEWS -> {
                 makeReviewsPostUseCase.execute((anyWorkerParam as ReviewsWorkerParam).mapToReviewsParam())
             }
+
             WorkerType.TWOGIS -> {
                 makeTwoGisPostUseCase.execute((anyWorkerParam as TwoGisWorkerParam).mapToTwoGisParam())
             }
@@ -169,82 +171,83 @@ class WorkerScope(bot: Bot) {
     }
 
     private suspend fun sendOnSchedule(workerParam: WorkerParam) {
-        Logging.d(tag, sendDateTimeMap.toString())
+        Logging.d(tag, "[${workerParam.workerName}] " + sendDateTimeMap.toString())
 
         val todayDT = LocalDateTime.now()
-        val todayDate = todayDT.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-        var sendTime = workerParam.sendTime.first()
+        val todayDate = todayDT.toLocalDate()
+        var sendTime = if (workerParam.sendWhenType == 4)
+            nextSendTime(todayDate)
+        else workerParam.sendTime.first()
 
-        if (workerParam.sendWhenType == 4) {
-            sendTime = nextSendTime(todayDate, sendTime)
-        }
+        Logging.d(tag, "[${workerParam.workerName}] send time:" + sendTime)
 
         var secToSendTime =
             LocalTime.parse(sendTime)
                 .toSecondOfDay() // секунд с начала дня до времени отправки
-        val secToNowTime = LocalTime.now().toSecondOfDay() // секунд с начала дня до текущего момента
+        val secToNowTime = todayDT.toLocalTime().toSecondOfDay() // секунд с начала дня до текущего момента
         Logging.d(
             tag,
-            "[${workerParam.workerName}] с 00:00 до времени отправки: ${secToSendTime}s до текущего времени: ${secToNowTime}s"
+            "[${workerParam.workerName}] с 00:00 до времени отправки: ${secToSendTime}s, c 00:00 до текущего времени: ${secToNowTime}s"
         )
 
-            if (                                    // когда отправлять: 0 - ежедневно, 2 - дни недели, 3 - числа месяца, 4 - в даты
-                ((lastSendDate != todayDate)&&(workerParam.sendWhenType == 0)) ||
-                ((lastSendDate != todayDate)&&(workerParam.sendWhenType == 2 && workerParam.sendWeekDay.contains(todayDT.dayOfWeek.value))) ||
-                ((lastSendDate != todayDate)&&(workerParam.sendWhenType == 3 && workerParam.sendMonthDay.contains(todayDT.dayOfMonth))) ||
-                ((lastSendDate != todayDate)&&(workerParam.sendWhenType == 3 && ( // если по числам и содержит 32, то отправляем в последний день месяца
-                        workerParam.sendMonthDay.contains(32) &&
-                                todayDT.dayOfMonth == todayDT.month.length(isLeapYear(todayDT.year)))
-                        )) ||
-                ((workerParam.sendWhenType == 4) && (sendDateTimeMap.containsKey(todayDate)))
-            ) {
-                val timeSend = sendTime.split(":")
-                if ((todayDT.hour == timeSend[0].toInt() && todayDT.minute >= timeSend[1].toInt()) || (todayDT.hour > timeSend[0].toInt())) {
-                    // если (час = и минуты >=) или час > то выполняем
+        if (                                    // когда отправлять: 0 - ежедневно, 2 - дни недели, 3 - числа месяца, 4 - в даты
+            ((lastSendDate != todayDate) && (workerParam.sendWhenType == 0)) ||
+            ((lastSendDate != todayDate) && (workerParam.sendWhenType == 2 && workerParam.sendWeekDay.contains(todayDT.dayOfWeek.value))) ||
+            ((lastSendDate != todayDate) && (workerParam.sendWhenType == 3 && workerParam.sendMonthDay.contains(todayDT.dayOfMonth))) ||
+            ((lastSendDate != todayDate) && (workerParam.sendWhenType == 3 && ( // если по числам и содержит 32, то отправляем в последний день месяца
+                    workerParam.sendMonthDay.contains(32) &&
+                            todayDT.dayOfMonth == todayDT.month.length(isLeapYear(todayDT.year)))
+                    )) ||
+            ((workerParam.sendWhenType == 4) && (sendDateTimeMap.containsKey(todayDate)))
+        ) {
+            val timeSend = sendTime.split(":")
+            if ((todayDT.hour == timeSend[0].toInt() && todayDT.minute >= timeSend[1].toInt()) || (todayDT.hour > timeSend[0].toInt())) {
+                // если (час = и минуты >=) или час > то выполняем
 
-                    if (!firstStart) { // не отправляем если это первый запуск после сохранения
-                        Logging.i(
-                            tag,
-                            "process worker [${workerParam.workerName}] - ${workerParam.workerId}..."
-                        )
-                        sendMessage()
-                        if (workerParam.sendWhenType == 4) {
-                            sendDateTimeMap[todayDate]?.remove(sendTime) // удаляем отправленное время из списка
-                            if (sendDateTimeMap[todayDate]?.isEmpty() == true) { // если сегодняшний список пуст, то удаляем запись
-                                sendDateTimeMap.remove(todayDate)
-                            }
-                            sendTime = nextSendTime(todayDate, sendTime)
-                            secToSendTime =
-                                LocalTime.parse(sendTime)
-                                    .toSecondOfDay() // секунд с начала дня до времени отправки
+                if (!firstStart) { // не отправляем если это первый запуск после сохранения
+                    Logging.i(
+                        tag,
+                        "process worker [${workerParam.workerName}] - ${workerParam.workerId}..."
+                    )
+                    sendMessage()
+                    if (workerParam.sendWhenType == 4) {
+                        sendDateTimeMap[todayDate]?.remove(sendTime) // удаляем отправленное время из списка
+                        if (sendDateTimeMap[todayDate]?.isEmpty() == true) { // если сегодняшний список пуст, то удаляем запись
+                            sendDateTimeMap.remove(todayDate)
                         }
+                        sendTime = nextSendTime(todayDate)
+                        secToSendTime =
+                            LocalTime.parse(sendTime)
+                                .toSecondOfDay() // секунд с начала дня до времени отправки
                     }
-
-                    lastSendDate = todayDate
-                } else {
-                    Logging.d(tag, "Рано отправлять")
                 }
+
+                lastSendDate = todayDate
+            } else {
+                Logging.d(tag, "[${workerParam.workerName}] Рано отправлять")
             }
+        }
 
         firstStart = false
         var delayTime: Long = 0
         if (secToNowTime >= secToSendTime) delayTime = ((86400 - secToNowTime) + secToSendTime).toLong() * 1000
         else delayTime = (secToSendTime - secToNowTime).toLong() * 1000
-        Logging.d(tag, "worker ${workerParam.workerId} DELAY ${delayTime / 1000}s")
+        Logging.d(tag, "[${workerParam.workerName}] worker ${workerParam.workerId} DELAY ${delayTime / 1000}s")
         delay(delayTime)
     }
 
-    private fun nextSendTime(todayDate: String, sendTime: String): String {
-        var sendTime1 = sendTime
-        if ((sendDateTimeMap.isEmpty()) || (!sendDateTimeMap.containsKey(todayDate))) { // если список дат пуст или сегодня не отправляем
-            sendTime1 = "23:59:59"
-        } else {
-            sendTime1 = sendDateTimeMap[todayDate]?.minOrNull()
-                ?: "23:59:59" // если список пуст, то 23:59 иначе ближайшее время
-        }
-        Logging.d(tag, sendTime1)
-        return sendTime1
-    }
+    private fun nextSendTime(todayDate: LocalDate): String =
+        (
+                if (sendDateTimeMap.containsKey(todayDate)) sendDateTimeMap[todayDate]?.minOrNull() // если есть сегодня, то берем самое раннее время
+                else sendDateTimeMap // иначе ищем следующую дату и берем самое раннее время
+                    .filter {// отфильтровываем прошедшие даты
+                        it.key > todayDate
+                    }
+                    .entries.sortedBy { it.key }
+                    .first()
+                    .value
+                    .minOrNull()
+                ) ?: "00:00:00" // если список пуст или вернулся null то 00:00:00
 
     private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && year % 100 != 0 || year % 400 == 0
 }
