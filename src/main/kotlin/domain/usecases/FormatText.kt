@@ -154,9 +154,11 @@ class FormatText {
     ): String {
         val regex = "\\[/?.*?\\]".toRegex()
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val digitPool : List<Char> = ('0'..'9').toList()
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
                 "RANDOM" -> List(6) { charPool.random() }.joinToString("")
+                "RANDOM4" -> List(4) { digitPool.random() }.joinToString("")
                 else -> it.value
             }
         }

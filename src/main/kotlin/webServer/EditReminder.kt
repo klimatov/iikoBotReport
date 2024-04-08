@@ -51,7 +51,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                     reminderText = "\n" +
                             "\n" +
                             "Шаблоны замены:\n" +
-                            "[RANDOM] - Генерирует случайный набор цифр и символов" // текст напоминания
+                            "[RANDOM] - Генерирует случайный набор из 6 цифр и символов\n" +
+                            "[RANDOM4] - Генерирует случайный набор из 4 цифр" // текст напоминания
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reminderList.containsKey(workerId) == true) editReminderParam = reminderList[workerId]!!
