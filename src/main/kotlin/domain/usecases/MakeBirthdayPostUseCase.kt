@@ -1,5 +1,6 @@
 package domain.usecases
 
+import dev.inmo.tgbotapi.types.message.textsources.pre
 import domain.models.BirthdayParam
 import domain.models.EmployeeModel
 import domain.repository.BotRepository
@@ -15,16 +16,21 @@ class MakeBirthdayPostUseCase(
     private val tag = this::class.java.simpleName
     private var employeesList: MutableList<EmployeeModel> = mutableListOf()
 
-    suspend fun execute(birthdayParam: BirthdayParam) {
+    suspend fun execute(birthdayParam: BirthdayParam, preliminary: Boolean = false) {
         // пробуем получить список сотрудников с сервера
         val tempEmployeesList = GetEmployeesData(getFromIikoApiRepository).execute().employees
         // если все ок, то обновляем список
         if (tempEmployeesList.isNotEmpty()) employeesList = tempEmployeesList
-        // выделяем в отдельный список тех сотрудников которые попадут в отчет (сразу фильтруем тех у кого не указана дата рождения)
-        val celebratingEmployeesList: List<EmployeeModel> = makeCelebratingEmployeesList(
-            birthdayParam.sendBeforeDays,
-            employeesList.filter { it.birthday != "" }
-        )
+
+        val celebratingEmployeesList: List<EmployeeModel> = if (!preliminary) { // если не предотправка
+            // выделяем в отдельный список тех сотрудников которые попадут в отчет (сразу фильтруем тех у кого не указана дата рождения)
+            makeCelebratingEmployeesList(
+                birthdayParam.sendBeforeDays,
+                employeesList.filter { it.birthday != "" }
+            )
+        } else { // предотправка
+
+        }
 
         val sendResult =
             SendBirthdayMessage(botRepository = botRepository).execute(birthdayParam, celebratingEmployeesList)
