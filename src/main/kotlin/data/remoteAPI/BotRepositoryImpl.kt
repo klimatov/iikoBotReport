@@ -15,8 +15,9 @@ class BotRepositoryImpl(private val bot: Bot) : BotRepository {
     override suspend fun sendMessageToChat(text: String, sendChatId: Long, photosList: List<String>): Boolean {
         try {
             val cropText = text.take(4095)
+            Logging.d(tag, cropText)
             when (photosList.size) {
-                0 -> bot.bot.sendTextMessage(ChatId(sendChatId), cropText)
+                0 -> if (cropText.length <= 1000) bot.bot.sendTextMessage(ChatId(sendChatId), cropText)
                 1 -> bot.bot.sendPhoto(
                     ChatId(sendChatId),
                     FileUrl(photosList.first()),

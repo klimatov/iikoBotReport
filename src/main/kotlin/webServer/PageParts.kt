@@ -365,7 +365,7 @@ fun FORM.preliminarySendBeforeDays(preliminarySendBeforeDays: Long) {
     p(classes = "field half") {
         id = "preliminarySendBeforeDays"
         label(classes = "label") {
-            +"За сколько дней до события разово отправить"
+            +"За сколько дней до ДР разово отправить"
         }
         input(type = InputType.number, name = "preliminarySendBeforeDays", classes = "text-input") {
             min = "0"
