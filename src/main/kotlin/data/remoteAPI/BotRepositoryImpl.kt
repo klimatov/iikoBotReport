@@ -42,6 +42,7 @@ class BotRepositoryImpl(private val bot: Bot) : BotRepository {
 
             return true
         } catch (e: Exception) {
+            // TODO обработка ошибки отправки
             Logging.e(tag, e.toString())
             return false
         }

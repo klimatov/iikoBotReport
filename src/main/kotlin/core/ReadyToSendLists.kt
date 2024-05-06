@@ -1,10 +1,27 @@
 package core
 
+
 import models.WorkerParam
 import utils.Logging
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
+
+data class SendTime(
+    val time: LocalTime,
+    val preliminarySendBeforeDays: Long = 0, // За сколько дней до события разово отправить (0 - не отправлять)
+)
+
+fun MutableList<SendTime>.minOrNull(): SendTime? {
+    if (this.isEmpty()) return null else {
+        var minTime = this.first()
+        this.forEach {
+            if (it.time < minTime.time) minTime = it
+        }
+        return minTime
+    }
+}
+
+
 
 class ReadyToSendLists(
     var workerParam: WorkerParam,
@@ -13,7 +30,8 @@ class ReadyToSendLists(
     private val tag = this::class.java.simpleName
     private var dateOfTheTodayList: LocalDate = LocalDate.now().minusDays(1)
     private var dateOfTheTomorrowList: LocalDate = LocalDate.now().minusDays(1)
-    var todayTimeList: MutableMap<LocalDateTime, Long> = mutableMapOf() // список времени отправки сегодня + количество дней предотправки
+    var todayTimeList: MutableList<SendTime> =
+        mutableListOf() // список времени отправки сегодня + количество дней предотправки
         get() {
             val todayDate = LocalDate.now()
             if (dateOfTheTodayList != todayDate) { // если список не сегодняшний, то обновляем
@@ -24,7 +42,8 @@ class ReadyToSendLists(
             return field
         }
 
-    var tomorrowTimeList: MutableMap<LocalDateTime, Long> = mutableMapOf() // список времени отправки завтра + количество дней предотправки
+    var tomorrowTimeList: MutableList<SendTime> =
+        mutableListOf() // список времени отправки завтра + количество дней предотправки
         get() {
             val tomorrowDate = LocalDate.now().plusDays(1)
             if (dateOfTheTomorrowList != tomorrowDate) { // если список не завтрашний, то обновляем
@@ -38,26 +57,43 @@ class ReadyToSendLists(
             return field
         }
 
-    private fun makeTimeList(listDate: LocalDate): MutableMap<LocalDateTime, Long> {
-        val timeList: MutableMap<LocalDateTime, Long> = mutableMapOf()
+
+    private fun makeTimeList(listDate: LocalDate): MutableList<SendTime> {
+        val timeList: MutableList<SendTime> = mutableListOf()
 
         if (workerParam.preliminarySendBeforeDays > 0) { // если есть предотправка, то добавляем ее время
-            val preliminarySendTime =
-                convertToTime(workerParam.preliminarySendTime) ?: LocalTime.now()
-            timeList[listDate.atTime(preliminarySendTime)] =
-                workerParam.preliminarySendBeforeDays
+            timeList.add(
+                SendTime(
+                    time = convertToTime(workerParam.preliminarySendTime) ?: LocalTime.now(),
+                    preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays
+                )
+            )
         }
 
-        if (workerParam.sendWhenType == 4) { // если тип отправки в указ.даты, то добавляем их
+        if (workerParam.sendWhenType == 4) { // если тип отправки в указ. даты, то добавляем их
             sendDateTimeMap[listDate]?.forEach { time ->
-                convertToTime(time)?.let { timeList[listDate.atTime(it)] = 0 }
+                convertToTime(time)?.let {
+                    timeList.add(
+                        SendTime(
+                            time = it,
+                            preliminarySendBeforeDays = 0
+                        )
+                    )
+                }
             }
         } else { // иначе время отправки
             workerParam.sendTime.forEach { time ->
-                convertToTime(time)?.let { timeList[listDate.atTime(it)] = 0 }
+                convertToTime(time)?.let {
+                    timeList.add(
+                        SendTime(
+                            time = it,
+                            preliminarySendBeforeDays = 0
+                        )
+                    )
+                }
             }
         }
-        return timeList.toSortedMap()
+        return timeList
     }
 
     private fun convertToTime(time: String): LocalTime? = try {
