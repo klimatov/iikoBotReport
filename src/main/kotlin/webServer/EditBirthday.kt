@@ -115,7 +115,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
 
                             preliminarySendTimeField(editBirthdayParam.workerParam.preliminarySendTime)
 
-                            preliminarySendBeforeDays(editBirthdayParam.workerParam.preliminarySendBeforeDays)
+                            preliminarySendBeforeDays(editBirthdayParam.workerParam.preliminarySendBeforeDays, "ДР")
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {

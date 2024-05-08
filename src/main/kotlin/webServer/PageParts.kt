@@ -361,11 +361,11 @@ fun FORM.preliminarySendTimeField(preliminarySendTime: String) {
     }
 }
 
-fun FORM.preliminarySendBeforeDays(preliminarySendBeforeDays: Long) {
+fun FORM.preliminarySendBeforeDays(preliminarySendBeforeDays: Long, eventName: String) {
     p(classes = "field half") {
         id = "preliminarySendBeforeDays"
         label(classes = "label") {
-            +"За сколько дней до ДР разово отправить"
+            +"За сколько дней до $eventName разово отправить"
         }
         input(type = InputType.number, name = "preliminarySendBeforeDays", classes = "text-input") {
             min = "0"

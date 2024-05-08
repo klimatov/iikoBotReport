@@ -91,9 +91,12 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                             sendMonthDay(editReminderParam.workerParam.sendMonthDay)
 
-
                             sendDateField(editReminderParam.workerParam.sendDateTimeList)
-//                            sendDateField(listOf("2023-07-20T23:22", "2022-07-20T01:22"))
+
+                            preliminarySendTimeField(editReminderParam.workerParam.preliminarySendTime)
+
+                            preliminarySendBeforeDays(editReminderParam.workerParam.preliminarySendBeforeDays, "события")
+
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
