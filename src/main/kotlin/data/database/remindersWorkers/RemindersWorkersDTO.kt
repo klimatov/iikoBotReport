@@ -17,7 +17,9 @@ data class RemindersWorkersDTO(
     val sendMonthDay: List<Int>,
     val nameInHeader: Boolean,
     val workerIsActive: Boolean,
-    val sendDateTimeList: List<String>
+    val sendDateTimeList: List<String>,
+    val preliminarySendBeforeDays: Long,
+    val preliminarySendTime: String,
 )
 
 fun ReminderWorkerParam.mapToRemindersWorkersDTO(): RemindersWorkersDTO = RemindersWorkersDTO(
@@ -32,7 +34,9 @@ fun ReminderWorkerParam.mapToRemindersWorkersDTO(): RemindersWorkersDTO = Remind
     sendMonthDay = workerParam.sendMonthDay,
     nameInHeader = workerParam.nameInHeader,
     workerIsActive = workerParam.workerIsActive,
-    sendDateTimeList = workerParam.sendDateTimeList
+    sendDateTimeList = workerParam.sendDateTimeList,
+    preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays,
+    preliminarySendTime = workerParam.preliminarySendTime,
 )
 
 fun RemindersWorkersDTO.mapToReminderWorkerParam(): ReminderWorkerParam = ReminderWorkerParam(
@@ -48,6 +52,8 @@ fun RemindersWorkersDTO.mapToReminderWorkerParam(): ReminderWorkerParam = Remind
         sendMonthDay = sendMonthDay,
         nameInHeader = nameInHeader,
         workerIsActive = workerIsActive,
-        sendDateTimeList = sendDateTimeList
+        sendDateTimeList = sendDateTimeList,
+        preliminarySendBeforeDays = preliminarySendBeforeDays,
+        preliminarySendTime = preliminarySendTime,
     )
 )
