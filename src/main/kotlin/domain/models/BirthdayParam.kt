@@ -8,6 +8,7 @@ class BirthdayParam(
     val nameInHeader: Boolean = false, // Выводить название отчета в заголовке сообщения
     val birthdayText: String = "", // текст сообщения о дне рождения
     val sendBeforeDays: Long, // за сколько дней до ДР начать оповещать
+    val preliminarySendBeforeDays: Long = 0, // За сколько дней до события разово отправить (0 - не отправлять)
 )
 
 data class BirthdayValues(
@@ -26,5 +27,6 @@ fun BirthdayWorkerParam.mapToBirthdayParam(): BirthdayParam = BirthdayParam(
     nameInHeader = workerParam.nameInHeader,
     workerName = workerParam.workerName,
     birthdayText = birthdayText,
-    sendBeforeDays = sendBeforeDays
+    sendBeforeDays = sendBeforeDays,
+    preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays,
 )
