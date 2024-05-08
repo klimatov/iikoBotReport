@@ -12,6 +12,6 @@ data class WorkerParam(
     val nameInHeader: Boolean = false, // Выводить название отчета в заголовке сообщения
     val workerIsActive: Boolean = true, // Галка активности отчета
     val sendDateTimeList: List<String> = listOf(), // список дат-времени для отправки отчетов тип 4
-    val preliminarySendBeforeDays: Long = 0, // За сколько дней до события разово отправить (0 - не отправлять)
+    var preliminarySendBeforeDays: Long = 0, // За сколько дней до события разово отправить (0 - не отправлять)
     val preliminarySendTime: String = "10:00", // Время предварительной разовой отправки
 )

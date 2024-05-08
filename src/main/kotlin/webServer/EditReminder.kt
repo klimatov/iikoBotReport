@@ -46,7 +46,9 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         sendWeekDay = listOf(),
                         sendMonthDay = listOf(),
                         nameInHeader = true,
-                        sendDateTimeList = listOf()
+                        sendDateTimeList = listOf(),
+                        preliminarySendTime = "10:00",
+                        preliminarySendBeforeDays = 0,
                     ),
                     reminderText = "\n" +
                             "\n" +
@@ -75,13 +77,24 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                     body {
                         postForm(classes = "form") {
 
-                            workerIdField(editReminderParam.workerParam.workerId, editReminderParam.workerParam.workerIsActive, workerTypeName = "Напоминание")
+                            workerIdField(
+                                editReminderParam.workerParam.workerId,
+                                editReminderParam.workerParam.workerIsActive,
+                                workerTypeName = "Напоминание"
+                            )
 
-                            workerNameField(editReminderParam.workerParam.workerName, editReminderParam.workerParam.nameInHeader, workerTypeName = "напоминания")
+                            workerNameField(
+                                editReminderParam.workerParam.workerName,
+                                editReminderParam.workerParam.nameInHeader,
+                                workerTypeName = "напоминания"
+                            )
 
                             sendChatIdField(editReminderParam.workerParam.sendChatId, nameIdBundleList)
 
-                            sendWhenTypeField(editReminderParam.workerParam.sendWhenType, workerTypeName = "напоминание")
+                            sendWhenTypeField(
+                                editReminderParam.workerParam.sendWhenType,
+                                workerTypeName = "напоминание"
+                            )
 
                             sendPeriodField(editReminderParam.workerParam.sendPeriod)
 
@@ -95,7 +108,10 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                             preliminarySendTimeField(editReminderParam.workerParam.preliminarySendTime)
 
-                            preliminarySendBeforeDays(editReminderParam.workerParam.preliminarySendBeforeDays, "события")
+                            preliminarySendBeforeDays(
+                                editReminderParam.workerParam.preliminarySendBeforeDays,
+                                "события"
+                            )
 
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
@@ -140,10 +156,19 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         sendMonthDay = receiveParam["sendMonthDay"]?.map { it.toInt() } ?: listOf(1),
                         nameInHeader = receiveParam["nameInHeader"]?.joinToString().toString() == "on",
                         workerIsActive = receiveParam["workerIsActive"]?.joinToString().toString() == "on",
-                        sendDateTimeList = (receiveParam["sendDateTime"]?.filter { it != "2000-01-01T00:00"} ?: listOf()),
+                        sendDateTimeList = (receiveParam["sendDateTime"]?.filter { it != "2000-01-01T00:00" }
+                            ?: listOf()),
+                        preliminarySendBeforeDays = receiveParam["preliminarySendBeforeDays"]?.joinToString()?.toLong()
+                            ?: 0,
+                        preliminarySendTime = receiveParam["preliminarySendTime"]?.joinToString() ?: "10:00"
                     ),
                     reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
                 )
+
+                when (htmlReminderParam.workerParam.sendWhenType) { //проверяем типы в которых разрешена предотправка
+                    3, 4 -> {}
+                    else -> htmlReminderParam.workerParam.preliminarySendBeforeDays = 0
+                }
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!
                     Logging.i(
