@@ -7,5 +7,6 @@ data class TwoGisDataParam(
 
 data class TwoGisShownReviews(
     val shownReviewId: String,
-    val shownReviewCreatedTimestamp: String? = null
+    val shownReviewCreatedTimestamp: String? = null,
+    val shownReviewObjectId: String? = null,
 )

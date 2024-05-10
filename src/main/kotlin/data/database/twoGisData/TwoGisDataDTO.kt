@@ -14,7 +14,8 @@ data class TwoGisDataDTO(
 @Serializable
 data class TwoGisShownReviewsDTO(
     val shownReviewId: String,
-    val shownReviewCreatedTimestamp: String? = null
+    val shownReviewCreatedTimestamp: String? = null,
+    val shownReviewObjectId: String? = null,
 )
 
 fun TwoGisDataParam.mapToTwoGisDataDTO(): TwoGisDataDTO = TwoGisDataDTO(
@@ -22,7 +23,8 @@ fun TwoGisDataParam.mapToTwoGisDataDTO(): TwoGisDataDTO = TwoGisDataDTO(
     twoGisShownReviews = shownReviews.map {
         TwoGisShownReviewsDTO(
             shownReviewId = it.shownReviewId,
-            shownReviewCreatedTimestamp = it.shownReviewCreatedTimestamp
+            shownReviewCreatedTimestamp = it.shownReviewCreatedTimestamp,
+            shownReviewObjectId = it.shownReviewObjectId,
         )
     }.toList()
 )
@@ -32,7 +34,8 @@ fun TwoGisDataDTO.mapToTwoGisDataParam(): TwoGisDataParam = TwoGisDataParam(
     shownReviews = twoGisShownReviews.map {
         TwoGisShownReviews(
             shownReviewId = it.shownReviewId,
-            shownReviewCreatedTimestamp = it.shownReviewCreatedTimestamp
+            shownReviewCreatedTimestamp = it.shownReviewCreatedTimestamp,
+            shownReviewObjectId = it.shownReviewObjectId
         )
     }.toMutableList()
 )
