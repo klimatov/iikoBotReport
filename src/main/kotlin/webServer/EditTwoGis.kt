@@ -2,6 +2,7 @@ package webServer
 
 import core.WorkersManager
 import data.NameIdBundleRepository
+import data.TwoGisDataRepository
 import data.TwoGisRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -166,6 +167,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                     )
                     twoGisReviewsList.remove(htmlReviewsParam.workerParam.workerId)
                     TwoGisRepository().delete(htmlReviewsParam.workerParam.workerId)
+                    TwoGisDataRepository.delete(htmlReviewsParam.workerParam.workerId)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
                         workerData = htmlReviewsParam
