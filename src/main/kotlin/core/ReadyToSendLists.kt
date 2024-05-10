@@ -124,9 +124,9 @@ class ReadyToSendLists(
     }
 
     private fun convertToTime(time: String): LocalTime? = try {
-        LocalTime.parse(time)
+        if (time.isNotEmpty()) LocalTime.parse(time) else null
     } catch (e: Exception) {
-        Logging.e(tag, "[${workerParam.workerName}] Exception: $e")
+        Logging.e(tag, "[${workerParam.workerName}] Exception: ${e.printStackTrace()}")
         null
     }
 }
