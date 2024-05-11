@@ -2,6 +2,7 @@ package webServer
 
 import core.WorkersManager
 import data.NameIdBundleRepository
+import data.ReviewsDataRepository
 import data.ReviewsRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -171,6 +172,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                     )
                     reviewsList.remove(htmlReviewsParam.workerParam.workerId)
                     ReviewsRepository().delete(htmlReviewsParam.workerParam.workerId)
+                    ReviewsDataRepository.delete(htmlReviewsParam.workerParam.workerId)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.DELETE,
                         workerData = htmlReviewsParam

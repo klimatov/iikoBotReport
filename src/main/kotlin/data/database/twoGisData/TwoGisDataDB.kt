@@ -36,7 +36,7 @@ object TwoGisDataDB : Table("twogis_data") {
                 TwoGisDataDB.selectAll().toList().map {
                     TwoGisDataDTO(
                         workerId = it[workerId],
-                        twoGisShownReviews = it[twoGisShownReviews]
+                        twoGisShownReviews = it[twoGisShownReviews],
                     )
                 }
             }

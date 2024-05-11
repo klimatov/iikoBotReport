@@ -57,7 +57,7 @@ function editOnLoad() {
     onSelectWhenType(select)
 }
 
-function onSelectWhenType(select) { //1 - периодически, 2 - дни недели, 3 - числа месяца, 0 - ежедневно, 4 - В указанные даты
+function onSelectWhenType(select) { //0 - ежедневно, 1 - периодически, 2 - дни недели, 3 - числа месяца, 4 - В указанные даты
     var selectedOption = select.options[select.selectedIndex]
     console.log('Выбор: >' + selectedOption.value + '<')
 
@@ -68,6 +68,8 @@ function onSelectWhenType(select) { //1 - периодически, 2 - дни �
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
+            document.getElementById('preliminarySendTime').style.display = 'none';
+            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
             break;
         case '1':
             document.getElementById('sendPeriod').style.display = '';
@@ -75,6 +77,8 @@ function onSelectWhenType(select) { //1 - периодически, 2 - дни �
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
+            document.getElementById('preliminarySendTime').style.display = 'none';
+            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
         break;
         case '2':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -82,6 +86,8 @@ function onSelectWhenType(select) { //1 - периодически, 2 - дни �
             document.getElementById('sendWeekDay').style.display = '';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
+            document.getElementById('preliminarySendTime').style.display = 'none';
+            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
         break;
         case '3':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -89,6 +95,8 @@ function onSelectWhenType(select) { //1 - периодически, 2 - дни �
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = '';
             document.getElementById('sendDateTime').style.display = 'none';
+            document.getElementById('preliminarySendTime').style.display = '';
+            document.getElementById('preliminarySendBeforeDays').style.display = '';
         break;
         case '4':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -96,6 +104,8 @@ function onSelectWhenType(select) { //1 - периодически, 2 - дни �
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = '';
+            document.getElementById('preliminarySendTime').style.display = '';
+            document.getElementById('preliminarySendBeforeDays').style.display = '';
         break;
         default:
             console.log("Непредусмотренный вариант")

@@ -44,14 +44,27 @@ class MakeTwoGisPostUseCase(
         sentReviewsList.forEach { review ->
             review.id?.let {
                 shownTwoGisReviewsList.add(
-                    TwoGisShownReviews(it, review.dateCreated)
+                    TwoGisShownReviews(
+                        it,
+                        LocalDate.now().toString(),
+//                        review.dateCreated,
+                        review.objectId,
+                    )
                 )
-                // ограничиваем список отправленных
-//                if (shownReviewsList.size > 100) shownReviewsList.removeLast()
-
-                //TODO: удаление старых отзывов по дате
             }
         }
+
+        // ограничиваем список отправленных
+//        val outdatedShownReviews: MutableList<String> = mutableListOf()
+//        shownTwoGisReviewsList.forEach { shownReview ->
+//            if (reviewIsOld(shownReview.shownReviewCreatedTimestamp)) outdatedShownReviews.add(shownReview.shownReviewId)
+//        }
+//        Logging.d(tag, "Need Delete: $outdatedShownReviews")
+
+        // удаляем из списка отправленных старые отзывы для ограничения размера базы
+        shownTwoGisReviewsList.removeAll { reviewIsOld(it.shownReviewCreatedTimestamp) }
+        //TODO: оставлять какое-то количество отзывов по каждой компании
+
 
         // если отправляли отзывы, то обновляем данные отправленных в БД
         if (sentReviewsList.isNotEmpty()) TwoGisDataRepository.setByWorkerId(
@@ -75,6 +88,19 @@ class MakeTwoGisPostUseCase(
             "Отзывы ${twoGisParam.workerName} ${if (sendResult) "отправлено в чат" else "отправить в чат НЕ УДАЛОСЬ"}..."
         )
     }
+
+    private fun String.convertToDateOrNull(): LocalDate? = try {
+        if (this.isNotEmpty()) LocalDate.parse(this.take(10)) else null
+    } catch (e: Exception) {
+        Logging.e(tag, "Exception: ${e.printStackTrace()}")
+        null
+    }
+
+    private fun reviewIsOld(shownReviewCreatedTimestamp: String?): Boolean =
+        shownReviewCreatedTimestamp?.convertToDateOrNull() // конвертим в дату
+            ?.isBefore(LocalDate.now().minusDays(60))  // проверяем старше ли 60 дней
+            ?: true // если дата null, то считаем старым
+
 
     private fun periodFrom(minusDays: Long): String =
         LocalDate

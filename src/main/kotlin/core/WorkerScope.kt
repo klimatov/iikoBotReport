@@ -70,7 +70,7 @@ class WorkerScope(bot: Bot) {
     private lateinit var workerType: WorkerType
     private lateinit var anyWorkerParam: Any
 
-    private var readyToSendLists = ReadyToSendLists(WorkerParam(), sendDateTimeMap)
+    private lateinit var readyToSendLists: ReadyToSendLists
 
     suspend fun processReport(reportWorkerParam: ReportWorkerParam) {
         anyWorkerParam = reportWorkerParam
@@ -104,6 +104,7 @@ class WorkerScope(bot: Bot) {
 
     private suspend fun process(workerParam: WorkerParam) {
         firstStartInit(workerParam)
+
         while (isActive) {
             when (workerParam.sendWhenType) {
                 1 -> sendPeriodical(workerParam)
@@ -113,9 +114,9 @@ class WorkerScope(bot: Bot) {
     }
 
     private fun firstStartInit(workerParam: WorkerParam) {
+        readyToSendLists = ReadyToSendLists(workerParam, sendDateTimeMap, workerType)
         val todayDT = LocalDateTime.now()
         val todayDate = todayDT.toLocalDate()
-        readyToSendLists.workerParam = workerParam
 
         Logging.d(tag, "[${workerParam.workerName}] load all datetime: ${workerParam.sendDateTimeList}")
         sendDateTimeMap.clear()

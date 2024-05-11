@@ -271,12 +271,6 @@ label {
   display: none;
 } /* убираем стрелку селекта у интернет эксплорера */
 
-.form .resize{
-    height: 1.6em;
-    width: 100%;
-    filter: brightness(0) invert(1);
-}
-
 .form .icons {
     height: auto;
     width: auto;
@@ -355,6 +349,14 @@ label {
     float: right;
     position: relative;
     top: -0.7em;
+  }
+
+  .resize{
+    height: 1.6em;
+    /* width: 100%; */
+    filter: brightness(0) invert(1);
+    /* float: right; */
+    position: relative;
 }
 
 
