@@ -50,7 +50,7 @@ object TwoGisDataDB : Table("twogis_data") {
         return try {
             transaction {
                 addLogger(StdOutSqlLogger)
-                val result = TwoGisDataDB.select { TwoGisDataDB.workerId.eq(workerId) }.single()
+                val result = TwoGisDataDB.selectAll().where { TwoGisDataDB.workerId.eq(workerId) }.single()
                 TwoGisDataDTO(
                     workerId = workerId,
                     twoGisShownReviews = result[twoGisShownReviews]

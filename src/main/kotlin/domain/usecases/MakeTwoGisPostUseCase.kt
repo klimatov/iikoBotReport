@@ -10,7 +10,6 @@ import models.TwoGisDataParam
 import models.TwoGisShownReviews
 import utils.Logging
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class MakeTwoGisPostUseCase(
     getFromTwoGisApiRepository: GetFromTwoGisApiRepository,
@@ -29,7 +28,7 @@ class MakeTwoGisPostUseCase(
 
         // тут получаем список отзывов
         val twoGisReviewsList: MutableList<TwoGisReview> = mutableListOf()
-        TwoGisCompanyEnum.values().forEach {
+        TwoGisCompanyEnum.entries.forEach {
             twoGisReviewsList += getDataFromTwoGIS.getReviewsList(it.twoGisCompanyData.id)
         }
 
@@ -100,15 +99,5 @@ class MakeTwoGisPostUseCase(
         shownReviewCreatedTimestamp?.convertToDateOrNull() // конвертим в дату
             ?.isBefore(LocalDate.now().minusDays(60))  // проверяем старше ли 60 дней
             ?: true // если дата null, то считаем старым
-
-
-    private fun periodFrom(minusDays: Long): String =
-        LocalDate
-            .now()
-            .minusDays(minusDays)
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            .toString()
-            .plus("T17:00:00.000Z")
-
 
 }

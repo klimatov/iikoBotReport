@@ -53,7 +53,7 @@ class FormatText {
     }
 
     fun report(messageParam: MessageParam): String {
-        var tableMsg = messageParam.reportResult.table
+        val tableMsg = messageParam.reportResult.table
         var resultMessage = ""
         var sum: Double = 0.0
 
@@ -173,7 +173,7 @@ class FormatText {
         return rawMessage.replace(regex) {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
                 "STARS" -> toStarsString(twoGisReview.rating)
-                "OUTLET" -> TwoGisCompanyEnum.values()
+                "OUTLET" -> TwoGisCompanyEnum.entries
                     .first { it.twoGisCompanyData.id == twoGisReview.objectId }.twoGisCompanyData.name.toString()
 
                 "OBJECTID" -> twoGisReview.objectId.toString()

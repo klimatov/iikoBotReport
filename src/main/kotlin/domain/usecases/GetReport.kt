@@ -17,8 +17,8 @@ class GetReport(private val reportRepository: ReportRepository) {
         val columns = mutableMapOf<String, String>()
         if (doc != null) {
             for (element in doc.getElementsByTag("head")) {
-                element.getElementsByTag("grouping").forEach { columns.put(it.id(), it.text()) }
-                element.getElementsByTag("values").forEach { columns.put(it.id(), it.text()) }
+                element.getElementsByTag("grouping").forEach { columns[it.id()] = it.text() }
+                element.getElementsByTag("values").forEach { columns[it.id()] = it.text() }
             }
 
 

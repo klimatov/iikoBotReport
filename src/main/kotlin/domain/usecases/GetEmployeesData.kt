@@ -18,11 +18,11 @@ class GetEmployeesData(private val getFromIikoApiRepository: GetFromIikoApiRepos
     }
 
     private fun parser(rawXmlEmployeesString: String): EmployeeResult  {
-        var employees: EmployeeResult = EmployeeResult()
+        val employees = EmployeeResult()
         val doc = Jsoup.parse(rawXmlEmployeesString, Parser.xmlParser())
         for (element in doc.getElementsByTag("employees")) {
             element.children().forEach {
-                var newEmployee = EmployeeModel()
+                val newEmployee = EmployeeModel()
                 it.children().forEachIndexed() { index, element ->
                     when(element.tag().toString()) {
                         "name" -> newEmployee.name = element.text()

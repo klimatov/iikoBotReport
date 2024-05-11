@@ -16,9 +16,6 @@ object GetFromTwoGisApiRepositoryImpl : GetFromTwoGisApiRepository {
     private val twoGisLinkHead = "https://public-api.reviews.2gis.com/2.0/branches/"
     private val twoGisLinkTail = "/reviews?key=$twoGisRequestKey&limit=$twoGisRequestMessagesLimit&sort_by=date_created"
 
-    val branch = "70000001023172948"
-
-
     override fun getData(firm: String): TwoGisReviewsDTO? {
         try {
             val doc =

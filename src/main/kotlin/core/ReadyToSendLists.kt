@@ -102,16 +102,17 @@ class ReadyToSendLists(
         when (workerParam.preliminarySendBeforeDays > 0) { //если есть предотправка
             (workerType == WorkerType.BIRTHDAY) -> return true //если ДР то добавляем время
             (workerType == WorkerType.REMINDER) -> { //если напоминание
-                when (workerParam.sendWhenType){ // 3 - числа месяца, 4 - в даты
+                return when (workerParam.sendWhenType){ // 3 - числа месяца, 4 - в даты
                     3 -> {
                         // если в списке отправки по числам есть число даты (сегодня + дней предотправки), то добавляем время
-                        return if (workerParam.sendMonthDay.contains(listDate.plusDays(workerParam.preliminarySendBeforeDays).dayOfMonth)) true
+                        if (workerParam.sendMonthDay.contains(listDate.plusDays(workerParam.preliminarySendBeforeDays).dayOfMonth)) true
                         // иначе проверяем на последний день месяца 32 и (сегодня + дней предотправки) приходится на последнее число месяца, то добавляем время
                         else (workerParam.sendMonthDay.contains(32)) && (isLastDayOfMonth(listDate.plusDays(workerParam.preliminarySendBeforeDays)))
                     }
-                    4 -> return sendDateTimeMap.containsKey(listDate.plusDays(workerParam.preliminarySendBeforeDays))
 
-                    else -> return false
+                    4 -> sendDateTimeMap.containsKey(listDate.plusDays(workerParam.preliminarySendBeforeDays))
+
+                    else -> false
                 }
             }
             else -> return false

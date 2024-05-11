@@ -2,11 +2,6 @@ package domain.models
 
 import data.remoteAPI.twoGis.ReviewsGIS
 
-data class TwoGisReviewsBundle(
-    val twoGisCompanyData: TwoGisCompanyData,
-    val twoGisReviewList: List<TwoGisReview> = emptyList()
-)
-
 data class TwoGisCompanyData(
     val id: String,
     val name: String? = null,

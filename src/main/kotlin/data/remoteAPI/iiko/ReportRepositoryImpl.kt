@@ -99,8 +99,8 @@ object ReportRepositoryImpl : ReportRepository {
                 .referrer(server)
                 .get()
 //        Logging.d(tag, doc.connection().response().url().path)
-        if ((doc.connection().response().url().path == pathForCheckCookies) && (doc.connection().response()
-                .statusCode() == 200)) return true else return false
+        return (doc.connection().response().url().path == pathForCheckCookies) && (doc.connection().response()
+                .statusCode() == 200)
     }
 
     private fun checkCookies(): Boolean {

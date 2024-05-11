@@ -57,7 +57,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             "[RANDOM4] - Генерирует случайный набор из 4 цифр" // текст напоминания
                 )
                 val workerId = call.request.queryParameters["workerId"]
-                if (reminderList.containsKey(workerId) == true) editReminderParam = reminderList[workerId]!!
+                if (reminderList.containsKey(workerId)) editReminderParam = reminderList[workerId]!!
 
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
@@ -188,7 +188,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlReminderParam.workerParam.workerName} - ${htmlReminderParam.workerParam.workerId}"
                     )
-                    reminderList.put(htmlReminderParam.workerParam.workerId, htmlReminderParam)
+                    reminderList[htmlReminderParam.workerParam.workerId] = htmlReminderParam
                     RemindersRepository().set(reminderList)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.UPDATE,

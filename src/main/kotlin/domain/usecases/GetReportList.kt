@@ -9,9 +9,7 @@ class GetReportList {
         val doc = reportRepository.getList()
         val reportList = mutableMapOf<String, String>()
 
-        if (doc != null) {
-            doc.getElementsByTag("preset").forEach { reportList.put(it.id(), it.text()) }
-        }
+        doc?.getElementsByTag("preset")?.forEach { reportList[it.id()] = it.text() }
         return reportList
     }
 }

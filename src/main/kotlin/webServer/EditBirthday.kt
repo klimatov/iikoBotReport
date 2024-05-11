@@ -75,7 +75,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                     sendBeforeDays = 0 // за сколько дней до ДР начать оповещать
                 )
                 val workerId = call.request.queryParameters["workerId"]
-                if (birthdayList.containsKey(workerId) == true) editBirthdayParam = birthdayList[workerId]!!
+                if (birthdayList.containsKey(workerId)) editBirthdayParam = birthdayList[workerId]!!
 
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
@@ -186,7 +186,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlBirthdayParam.workerParam.workerName} - ${htmlBirthdayParam.workerParam.workerId}"
                     )
-                    birthdayList.put(htmlBirthdayParam.workerParam.workerId, htmlBirthdayParam)
+                    birthdayList[htmlBirthdayParam.workerParam.workerId] = htmlBirthdayParam
                     BirthdayRepository().set(birthdayList)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.UPDATE,

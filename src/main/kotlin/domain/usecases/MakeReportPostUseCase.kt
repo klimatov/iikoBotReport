@@ -6,10 +6,10 @@ import domain.models.ReportRequestParam
 import domain.models.ReportResult
 import domain.repository.BotRepository
 import domain.repository.ReportRepository
+import utils.Logging
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import utils.Logging
 
 class MakeReportPostUseCase(private val reportRepository: ReportRepository, private val botRepository: BotRepository) {
     private val tag = this::class.java.simpleName
@@ -23,7 +23,7 @@ class MakeReportPostUseCase(private val reportRepository: ReportRepository, priv
         // сравниваем с прошлым
         if (result.table != oldReport.table) {
             // если изменился, то отправляем в чат
-            val messageParam: MessageParam = MessageParam(
+            val messageParam = MessageParam(
                 reportResult = result,
                 oldReport = oldReport,
                 sendChatId = reportParam.sendChatId,

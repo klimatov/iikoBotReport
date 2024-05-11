@@ -73,7 +73,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                             "[USERPUBLICID] – Публичный ID пользователя\n", // текст отчета об отзыве
                 )
                 val workerId = call.request.queryParameters["workerId"]
-                if (twoGisReviewsList.containsKey(workerId) == true) editTwoGisParam = twoGisReviewsList[workerId]!!
+                if (twoGisReviewsList.containsKey(workerId)) editTwoGisParam = twoGisReviewsList[workerId]!!
 
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
@@ -179,7 +179,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlReviewsParam.workerParam.workerName} - ${htmlReviewsParam.workerParam.workerId}"
                     )
-                    twoGisReviewsList.put(htmlReviewsParam.workerParam.workerId, htmlReviewsParam)
+                    twoGisReviewsList[htmlReviewsParam.workerParam.workerId] = htmlReviewsParam
                     TwoGisRepository().set(twoGisReviewsList)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.UPDATE,

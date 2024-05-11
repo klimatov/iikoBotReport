@@ -50,7 +50,7 @@ object ReviewsDataDB : Table("reviews_data") {
         return try {
             transaction {
                 addLogger(StdOutSqlLogger)
-                val result = ReviewsDataDB.select { ReviewsDataDB.workerId.eq(workerId) }.single()
+                val result = ReviewsDataDB.selectAll().where { ReviewsDataDB.workerId.eq(workerId) }.single()
                 ReviewsDataDTO(
                     workerId = workerId,
                     shownReviews = result[shownReviews]

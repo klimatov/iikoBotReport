@@ -1,6 +1,5 @@
 package data.database.birthdayWorkers
 
-import data.database.birthdayWorkers.BirthdayWorkersDB.birthdayText
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

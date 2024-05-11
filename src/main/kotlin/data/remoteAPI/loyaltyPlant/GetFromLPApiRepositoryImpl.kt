@@ -147,7 +147,7 @@ object GetFromLPApiRepositoryImpl: GetFromLPApiRepository {
     }
 
     private fun checkCookies(): Boolean {
-        if (loginCookies.isEmpty()) return refreshCookies() else return true
+        return if (loginCookies.isEmpty()) refreshCookies() else true
     }
 
     private fun refreshCookies(): Boolean {

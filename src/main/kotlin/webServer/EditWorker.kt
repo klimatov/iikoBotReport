@@ -1,8 +1,8 @@
 package webServer
 
 import core.WorkersManager
-import data.ReportsRepository
 import data.NameIdBundleRepository
+import data.ReportsRepository
 import domain.usecases.GetReportList
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -57,7 +57,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                     messageWordLimit = mapOf(Pair(-1, 1))
                 )
                 val workerId = call.request.queryParameters["workerId"]
-                if (workerList?.containsKey(workerId) == true) editWorkerParam = workerList[workerId]!!
+                if (workerList.containsKey(workerId)) editWorkerParam = workerList[workerId]!!
 
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
@@ -89,7 +89,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                                 select(classes = "select") {
                                     name = "reportId"
                                     id = "reportId"
-                                    GetReportList().execute().forEach { reportId, reportName ->
+                                    GetReportList().execute().forEach { (reportId, reportName) ->
                                         option {
                                             value = reportId
                                             selected = editWorkerParam.reportId == value
@@ -162,8 +162,8 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                                     required = true
                                     min = "0"
                                     max = "999"
-                                    if (editWorkerParam.reportPeriod > 0) value =
-                                        editWorkerParam.reportPeriod.toString() else value = "0"
+                                    value =
+                                        if (editWorkerParam.reportPeriod > 0) editWorkerParam.reportPeriod.toString() else "0"
                                 }
                             }
 //!!!!! ---------------------------------------------------------------------------------------------------------------
@@ -329,7 +329,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button DELETE for worker ${htmlWorkerParam.workerParam.workerName} - ${htmlWorkerParam.workerParam.workerId}"
                     )
-                    workerList?.remove(htmlWorkerParam.workerParam.workerId)
+                    workerList.remove(htmlWorkerParam.workerParam.workerId)
                     ReportsRepository().delete(htmlWorkerParam.workerParam.workerId)
 //                    reportManager.changeWorkersConfig()
                     workersManager.makeChangeWorker(
@@ -343,7 +343,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlWorkerParam.workerParam.workerName} - ${htmlWorkerParam.workerParam.workerId}"
                     )
-                    workerList?.put(htmlWorkerParam.workerParam.workerId, htmlWorkerParam)
+                    workerList[htmlWorkerParam.workerParam.workerId] = htmlWorkerParam
                     ReportsRepository().set(workerList)
 //                    reportManager.changeWorkersConfig()
                     workersManager.makeChangeWorker(

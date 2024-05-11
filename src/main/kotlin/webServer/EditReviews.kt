@@ -87,7 +87,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                             "[TR_VALIDATIONID] - ID проверки транзакции\n", // текст отчета об отзыве
                 )
                 val workerId = call.request.queryParameters["workerId"]
-                if (reviewsList.containsKey(workerId) == true) editReviewsParam = reviewsList[workerId]!!
+                if (reviewsList.containsKey(workerId)) editReviewsParam = reviewsList[workerId]!!
 
                 call.respondHtml(HttpStatusCode.OK) {
                     head {
@@ -184,7 +184,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
                         tag,
                         "User $userName [$userIP] pressed button SAVE for worker ${htmlReviewsParam.workerParam.workerName} - ${htmlReviewsParam.workerParam.workerId}"
                     )
-                    reviewsList.put(htmlReviewsParam.workerParam.workerId, htmlReviewsParam)
+                    reviewsList[htmlReviewsParam.workerParam.workerId] = htmlReviewsParam
                     ReviewsRepository().set(reviewsList)
                     workersManager.makeChangeWorker(
                         workerState = WorkerState.UPDATE,
