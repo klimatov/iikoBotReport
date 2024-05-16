@@ -23,7 +23,6 @@ fun MutableList<SendTime>.minOrNull(): SendTime? {
 }
 
 
-
 class ReadyToSendLists(
     var workerParam: WorkerParam,
     private val sendDateTimeMap: MutableMap<LocalDate, MutableList<String>>,
@@ -99,25 +98,29 @@ class ReadyToSendLists(
     }
 
     private fun checkPreliminaryConditions(listDate: LocalDate): Boolean {
-        when (workerParam.preliminarySendBeforeDays > 0) { //если есть предотправка
-            (workerType == WorkerType.BIRTHDAY) -> return true //если ДР то добавляем время
-            (workerType == WorkerType.REMINDER) -> { //если напоминание
-                return when (workerParam.sendWhenType){ // 3 - числа месяца, 4 - в даты
-                    3 -> {
-                        // если в списке отправки по числам есть число даты (сегодня + дней предотправки), то добавляем время
-                        if (workerParam.sendMonthDay.contains(listDate.plusDays(workerParam.preliminarySendBeforeDays).dayOfMonth)) true
-                        // иначе проверяем на последний день месяца 32 и (сегодня + дней предотправки) приходится на последнее число месяца, то добавляем время
-                        else (workerParam.sendMonthDay.contains(32)) && (isLastDayOfMonth(listDate.plusDays(workerParam.preliminarySendBeforeDays)))
+        Logging.d(tag, "checkPreliminaryConditions:  ${workerParam.preliminarySendBeforeDays}")
+        if (workerParam.preliminarySendBeforeDays > 0) { // если предотправка
+            when (workerType) { //тип воркера
+                WorkerType.BIRTHDAY -> return true //если ДР то добавляем время
+                WorkerType.REMINDER -> { //если напоминание
+                    return when (workerParam.sendWhenType) { // 3 - числа месяца, 4 - в даты
+                        3 -> {
+                            // если в списке отправки по числам есть число даты (сегодня + дней предотправки), то добавляем время
+                            if (workerParam.sendMonthDay.contains(listDate.plusDays(workerParam.preliminarySendBeforeDays).dayOfMonth)) true
+                            // иначе проверяем на последний день месяца 32 и (сегодня + дней предотправки) приходится на последнее число месяца, то добавляем время
+                            else (workerParam.sendMonthDay.contains(32)) && (isLastDayOfMonth(
+                                listDate.plusDays(
+                                    workerParam.preliminarySendBeforeDays
+                                )
+                            ))
+                        }
+                        4 -> sendDateTimeMap.containsKey(listDate.plusDays(workerParam.preliminarySendBeforeDays))
+                        else -> false
                     }
-
-                    4 -> sendDateTimeMap.containsKey(listDate.plusDays(workerParam.preliminarySendBeforeDays))
-
-                    else -> false
                 }
+                else -> return false
             }
-            else -> return false
-        }
-        return false
+        } else return false
     }
 
     private fun isLastDayOfMonth(checkDate: LocalDate): Boolean {
