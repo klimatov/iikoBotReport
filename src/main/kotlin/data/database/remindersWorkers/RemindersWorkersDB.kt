@@ -23,6 +23,7 @@ object RemindersWorkersDB : Table("reminders_workers") {
     private val sendDateTimeList = RemindersWorkersDB.json<Array<String>>("send_date_time_list", Json.Default)
     private val preliminarySendBeforeDays = RemindersWorkersDB.long("preliminary_send_before_days").nullable()
     private val preliminarySendTime = RemindersWorkersDB.varchar("preliminary_send_time", 5).nullable()
+    private val reminderPreliminaryText = RemindersWorkersDB.text("reminder_preliminary_text").nullable()
 
     override val primaryKey = PrimaryKey(workerId)
 
@@ -45,6 +46,7 @@ object RemindersWorkersDB : Table("reminders_workers") {
                     it[sendDateTimeList] = remindersWorkersDTO.sendDateTimeList.toTypedArray()
                     it[preliminarySendBeforeDays] = remindersWorkersDTO.preliminarySendBeforeDays
                     it[preliminarySendTime] = remindersWorkersDTO.preliminarySendTime
+                    it[reminderPreliminaryText] = remindersWorkersDTO.reminderPreliminaryText
                 }
             }
             return true
@@ -74,6 +76,7 @@ object RemindersWorkersDB : Table("reminders_workers") {
                         sendDateTimeList = it[sendDateTimeList].toList(),
                         preliminarySendBeforeDays = it[preliminarySendBeforeDays] ?: 0,
                         preliminarySendTime = it[preliminarySendTime] ?: "10:00",
+                        reminderPreliminaryText = it[reminderPreliminaryText] ?: "",
                     )
                 }
             }
