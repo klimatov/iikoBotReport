@@ -131,7 +131,7 @@ fun Application.configureEditTwoGis(workersManager: WorkersManager) {
 
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-                        script(type = "text/javascript") { +"editOnLoad()" }
+                        script(type = "text/javascript") { +"editOnLoad('${editTwoGisParam.workerParam.sendWhenType}')" }
                     }
                 }
             }

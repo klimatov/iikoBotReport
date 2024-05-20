@@ -31,7 +31,7 @@ class MakeBirthdayPostUseCase(
             )
 
         val sendResult =
-            SendBirthdayMessage(botRepository = botRepository).execute(birthdayParam, celebratingEmployeesList)
+            SendBirthdayMessage(botRepository = botRepository).execute(birthdayParam, celebratingEmployeesList, preliminary)
         Logging.i(
             tag,
             "Напоминание о ДР ${birthdayParam.workerName} ${if (sendResult) "отправлено в чат" else "отправить в чат НЕ УДАЛОСЬ"}..."

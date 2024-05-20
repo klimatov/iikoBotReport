@@ -55,7 +55,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             "Шаблоны замены:\n" +
                             "[RANDOM] - Генерирует случайный набор из 6 цифр и символов\n" +
                             "[RANDOM4] - Генерирует случайный набор из 4 цифр", // текст напоминания
-                    reminderPreliminaryText = "", //  текст напоминания для предотправки
+                    reminderPreliminaryText = "!", //  текст напоминания для предотправки
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reminderList.containsKey(workerId)) editReminderParam = reminderList[workerId]!!
@@ -137,7 +137,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-                        script(type = "text/javascript") { +"editOnLoad()" }
+                        script(type = "text/javascript") { +"editOnLoad('${editReminderParam.workerParam.sendWhenType}')" }
                     }
                 }
             }

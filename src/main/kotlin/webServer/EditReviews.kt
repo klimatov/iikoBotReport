@@ -137,7 +137,7 @@ fun Application.configureEditReviews(workersManager: WorkersManager) {
 
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-                        script(type = "text/javascript") { +"editOnLoad()" }
+                        script(type = "text/javascript") { +"editOnLoad('${editReviewsParam.workerParam.sendWhenType}')" }
                     }
                 }
             }

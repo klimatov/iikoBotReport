@@ -276,7 +276,7 @@ fun Application.configureEditWorker(workersManager: WorkersManager) {
                             bottomButtonsField()
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-                        script(type = "text/javascript") {+"editOnLoad()"}
+                        script(type = "text/javascript") {+"editOnLoad('${editWorkerParam.workerParam.sendWhenType}')"}
                     }
                 }
             }

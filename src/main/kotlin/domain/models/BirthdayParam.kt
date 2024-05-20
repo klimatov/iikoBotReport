@@ -9,6 +9,7 @@ class BirthdayParam(
     val birthdayText: String = "", // текст сообщения о дне рождения
     val sendBeforeDays: Long, // за сколько дней до ДР начать оповещать
     val preliminarySendBeforeDays: Long = 0, // За сколько дней до события разово отправить (0 - не отправлять)
+    val birthdayPreliminaryText: String,// = "", // текст сообщения для предотправки
 )
 
 data class BirthdayValues(
@@ -29,4 +30,5 @@ fun BirthdayWorkerParam.mapToBirthdayParam(): BirthdayParam = BirthdayParam(
     birthdayText = birthdayText,
     sendBeforeDays = sendBeforeDays,
     preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays,
+    birthdayPreliminaryText = birthdayPreliminaryText,
 )

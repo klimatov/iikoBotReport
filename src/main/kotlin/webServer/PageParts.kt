@@ -380,7 +380,7 @@ fun FORM.preliminaryTextField(preliminaryText: String) {
         id = "preliminaryText"
         label(classes = "label") {
             br()
-            +"Текст напоминания для предотправки"
+            +"Текст для предварительной отправки"
         }
         textArea(classes = "textarea") {
             name = "preliminaryText"
@@ -392,7 +392,7 @@ fun FORM.preliminaryTextField(preliminaryText: String) {
     }
 }
 
-fun FORM.preliminarySwitcher(preliminarySendBeforeDays: Long) {
+fun FORM.preliminarySwitcher(preliminarySendBeforeDays: Long, preliminaryForceSwitcher: Boolean = false) {
     val fieldName = "preliminarySwitcher"
     p(classes = "field") {
         id = fieldName
@@ -403,6 +403,10 @@ fun FORM.preliminarySwitcher(preliminarySendBeforeDays: Long) {
             title = "Клик для включения/отключения предварительной отправки"
             onClick = "preliminarySwitcherCheckbox('$fieldName');"
             +"Предварительная отправка ${if (preliminarySendBeforeDays != 0.toLong()) "вкл." else "выкл."}"
+        }
+        hiddenInput {
+            name = "preliminaryForceSwitcher"
+            value = preliminaryForceSwitcher.toString()
         }
     }
 //    hiddenInput {

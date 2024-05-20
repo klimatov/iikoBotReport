@@ -7,10 +7,10 @@ import domain.repository.BotRepository
 class SendBirthdayMessage(private val botRepository: BotRepository) {
     private val tag = this::class.java.simpleName
 
-    suspend fun execute(birthdayParam: BirthdayParam, celebratingEmployeesList: List<EmployeeModel>): Boolean {
+    suspend fun execute(birthdayParam: BirthdayParam, celebratingEmployeesList: List<EmployeeModel>, preliminary: Boolean): Boolean {
         var resultFlag = true
         celebratingEmployeesList.forEach { employee ->
-            val messageText = FormatText().birthday(birthdayParam, employee)
+            val messageText = FormatText().birthday(birthdayParam, employee, preliminary)
             if ((messageText.isNotEmpty()) && (birthdayParam.sendChatId.isNotEmpty())) {
                 birthdayParam.sendChatId.forEach {
                     if (!botRepository.sendMessageToChat(text = messageText, sendChatId = it)) {

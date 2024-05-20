@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 class FormatText {
     private val tag = this::class.java.simpleName
 
-    fun reminder(reminderParam: ReminderParam, preliminary: Boolean = false): String {
+    fun reminder(reminderParam: ReminderParam, preliminary: Boolean): String {
         var resultMessage = ""
 
         if (reminderParam.nameInHeader) resultMessage += reminderParam.workerName + "\n"
@@ -21,9 +21,9 @@ class FormatText {
         return resultMessage
     }
 
-    fun birthday(birthdayParam: BirthdayParam, employee: EmployeeModel): String {
+    fun birthday(birthdayParam: BirthdayParam, employee: EmployeeModel, preliminary: Boolean): String {
         var resultMessage = decodingBirthdayTemplates(
-            birthdayParam.birthdayText,
+            if (preliminary) birthdayParam.birthdayPreliminaryText else birthdayParam.birthdayText,
             employee
         )
         if (birthdayParam.nameInHeader) resultMessage = birthdayParam.workerName + "\n" + resultMessage

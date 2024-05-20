@@ -72,7 +72,8 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                             "[ROLECODES] - Занятости все (списком)\n" +
                             "[SNILS] - СНИЛС\n" +
                             "[TAXPAYERIDNUMBER] - ИНН", // текст напоминания
-                    sendBeforeDays = 0 // за сколько дней до ДР начать оповещать
+                    sendBeforeDays = 0, // за сколько дней до ДР начать оповещать
+                    birthdayPreliminaryText = "!",
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (birthdayList.containsKey(workerId)) editBirthdayParam = birthdayList[workerId]!!
@@ -113,9 +114,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
 
                             sendBeforeDays(editBirthdayParam.sendBeforeDays)
 
-                            preliminarySendTimeField(editBirthdayParam.workerParam.preliminarySendTime)
-
-                            preliminarySendBeforeDays(editBirthdayParam.workerParam.preliminarySendBeforeDays, "ДР")
+                            preliminarySwitcher(editBirthdayParam.workerParam.preliminarySendBeforeDays, true)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -133,11 +132,17 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                             }
 //!!!!! ---------------------------------------------------------------------------------------------------------------
 
+                            preliminarySendTimeField(editBirthdayParam.workerParam.preliminarySendTime)
+
+                            preliminarySendBeforeDays(editBirthdayParam.workerParam.preliminarySendBeforeDays, "ДР")
+
+                            preliminaryTextField(editBirthdayParam.birthdayPreliminaryText)
+
                             bottomButtonsField()
 
                         }
                         script(type = "text/javascript", src = "js/main.js") {}
-                        script(type = "text/javascript") { +"editOnLoad()" }
+                        script(type = "text/javascript") { +"editOnLoad('${editBirthdayParam.workerParam.sendWhenType}')" }
                     }
                 }
             }
@@ -166,6 +171,7 @@ fun Application.configureEditBirthday(workersManager: WorkersManager) {
                     ),
                     birthdayText = receiveParam["birthdayText"]?.joinToString() ?: "",
                     sendBeforeDays = receiveParam["sendBeforeDays"]?.joinToString()?.toLong() ?: 0,
+                    birthdayPreliminaryText = receiveParam["preliminaryText"]?.joinToString() ?: "",
                 )
 
                 if (receiveParam.containsKey("deleteButton")) {                                 // - DELETE !!!

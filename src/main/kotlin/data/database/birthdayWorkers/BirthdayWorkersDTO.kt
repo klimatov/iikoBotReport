@@ -21,6 +21,7 @@ data class BirthdayWorkersDTO(
     val sendDateTimeList: List<String>,
     val preliminarySendBeforeDays: Long,
     val preliminarySendTime: String,
+    val birthdayPreliminaryText: String, // = "", // текст сообщения для предотправки
 )
 
 fun BirthdayWorkerParam.mapToBirthdayWorkersDTO(): BirthdayWorkersDTO = BirthdayWorkersDTO(
@@ -39,6 +40,7 @@ fun BirthdayWorkerParam.mapToBirthdayWorkersDTO(): BirthdayWorkersDTO = Birthday
     sendDateTimeList = workerParam.sendDateTimeList,
     preliminarySendBeforeDays = workerParam.preliminarySendBeforeDays,
     preliminarySendTime = workerParam.preliminarySendTime,
+    birthdayPreliminaryText = birthdayPreliminaryText,
 )
 
 fun BirthdayWorkersDTO.mapToBirthdayWorkerParam(): BirthdayWorkerParam = BirthdayWorkerParam(
@@ -58,5 +60,6 @@ fun BirthdayWorkersDTO.mapToBirthdayWorkerParam(): BirthdayWorkerParam = Birthda
         sendDateTimeList = sendDateTimeList,
         preliminarySendBeforeDays = preliminarySendBeforeDays,
         preliminarySendTime = preliminarySendTime,
-    )
+    ),
+    birthdayPreliminaryText = birthdayPreliminaryText,
 )

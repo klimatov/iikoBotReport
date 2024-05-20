@@ -13,8 +13,6 @@ function editButtonPress(id) {
 
 function deleteButtonPress(id) {
     let delElement = id.parentElement;
-//    delElement.style.display = 'none';
-//    delElement.id = "delete"
     delElement.parentNode.removeChild(delElement)
 }
 
@@ -52,68 +50,86 @@ function setCheckbox(id) {
     c.checked = !c.checked;
 }
 
-function editOnLoad() {
-    var select = document.getElementsByName('sendWhenType')[0]
-    if (select) { onSelectWhenType(select) }
+function editOnLoad(sendWhenType) {
+    switchSelect(sendWhenType)
+    if (document.getElementById('preliminarySwitcher')) {
+        preliminaryVisibility();
+    }
 }
 
 function onSelectWhenType(select) { //0 - ежедневно, 1 - периодически, 2 - дни недели, 3 - числа месяца, 4 - В указанные даты
-    var selectedOption = select.options[select.selectedIndex]
-    console.log('Выбор: >' + selectedOption.value + '<')
+    var selectedOption = select.options[select.selectedIndex]    
+    switchSelect(selectedOption.value)    
+}
 
-    switch(selectedOption.value) {
+function switchSelect(sendWhenType){
+    console.log('Выбор: >' + sendWhenType + '<');
+    let sendPeriod = document.getElementById('sendPeriod');
+    let sendTime = document.getElementById('sendTime');
+    let sendWeekDay = document.getElementById('sendWeekDay');
+    let sendMonthDay = document.getElementById('sendMonthDay');
+    let sendDateTime = document.getElementById('sendDateTime');
+    let preliminarySwitcher = document.getElementById('preliminarySwitcher');  
+    
+    switch(sendWhenType) {
         case '0':
-            document.getElementById('sendPeriod').style.display = 'none';
-            document.getElementById('sendTime').style.display = '';
-            document.getElementById('sendWeekDay').style.display = 'none';
-            document.getElementById('sendMonthDay').style.display = 'none';
-            document.getElementById('sendDateTime').style.display = 'none';
-            if (document.getElementById('preliminarySwitcher')) {
-                document.getElementById('preliminarySwitcher').style.display = 'none';
-                preliminaryFieldsShow(false); 
+            if (sendPeriod) sendPeriod.style.display = 'none';
+            if (sendTime) sendTime.style.display = '';
+            if (sendWeekDay) sendWeekDay.style.display = 'none';
+            if (sendMonthDay) sendMonthDay.style.display = 'none';
+            if (sendDateTime) sendDateTime.style.display = 'none';
+            if (preliminarySwitcher) {
+                if ((preliminarySwitcher.children[2].value.toLowerCase() !== 'true')) {
+                    preliminarySwitcher.style.display = 'none';
+                    preliminaryFieldsShow(false);
+                } else preliminaryVisibility();
             }
             break;
         case '1':
-            document.getElementById('sendPeriod').style.display = '';
-            document.getElementById('sendTime').style.display = 'none';
-            document.getElementById('sendWeekDay').style.display = 'none';
-            document.getElementById('sendMonthDay').style.display = 'none';
-            document.getElementById('sendDateTime').style.display = 'none';
-            if (document.getElementById('preliminarySwitcher')) {
-                document.getElementById('preliminarySwitcher').style.display = 'none';
-                preliminaryFieldsShow(false); 
+            if (sendPeriod) sendPeriod.style.display = '';
+            if (sendTime) sendTime.style.display = 'none';
+            if (sendWeekDay) sendWeekDay.style.display = 'none';
+            if (sendMonthDay) sendMonthDay.style.display = 'none';
+            if (sendDateTime) sendDateTime.style.display = 'none';
+            if (preliminarySwitcher) {
+                if ((preliminarySwitcher.children[2].value.toLowerCase() !== 'true')) {
+                    preliminarySwitcher.style.display = 'none';
+                    preliminaryFieldsShow(false);
+                } else preliminaryVisibility();
             }
         break;
         case '2':
-            document.getElementById('sendPeriod').style.display = 'none';
-            document.getElementById('sendTime').style.display = '';
-            document.getElementById('sendWeekDay').style.display = '';
-            document.getElementById('sendMonthDay').style.display = 'none';
-            document.getElementById('sendDateTime').style.display = 'none';
-            if (document.getElementById('preliminarySwitcher')) {
-                document.getElementById('preliminarySwitcher').style.display = 'none';
-                preliminaryFieldsShow(false); 
+            if (sendPeriod) sendPeriod.style.display = 'none';
+            if (sendTime) sendTime.style.display = '';
+            if (sendWeekDay) sendWeekDay.style.display = '';
+            if (sendMonthDay) sendMonthDay.style.display = 'none';
+            if (sendDateTime) sendDateTime.style.display = 'none';
+            if (preliminarySwitcher) {
+                if ((preliminarySwitcher.children[2].value.toLowerCase() !== 'true')) {
+                    preliminarySwitcher.style.display = 'none';
+                    preliminaryFieldsShow(false);
+                } else preliminaryVisibility();
             }
         break;
         case '3':
-            document.getElementById('sendPeriod').style.display = 'none';
-            document.getElementById('sendTime').style.display = '';
-            document.getElementById('sendWeekDay').style.display = 'none';
-            document.getElementById('sendMonthDay').style.display = '';
-            document.getElementById('sendDateTime').style.display = 'none';
-            if (document.getElementById('preliminarySwitcher')) {
-                document.getElementById('preliminarySwitcher').style.display = '';
+            if (sendPeriod) sendPeriod.style.display = 'none';
+            if (sendTime) sendTime.style.display = '';
+            if (sendWeekDay) sendWeekDay.style.display = 'none';
+            if (sendMonthDay) sendMonthDay.style.display = '';
+            if (sendDateTime) sendDateTime.style.display = 'none';
+            if (preliminarySwitcher) {
+                if ((preliminarySwitcher.children[2].value.toLowerCase() !== 'true')) preliminarySwitcher.style.display = '';
                 preliminaryVisibility();
             }
         break;
         case '4':
-            document.getElementById('sendPeriod').style.display = 'none';
-            document.getElementById('sendTime').style.display = 'none';
-            document.getElementById('sendWeekDay').style.display = 'none';
-            document.getElementById('sendMonthDay').style.display = 'none';
-            document.getElementById('sendDateTime').style.display = '';
-            if (document.getElementById('preliminarySwitcher')) {
-                document.getElementById('preliminarySwitcher').style.display = '';
+            if (sendPeriod) sendPeriod.style.display = 'none';
+            if (sendTime) sendTime.style.display = 'none';
+            if (sendWeekDay) sendWeekDay.style.display = 'none';
+            if (sendMonthDay) sendMonthDay.style.display = 'none';
+            if (sendDateTime) sendDateTime.style.display = '';
+            if (preliminarySwitcher) {
+                if ((preliminarySwitcher.children[2].value.toLowerCase() !== 'true')) preliminarySwitcher.style.display = '';
                 preliminaryVisibility();
             }
         break;

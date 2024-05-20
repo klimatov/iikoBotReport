@@ -76,7 +76,7 @@ object RemindersWorkersDB : Table("reminders_workers") {
                         sendDateTimeList = it[sendDateTimeList].toList(),
                         preliminarySendBeforeDays = it[preliminarySendBeforeDays] ?: 0,
                         preliminarySendTime = it[preliminarySendTime] ?: "10:00",
-                        reminderPreliminaryText = it[reminderPreliminaryText] ?: "",
+                        reminderPreliminaryText = it[reminderPreliminaryText] ?: it[reminderText],
                     )
                 }
             }
