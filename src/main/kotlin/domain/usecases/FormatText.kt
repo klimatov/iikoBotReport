@@ -159,6 +159,7 @@ class FormatText {
             when (it.value.uppercase().substring(1, it.value.length - 1)) {
                 "RANDOM" -> List(6) { charPool.random() }.joinToString("")
                 "RANDOM4" -> List(4) { digitPool.random() }.joinToString("")
+                "DATEOFEVENT" -> it.value
                 else -> it.value
             }
         }
