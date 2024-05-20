@@ -54,7 +54,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             "\n" +
                             "Шаблоны замены:\n" +
                             "[RANDOM] - Генерирует случайный набор из 6 цифр и символов\n" +
-                            "[RANDOM4] - Генерирует случайный набор из 4 цифр" // текст напоминания
+                            "[RANDOM4] - Генерирует случайный набор из 4 цифр", // текст напоминания
+                    reminderPreliminaryText = "", //  текст напоминания для предотправки
                 )
                 val workerId = call.request.queryParameters["workerId"]
                 if (reminderList.containsKey(workerId)) editReminderParam = reminderList[workerId]!!
@@ -130,6 +131,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             }
 //!!!!! ---------------------------------------------------------------------------------------------------------------
 
+                            preliminaryTextField(editReminderParam.reminderPreliminaryText)
+
                             bottomButtonsField()
 
                         }
@@ -162,7 +165,8 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             ?: 0,
                         preliminarySendTime = receiveParam["preliminarySendTime"]?.joinToString() ?: "10:00"
                     ),
-                    reminderText = receiveParam["reminderText"]?.joinToString() ?: ""
+                    reminderText = receiveParam["reminderText"]?.joinToString() ?: "",
+                    reminderPreliminaryText = receiveParam["preliminaryText"]?.joinToString() ?: "",
                 )
 
                 when (htmlReminderParam.workerParam.sendWhenType) { //проверяем типы в которых разрешена предотправка

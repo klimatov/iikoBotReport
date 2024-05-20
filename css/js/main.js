@@ -70,6 +70,7 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendDateTime').style.display = 'none';
             document.getElementById('preliminarySendTime').style.display = 'none';
             document.getElementById('preliminarySendBeforeDays').style.display = 'none';
+            document.getElementById('preliminaryText').style.display = 'none';
             break;
         case '1':
             document.getElementById('sendPeriod').style.display = '';
@@ -79,6 +80,7 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendDateTime').style.display = 'none';
             document.getElementById('preliminarySendTime').style.display = 'none';
             document.getElementById('preliminarySendBeforeDays').style.display = 'none';
+            document.getElementById('preliminaryText').style.display = 'none';
         break;
         case '2':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -88,6 +90,7 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendDateTime').style.display = 'none';
             document.getElementById('preliminarySendTime').style.display = 'none';
             document.getElementById('preliminarySendBeforeDays').style.display = 'none';
+            document.getElementById('preliminaryText').style.display = 'none';
         break;
         case '3':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -97,6 +100,7 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendDateTime').style.display = 'none';
             document.getElementById('preliminarySendTime').style.display = '';
             document.getElementById('preliminarySendBeforeDays').style.display = '';
+            document.getElementById('preliminaryText').style.display = '';
         break;
         case '4':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -106,6 +110,7 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendDateTime').style.display = '';
             document.getElementById('preliminarySendTime').style.display = '';
             document.getElementById('preliminarySendBeforeDays').style.display = '';
+            document.getElementById('preliminaryText').style.display = '';
         break;
         default:
             console.log("Непредусмотренный вариант")

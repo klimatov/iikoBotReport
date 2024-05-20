@@ -20,7 +20,7 @@ data class RemindersWorkersDTO(
     val sendDateTimeList: List<String>,
     val preliminarySendBeforeDays: Long,
     val preliminarySendTime: String,
-    val reminderPreliminaryText: String //= "", // текст напоминания для предотправки
+    val reminderPreliminaryText: String = "", // текст напоминания для предотправки
 )
 
 fun ReminderWorkerParam.mapToRemindersWorkersDTO(): RemindersWorkersDTO = RemindersWorkersDTO(

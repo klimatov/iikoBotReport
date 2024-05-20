@@ -374,3 +374,20 @@ fun FORM.preliminarySendBeforeDays(preliminarySendBeforeDays: Long, eventName: S
         }
     }
 }
+
+fun FORM.preliminaryTextField(preliminaryText: String) {
+    p(classes = "field required") {
+        id = "preliminaryText"
+        label(classes = "label") {
+            br()
+            +"Текст напоминания для предотправки"
+        }
+        textArea(classes = "textarea") {
+            name = "preliminaryText"
+            rows = "20"
+            cols = "80"
+            required = true
+            +preliminaryText
+        }
+    }
+}
