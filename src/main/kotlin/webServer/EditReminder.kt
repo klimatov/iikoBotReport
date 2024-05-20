@@ -107,13 +107,7 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
 
                             sendDateField(editReminderParam.workerParam.sendDateTimeList)
 
-                            preliminarySendTimeField(editReminderParam.workerParam.preliminarySendTime)
-
-                            preliminarySendBeforeDays(
-                                editReminderParam.workerParam.preliminarySendBeforeDays,
-                                "события"
-                            )
-
+                            preliminarySwitcher(editReminderParam.workerParam.preliminarySendBeforeDays)
 
 //!!!!! ---------------------------------------------------------------------------------------------------------------
                             p(classes = "field required") {
@@ -131,6 +125,12 @@ fun Application.configureEditReminder(workersManager: WorkersManager) {
                             }
 //!!!!! ---------------------------------------------------------------------------------------------------------------
 
+                            preliminarySendTimeField(editReminderParam.workerParam.preliminarySendTime)
+
+                            preliminarySendBeforeDays(
+                                editReminderParam.workerParam.preliminarySendBeforeDays,
+                                "события"
+                            )
                             preliminaryTextField(editReminderParam.reminderPreliminaryText)
 
                             bottomButtonsField()

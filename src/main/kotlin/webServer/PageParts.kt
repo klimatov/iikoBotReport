@@ -391,3 +391,22 @@ fun FORM.preliminaryTextField(preliminaryText: String) {
         }
     }
 }
+
+fun FORM.preliminarySwitcher(preliminarySendBeforeDays: Long) {
+    val fieldName = "preliminarySwitcher"
+    p(classes = "field") {
+        id = fieldName
+        input(type = InputType.checkBox, name = fieldName, classes = "checkbox-input") {
+            checked = (preliminarySendBeforeDays != 0.toLong())
+        }
+        label(classes = "checkbox-label") {
+            title = "Клик для включения/отключения предварительной отправки"
+            onClick = "preliminarySwitcherCheckbox('$fieldName');"
+            +"Предварительная отправка ${if (preliminarySendBeforeDays != 0.toLong()) "вкл." else "выкл."}"
+        }
+    }
+//    hiddenInput {
+//        name = "workerId"
+//        value = workerId
+//    }
+}

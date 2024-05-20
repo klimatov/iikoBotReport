@@ -54,7 +54,7 @@ function setCheckbox(id) {
 
 function editOnLoad() {
     var select = document.getElementsByName('sendWhenType')[0]
-    onSelectWhenType(select)
+    if (select) { onSelectWhenType(select) }
 }
 
 function onSelectWhenType(select) { //0 - ежедневно, 1 - периодически, 2 - дни недели, 3 - числа месяца, 4 - В указанные даты
@@ -68,9 +68,10 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
-            document.getElementById('preliminarySendTime').style.display = 'none';
-            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
-            document.getElementById('preliminaryText').style.display = 'none';
+            if (document.getElementById('preliminarySwitcher')) {
+                document.getElementById('preliminarySwitcher').style.display = 'none';
+                preliminaryFieldsShow(false); 
+            }
             break;
         case '1':
             document.getElementById('sendPeriod').style.display = '';
@@ -78,9 +79,10 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
-            document.getElementById('preliminarySendTime').style.display = 'none';
-            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
-            document.getElementById('preliminaryText').style.display = 'none';
+            if (document.getElementById('preliminarySwitcher')) {
+                document.getElementById('preliminarySwitcher').style.display = 'none';
+                preliminaryFieldsShow(false); 
+            }
         break;
         case '2':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -88,9 +90,10 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendWeekDay').style.display = '';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = 'none';
-            document.getElementById('preliminarySendTime').style.display = 'none';
-            document.getElementById('preliminarySendBeforeDays').style.display = 'none';
-            document.getElementById('preliminaryText').style.display = 'none';
+            if (document.getElementById('preliminarySwitcher')) {
+                document.getElementById('preliminarySwitcher').style.display = 'none';
+                preliminaryFieldsShow(false); 
+            }
         break;
         case '3':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -98,9 +101,10 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = '';
             document.getElementById('sendDateTime').style.display = 'none';
-            document.getElementById('preliminarySendTime').style.display = '';
-            document.getElementById('preliminarySendBeforeDays').style.display = '';
-            document.getElementById('preliminaryText').style.display = '';
+            if (document.getElementById('preliminarySwitcher')) {
+                document.getElementById('preliminarySwitcher').style.display = '';
+                preliminaryVisibility();
+            }
         break;
         case '4':
             document.getElementById('sendPeriod').style.display = 'none';
@@ -108,9 +112,10 @@ function onSelectWhenType(select) { //0 - ежедневно, 1 - периоди
             document.getElementById('sendWeekDay').style.display = 'none';
             document.getElementById('sendMonthDay').style.display = 'none';
             document.getElementById('sendDateTime').style.display = '';
-            document.getElementById('preliminarySendTime').style.display = '';
-            document.getElementById('preliminarySendBeforeDays').style.display = '';
-            document.getElementById('preliminaryText').style.display = '';
+            if (document.getElementById('preliminarySwitcher')) {
+                document.getElementById('preliminarySwitcher').style.display = '';
+                preliminaryVisibility();
+            }
         break;
         default:
             console.log("Непредусмотренный вариант")
@@ -153,8 +158,8 @@ function hideBlock(listHeader) {
 }
 
 function sendNow(element){
-    var hrefElement = element.parentElement
-    var workerId = hrefElement.getAttribute('title')    
+    var hrefElement = element.parentElement;
+    var workerId = hrefElement.getAttribute('title');   
     event.preventDefault();    
 
     const Http = new XMLHttpRequest();
@@ -167,5 +172,41 @@ function sendNow(element){
             console.log(Http.responseText);
             alert(JSON.parse(Http.responseText).message + ' (' + hrefElement.text + ')');
           }
+    }
+}
+
+function preliminarySwitcherCheckbox(id) {        
+    var block = document.querySelector('#' + id);
+    let checkBox = block.children[0];
+    checkBox.checked = !checkBox.checked;
+    setPreliminarySwitcher(checkBox.checked)
+    preliminaryVisibility()
+}
+
+function preliminaryVisibility() {
+    let isShow = document.getElementById('preliminarySwitcher').children[0].checked;
+    preliminaryFieldsShow(isShow);
+}
+
+function preliminaryFieldsShow(isShow){
+    if (isShow) {        
+        document.getElementById('preliminarySendTime').style.display = '';
+        document.getElementById('preliminarySendBeforeDays').style.display = '';
+        document.getElementById('preliminaryText').style.display = '';
+    } else {
+        document.getElementById('preliminarySendTime').style.display = 'none';
+        document.getElementById('preliminarySendBeforeDays').style.display = 'none';
+        document.getElementById('preliminaryText').style.display = 'none';
+    }
+}
+
+function setPreliminarySwitcher(checked) {
+    let block = document.getElementById('preliminarySwitcher')
+    let textPrem = block.children[1];
+    if (checked) {
+        textPrem.innerHTML = textPrem.innerHTML.replace('выкл.', 'вкл.');
+    } else {
+        textPrem.innerHTML = textPrem.innerHTML.replace('вкл.', 'выкл.');
+        document.getElementById('preliminarySendBeforeDays').children[1].value = 0;
     }
 }
