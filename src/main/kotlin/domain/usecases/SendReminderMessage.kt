@@ -6,8 +6,8 @@ import domain.repository.BotRepository
 class SendReminderMessage(private val botRepository: BotRepository) {
     private val tag = this::class.java.simpleName
 
-    suspend fun execute(reminderParam: ReminderParam): Boolean {
-        val messageText = FormatText().reminder(reminderParam)
+    suspend fun execute(reminderParam: ReminderParam, preliminary: Boolean = false): Boolean {
+        val messageText = FormatText().reminder(reminderParam, preliminary)
         if ((messageText.isNotEmpty()) && (reminderParam.sendChatId.isNotEmpty())) {
             var resultFlag = true
             reminderParam.sendChatId.forEach {

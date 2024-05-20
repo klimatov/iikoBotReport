@@ -10,11 +10,13 @@ import java.time.format.DateTimeFormatter
 class FormatText {
     private val tag = this::class.java.simpleName
 
-    fun reminder(reminderParam: ReminderParam): String {
+    fun reminder(reminderParam: ReminderParam, preliminary: Boolean = false): String {
         var resultMessage = ""
 
         if (reminderParam.nameInHeader) resultMessage += reminderParam.workerName + "\n"
-        resultMessage += decodingReminderTemplates(reminderParam.reminderText)
+        resultMessage += decodingReminderTemplates(
+            if (preliminary) reminderParam.reminderPreliminaryText else reminderParam.reminderText
+        )
 
         return resultMessage
     }

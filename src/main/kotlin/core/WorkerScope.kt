@@ -159,7 +159,7 @@ class WorkerScope(bot: Bot) {
             }
 
             WorkerType.REMINDER -> {
-                makeReminderPostUseCase.execute((anyWorkerParam as ReminderWorkerParam).mapToReminderParam())
+                makeReminderPostUseCase.execute((anyWorkerParam as ReminderWorkerParam).mapToReminderParam(), preliminary)
             }
 
             WorkerType.BIRTHDAY -> {
